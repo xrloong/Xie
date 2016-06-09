@@ -7,22 +7,42 @@ class Segment(Shape):
 	def draw(self, drawingSystem):
 		pass
 
-class BeelineSegment(Segment):
+class BaseBeelineSegment(Segment):
+	def getEndPoint(self):
+		return (0, 0)
+
+	def draw(self, drawingSystem):
+		drawingSystem.lineTo(self.getEndPoint())
+
+class BaseQCurveSegment(Segment):
+	def getControlPoint(self):
+		return (0, 0)
+
+	def getEndPoint(self):
+		return (0, 0)
+
+	def draw(self, drawingSystem):
+		drawingSystem.qCurveTo(self.getControlPoint(), self.getEndPoint())
+
+class BeelineSegment(BaseBeelineSegment):
 	def __init__(self, point):
 		super().__init__()
 		self.point=point
 
-	def draw(self, drawingSystem):
-		drawingSystem.lineTo(self.point)
+	def getEndPoint(self):
+		return self.point
 
-class QCurveSegment(Segment):
+class QCurveSegment(BaseQCurveSegment):
 	def __init__(self, control_point, point):
 		super().__init__()
 		self.control_point=control_point
 		self.point=point
 
-	def draw(self, drawingSystem):
-		drawingSystem.qCurveTo(self.control_point, self.point)
+	def getControlPoint(self):
+		return self.control_point
+
+	def getEndPoint(self):
+		return self.point
 
 class StrokePath(Shape):
 	def __init__(self, segments):

@@ -68,3 +68,6 @@ class DrawingSystem():
 	def clear(self):
 		self.canvasController.clear()
 
+	def draw(self, shape):
+		shape.draw(self)
+
