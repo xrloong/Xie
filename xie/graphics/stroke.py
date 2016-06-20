@@ -58,8 +58,14 @@ class Stroke(Shape):
 		drawingSystem.endDrawing()
 
 class Character(Shape):
-	def __init__(self, name, strokes):
+	def __init__(self, strokes=[], name=""):
 		self.name = name
+		self.strokes = strokes
+
+	def setName(self, name):
+		self.name = name
+
+	def setStrokes(self, strokes):
 		self.strokes = strokes
 
 	def getStrokes(self):
