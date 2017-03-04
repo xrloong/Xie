@@ -33,13 +33,13 @@ class XieApp:
 		self.root.mainloop()
 
 	def test(self):
-		from xie.graphics.stroke import BeelineSegment
-		from xie.graphics.stroke import StrokePath
-		from xie.graphics.stroke import Stroke
+		import xie.graphics.stroke_factory as StrokeFactory
 
-		segment=BeelineSegment((200, 0))
-		strokePath=StrokePath([segment])
-		stroke=Stroke((70, 30), strokePath)
+		strokeFactory = StrokeFactory.getInstance()
+		stroke=strokeFactory.generateStroke橫((70, 30), 200)
+		self.dh.draw(stroke)
+
+		stroke=strokeFactory.generateStroke豎((70, 30), 200)
 		self.dh.draw(stroke)
 
 if __name__ == '__main__':
