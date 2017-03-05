@@ -1,4 +1,5 @@
 from xie.graphics.stroke import BeelineSegment
+from xie.graphics.stroke import QCurveSegment
 from xie.graphics.stroke import StrokePath
 from xie.graphics.stroke import Stroke
 
@@ -63,6 +64,37 @@ class StrokeFactory:
 
 	def generateStroke豎(self, startPoint, length):
 		strokePath=self._generateStrokePath豎(length)
+		return Stroke(startPoint, strokePath)
+
+	def _generateStrokePath撇(self, lengthWidth, lengthHeight):
+		segment=self._generateSegment_ToBottomLeft(lengthWidth, lengthHeight)
+		return StrokePath([segment])
+
+	def generateStroke撇(self, startPoint, lengthWidth, lengthHeight):
+		strokePath=self._generateStrokePath撇(lengthWidth, lengthHeight)
+		return Stroke(startPoint, strokePath)
+
+	def _generateStrokePath捺(self, lengthWidth, lengthHeight):
+		segment=self._generateSegment_ToBottomRight(lengthWidth, lengthHeight)
+		return StrokePath([segment])
+
+	def generateStroke捺(self, startPoint, lengthWidth, lengthHeight):
+		strokePath=self._generateStrokePath捺(lengthWidth, lengthHeight)
+		return Stroke(startPoint, strokePath)
+
+	def _generateStrokePath圈(self, width, height):
+		halfWidth=width/2
+		halfHeight=height/2
+		center=(0, halfHeight)
+
+		segment1=QCurveSegment((halfWidth, 0), (halfWidth, halfHeight))
+		segment2=QCurveSegment((0, halfHeight), (-halfWidth, halfHeight))
+		segment3=QCurveSegment((-halfWidth, 0), (-halfWidth, -halfHeight))
+		segment4=QCurveSegment((0, -halfHeight), (halfWidth, -halfHeight))
+		return StrokePath([segment1, segment2, segment3, segment4])
+
+	def generateStroke圈(self, startPoint, width, height):
+		strokePath=self._generateStrokePath圈(width, height)
 		return Stroke(startPoint, strokePath)
 
 _StrokeFactory=StrokeFactory()

@@ -42,6 +42,15 @@ class XieApp:
 		stroke=strokeFactory.generateStroke豎((70, 30), 200)
 		self.dh.draw(stroke)
 
+		stroke=strokeFactory.generateStroke撇((270, 30), 200, 200)
+		self.dh.draw(stroke)
+
+		stroke=strokeFactory.generateStroke捺((170, 130), 200, 200)
+		self.dh.draw(stroke)
+
+		stroke=strokeFactory.generateStroke圈((256, 300), 200, 100)
+		self.dh.draw(stroke)
+
 if __name__ == '__main__':
 	app=XieApp()
 	app.test()
