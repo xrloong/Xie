@@ -185,9 +185,10 @@ class Drawing:
 		newSTargetPane=sgTargetPane.transformRelativePaneByTargetPane(sTargetPane, newSgTargetPane)
 		self.setStatePane(newSTargetPane)
 
-class Boundary:
+class Boundary(Pane):
 	def __init__(self, left, top, right, bottom):
 		assert left <= right and top <= bottom
+		super().__init__((left, top, right, bottom))
 		self.left=left
 		self.top=top
 		self.right=right
