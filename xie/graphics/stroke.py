@@ -1,4 +1,5 @@
 from .shape import Shape
+from .shape import Pane
 
 class Segment(Shape):
 	def __init__(self):
@@ -1479,4 +1480,12 @@ StrokeInfoMap = {
 	"提捺": StrokeInfo_提捺,
 	"橫捺": StrokeInfo_橫捺,
 }
+
+def generateStrokeInfo(name, startPoint, parameterList, bBox):
+	clsStrokeInfo = StrokeInfoMap.get(name, None)
+	assert clsStrokeInfo!=None
+
+	parameterList = clsStrokeInfo.parseExpression(parameterList)
+	strokeInfo = clsStrokeInfo(name, startPoint, parameterList, Pane(*bBox))
+	return strokeInfo
 
