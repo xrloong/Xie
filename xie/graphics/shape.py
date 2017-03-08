@@ -19,8 +19,7 @@ class Pane:
 
 	EMBOX_REGION=[EMBOX_X_MIN, EMBOX_Y_MIN, EMBOX_X_MAX, EMBOX_Y_MAX]
 
-	def __init__(self, region=EMBOX_REGION):
-		[left, top, right, bottom]=region
+	def __init__(self, left, top, right, bottom):
 		self.left=left
 		self.top=top
 		self.right=right
@@ -32,7 +31,7 @@ class Pane:
 		return "%s"%([self.left, self.top, self.right, self.bottom])
 
 	def clone(self):
-		return Pane(self.getAsList())
+		return Pane(self.left, self.top, self.right, self.bottom)
 
 	def setup(self):
 		self.hScale=self.width*1./Pane.EMBOX_WIDTH
@@ -73,9 +72,6 @@ class Pane:
 		self.bottom=bottom
 
 		self.setup()
-
-	def getAsList(self):
-		return [self.left, self.top, self.right, self.bottom]
 
 	def getLeft(self):
 		return self.left
@@ -146,19 +142,24 @@ class Pane:
 		(left, top)=self.transformRelativePointByTargetPane(relativePane.getLeftTop(), targetPane)
 		(right, bottom)=self.transformRelativePointByTargetPane(relativePane.getRightBottom(), targetPane)
 
-		return Pane((left, top, right, bottom))
+		return Pane(left, top, right, bottom)
 
 
 # 字身框（Em Box）
-Pane.EMBOX=Pane()
+Pane.EMBOX=Pane(
+	Pane.EMBOX_X_MIN,
+	Pane.EMBOX_Y_MIN,
+	Pane.EMBOX_X_MAX,
+	Pane.EMBOX_Y_MAX
+	)
 
 # 字面框（Bounding Box）
-Pane.BBOX=Pane([
+Pane.BBOX=Pane(
 	Pane.BBOX_X_MIN,
 	Pane.BBOX_Y_MIN,
 	Pane.BBOX_X_MAX,
 	Pane.BBOX_Y_MAX,
-	])
+	)
 
 class Drawing:
 	def __init__(self, pane):
@@ -188,7 +189,7 @@ class Drawing:
 class Boundary(Pane):
 	def __init__(self, left, top, right, bottom):
 		assert left <= right and top <= bottom
-		super().__init__((left, top, right, bottom))
+		super().__init__(left, top, right, bottom)
 		self.left=left
 		self.top=top
 		self.right=right
