@@ -58,7 +58,7 @@ class StrokePath(Shape):
 		for segment in segments:
 			segment.draw(drawingSystem)
 
-class Stroke(Shape):
+class XieStroke(Shape):
 	def __init__(self, startPoint, strokePath):
 		self.startPoint=startPoint
 		self.strokePath=strokePath
