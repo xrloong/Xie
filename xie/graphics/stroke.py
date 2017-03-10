@@ -1,5 +1,7 @@
+from .shape import Drawing
 from .shape import Shape
 from .shape import Pane
+
 
 class Segment(Shape):
 	def __init__(self):
@@ -1481,11 +1483,58 @@ StrokeInfoMap = {
 	"橫捺": StrokeInfo_橫捺,
 }
 
-def generateStrokeInfo(name, startPoint, parameterList, bBox):
+def _generateStrokeInfo(name, startPoint, parameterList, bBox):
 	clsStrokeInfo = StrokeInfoMap.get(name, None)
 	assert clsStrokeInfo!=None
 
 	parameterList = clsStrokeInfo.parseExpression(parameterList)
 	strokeInfo = clsStrokeInfo(name, startPoint, parameterList, Pane(*bBox))
 	return strokeInfo
+
+class Stroke(Drawing):
+	def __init__(self, strokeInfo):
+		pane=strokeInfo.getBBoxPane()
+		super().__init__(pane)
+		self.strokeInfo=strokeInfo
+
+	def clone(self):
+		stroke=Stroke(self.strokeInfo)
+		stroke.setStatePane(self.getStatePane())
+		return stroke
+
+	def getExpression(self):
+		def encodeStroke(stroke):
+			points=stroke.getPoints()
+			point = points[0]
+			isCurve = point[0]
+			assert isCurve is False
+			pointExpressionList = ["0000{0[0]:02X}{0[1]:02X}".format(point[1]), ]
+
+			for point in points[1:]:
+				isCurve = point[0]
+				if isCurve:
+					pointExpressionList.append("0002{0[0]:02X}{0[1]:02X}".format(point[1]))
+				else:
+					pointExpressionList.append("0001{0[0]:02X}{0[1]:02X}".format(point[1]))
+			return ",".join(pointExpressionList)
+		return encodeStroke(self)
+
+
+	def getName(self):
+		return self.getStrokeInfo().getName()
+
+	def getStrokeInfo(self):
+		return self.strokeInfo
+
+	def getPoints(self):
+		pane=self.getStatePane()
+		startPoint=self.strokeInfo.getStartPoint()
+		points=self.strokeInfo.computePoints(startPoint)
+		bBoxPane=self.getInfoPane()
+		newPoints = [(isCurve, bBoxPane.transformRelativePointByTargetPane(point, pane)) for (isCurve, point) in points]
+		return newPoints
+
+def generateStroke(name, startPoint, parameterList, bBox):
+	strokeInfo = _generateStrokeInfo(name, startPoint, parameterList, bBox)
+	return Stroke(strokeInfo)
 
