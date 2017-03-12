@@ -1491,14 +1491,14 @@ def _generateStrokeInfo(name, startPoint, parameterList, bBox):
 	strokeInfo = clsStrokeInfo(name, startPoint, parameterList, Pane(*bBox))
 	return strokeInfo
 
-class Stroke(Drawing):
+class QHStroke(Drawing):
 	def __init__(self, strokeInfo):
 		pane=strokeInfo.getBBoxPane()
 		super().__init__(pane)
 		self.strokeInfo=strokeInfo
 
 	def clone(self):
-		stroke=Stroke(self.strokeInfo)
+		stroke=QHStroke(self.strokeInfo)
 		stroke.setStatePane(self.getStatePane())
 		return stroke
 
@@ -1533,6 +1533,17 @@ class Stroke(Drawing):
 		bBoxPane=self.getInfoPane()
 		newPoints = [(isCurve, bBoxPane.transformRelativePointByTargetPane(point, pane)) for (isCurve, point) in points]
 		return newPoints
+
+class Stroke(QHStroke):
+	def __init__(self, strokeInfo, pane=None):
+		if not pane:
+			pane=strokeInfo.getBBoxPane()
+		super().__init__(strokeInfo)
+		super().setStatePane(pane)
+
+	def clone(self):
+		return Stroke(self.strokeInfo, self.getStatePane())
+
 
 def generateStroke(name, startPoint, parameterList, bBox):
 	strokeInfo = _generateStrokeInfo(name, startPoint, parameterList, bBox)
