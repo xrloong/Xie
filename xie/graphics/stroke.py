@@ -47,6 +47,151 @@ class QCurveSegment(BaseQCurveSegment):
 	def getEndPoint(self):
 		return self.point
 
+class SegmentFactory:
+	def __init__(self):
+		pass
+
+	# 單個 Segment
+	def generateSegment_Horizontal(self, w):
+		return BeelineSegment((w, 0))
+
+	def generateSegment_Vertical(self, h):
+		return BeelineSegment((0, h))
+
+	def generateSegment_Beeline(self, endPoint):
+		return BeelineSegment(endPoint)
+
+	def generateSegment_QCurve(self, controlPoint, endPoint):
+		return QCurveSegment(controlPoint, endPoint)
+
+	def generateSegment_Slash(self, w, h):
+		return self.generateSegment_Beeline((w, h))
+
+
+	# 單個方向 Segment
+	def generateSegment_右(self, w):
+		assert w>0
+		return self.generateSegment_Horizontal(w)
+
+	def generateSegment_下(self, h):
+		assert h>0
+		return self.generateSegment_Vertical(h)
+
+	def generateSegment_左(self, w):
+		assert w>0
+		return self.generateSegment_Horizontal(-w)
+
+	def generateSegment_上(self, h):
+		assert h>0
+		return self.generateSegment_Vertical(-h)
+
+	def generateSegment_左上(self, w, h):
+		assert w>0 and h>0
+		return self.generateSegment_Slash(-w, -h)
+
+	def generateSegment_左下(self, w, h):
+		assert w>0 and h>0
+		return self.generateSegment_Slash(-w, h)
+
+	def generateSegment_右上(self, w, h):
+		assert w>0 and h>0
+		return self.generateSegment_Slash(w, -h)
+
+	def generateSegment_右下(self, w, h):
+		assert w>0 and h>0
+		return self.generateSegment_Slash(w, h)
+
+
+	# 單個筆畫 Segment
+	def generateSegment_橫(self, w):
+		return self.generateSegment_右(w)
+
+	def generateSegment_豎(self, h):
+		return self.generateSegment_下(h)
+
+	# 多個 Segment
+	def generateSegments_點(self, w, h):
+		return [self.generateSegment_Beeline((w, h))]
+
+	def generateSegments_圈(self, a, b):
+		assert a>0 and b>0
+		segment1=self.generateSegment_QCurve((a, 0), (a, b))
+		segment2=self.generateSegment_QCurve((0, b), (-a, b))
+		segment3=self.generateSegment_QCurve((-a, 0), (-a, -b))
+		segment4=self.generateSegment_QCurve((0, -b), (a, -b))
+		return [segment1, segment2, segment3, segment4]
+
+	def generateSegments_橫(self, w):
+		assert w>0
+		return [self.generateSegment_橫(w)]
+
+	def generateSegments_豎(self, h):
+		assert h>0
+		return [self.generateSegment_豎(h)]
+
+	def generateSegments_左(self, w):
+		return [self.generateSegment_左(w), ]
+
+	def generateSegments_上(self, h):
+		return [self.generateSegment_上(h), ]
+
+	def generateSegments_提(self, w, h):
+		return [self.generateSegment_右上(w, h), ]
+
+	def generateSegments_捺(self, w, h):
+		assert w>0 and h>0
+		scale = max(3, w/h*2, h/w*2)
+		midPoint = (w//2 - h//scale, h//2 + w//scale)
+		endPoint = (w, h)
+		return [self.generateSegment_QCurve(midPoint, endPoint), ]
+
+	def generateSegments_撇(self, w, h):
+		return [self.generateSegment_左下(w, h), ]
+
+	def generateSegments_鉤(self, w, h):
+		return [self.generateSegment_左上(w, h), ]
+
+	def generateSegments_臥捺(self, w, h):
+		assert w>0 and h>0
+		halfW = w//2
+		halfH = h//2
+
+		return [self.generateSegment_QCurve((halfW//2+halfH//4, halfH//2-halfW//4), (halfW, halfH)),
+			self.generateSegment_QCurve((halfW//2-halfH//4, halfH//2+halfW//4), (halfW, halfH)), ]
+
+	def generateSegments_豎撇(self, w, hs, hp):
+		assert w>0 and hs>0 and hp>0
+		return self.generateSegments_豎(hs) + [self.generateSegment_QCurve((0, hp), (-w, hp)), ]
+
+	def generateSegments_彎鉤之彎(self, w1, h1):
+		assert h1>0
+		cPoint = [w1//2, h1//2]
+		midPoint1 = [cPoint[0] + h1//2, cPoint[1] - w1//2]
+		midPoint2 = [w1, h1]
+		return [self.generateSegment_QCurve((w1//2 + h1//2, h1//2 - w1//2), midPoint2), ]
+
+	def generateSegments_撇鉤之撇(self, w, h):
+		assert w>0 and h>0
+		return [self.generateSegment_QCurve((0, h), (-w, h)), ]
+
+	def generateSegments_斜鉤之斜(self, w, h):
+		assert w>0 and h>0
+		return [self.generateSegment_QCurve((w//5, h*4//5), (w, h)), ]
+
+	def generateSegments_曲(self, cr):
+		assert cr>0
+		return [self.generateSegment_QCurve([0, cr], [cr, cr]), ]
+
+	def generateSegments_撇曲(self, wl, wr, h, cr):
+		assert wl>0 and wr>0 and h>0
+		midPoint1 = [-wl + cr, (wl - cr) * h // wl]
+		tmpY = h - (wl - cr) * h // wl
+		return [ self.generateSegment_Beeline(midPoint1),
+			self.generateSegment_QCurve((-cr, tmpY), (0, tmpY)),
+			self.generateSegment_Beeline((wr + wl - cr, 0)), ]
+
+segmentFactory=SegmentFactory()
+
 class StrokePath(Shape):
 	def __init__(self, segments):
 		self.segments=segments
@@ -59,6 +204,7 @@ class StrokePath(Shape):
 
 		for segment in segments:
 			segment.draw(drawingSystem)
+
 
 class XieStroke(Shape):
 	def __init__(self, startPoint, strokePath):
@@ -125,6 +271,13 @@ class StrokeInfo:
 	def computePoints(self):
 		points=[(False, startPoint), (False, startPoint), ]
 		return points
+
+	def computeStrokeSegments(self):
+		return []
+
+	def toStrokePath(self):
+		strokeSegments=self.computeStrokeSegments()
+		return StrokePath(strokeSegments)
 
 	@staticmethod
 	def computeExtreme(points, extreme, solveExtreme, retrieveValue):
@@ -301,6 +454,13 @@ class StrokeInfo_點(StrokeInfo):
 		points.extend(self.compute_點(points[-1][1], w, h))
 		return points
 
+	def computeStrokeSegments(self):
+		paramList=self.parameterList
+		w=paramList[0]
+		h=paramList[1]
+
+		return segmentFactory.generateSegments_點(w, h)
+
 class StrokeInfo_圈(StrokeInfo):
 	@classmethod
 	def parseExpression(cls, parameterExpressionList):
@@ -325,6 +485,13 @@ class StrokeInfo_圈(StrokeInfo):
 		points.extend(self.compute_圈(points[-1][1], a, b))
 		return points
 
+	def computeStrokeSegments(self):
+		paramList=self.parameterList
+		w=paramList[0]
+		h=paramList[1]
+
+		return segmentFactory.generateSegments_圈(w, h)
+
 class StrokeInfo_橫(StrokeInfo):
 	@classmethod
 	def parseExpression(cls, parameterExpressionList):
@@ -345,6 +512,12 @@ class StrokeInfo_橫(StrokeInfo):
 		points=[(False, startPoint), ]
 		points.extend(self.compute_橫(points[-1][1], w1))
 		return points
+
+	def computeStrokeSegments(self):
+		paramList=self.parameterList
+		w1=paramList[0]
+
+		return segmentFactory.generateSegments_橫(w1)
 
 class StrokeInfo_橫鉤(StrokeInfo):
 	@classmethod
@@ -576,6 +749,20 @@ class StrokeInfo_橫折鉤(StrokeInfo):
 		points.extend(self.compute_鉤(points[-1][1], w3, h3))
 		return points
 
+	def computeStrokeSegments(self):
+		paramList=self.parameterList
+		w1=paramList[0]
+		w2=paramList[1]
+		h2=paramList[2]
+		w3=paramList[3]
+		h3=paramList[4]
+
+		segments=[]
+		segments.extend(segmentFactory.generateSegments_橫(w1))
+		segments.extend(segmentFactory.generateSegments_撇鉤之撇(w2, h2))
+		segments.extend(segmentFactory.generateSegments_鉤(w3, h3))
+		return segments
+
 class StrokeInfo_橫折彎(StrokeInfo):
 	@classmethod
 	def parseExpression(cls, parameterExpressionList):
@@ -674,6 +861,21 @@ class StrokeInfo_橫斜彎鉤(StrokeInfo):
 		points.extend(self.compute_撇曲(points[-1][1], w2l, w2r, h2, cr))
 		points.extend(self.compute_上(points[-1][1], h3))
 		return points
+
+	def computeStrokeSegments(self):
+		paramList=self.parameterList
+		w1=paramList[0]
+		h2=paramList[1]
+		w2l=paramList[2]
+		w2r=paramList[3]
+		cr=paramList[4]
+		h3=paramList[5]
+
+		segments=[]
+		segments.extend(segmentFactory.generateSegments_橫(w1))
+		segments.extend(segmentFactory.generateSegments_撇曲(w2l, w2r, h2, cr))
+		segments.extend(segmentFactory.generateSegments_上(h3))
+		return segments
 
 class StrokeInfo_橫折折折鉤(StrokeInfo):
 	@classmethod
@@ -807,6 +1009,12 @@ class StrokeInfo_豎(StrokeInfo):
 		points.extend(self.compute_豎(points[-1][1], h1))
 		return points
 
+	def computeStrokeSegments(self):
+		paramList=self.parameterList
+		h1=paramList[0]
+
+		return segmentFactory.generateSegments_豎(h1)
+
 class StrokeInfo_豎折(StrokeInfo):
 	@classmethod
 	def parseExpression(cls, parameterExpressionList):
@@ -856,6 +1064,16 @@ class StrokeInfo_豎彎左(StrokeInfo):
 		points.extend(self.compute_豎(points[-1][1], h1))
 		points.extend(self.compute_左(points[-1][1], w2))
 		return points
+
+	def computeStrokeSegments(self):
+		paramList=self.parameterList
+		h1=paramList[0]
+		w2=paramList[1]
+
+		segments=[]
+		segments.extend(segmentFactory.generateSegments_豎(h1))
+		segments.extend(segmentFactory.generateSegments_左(w2))
+		return segments
 
 class StrokeInfo_豎提(StrokeInfo):
 	@classmethod
@@ -995,6 +1213,21 @@ class StrokeInfo_豎彎鉤(StrokeInfo):
 		points.extend(self.compute_上(points[-1][1], h2))
 		return points
 
+	def computeStrokeSegments(self):
+		paramList=self.parameterList
+		h1=paramList[0]
+		w1=paramList[1]
+		cr=paramList[2]
+		h2=paramList[3]
+
+
+		segments=[]
+		segments.extend(segmentFactory.generateSegments_豎(h1-cr))
+		segments.extend(segmentFactory.generateSegments_曲(cr))
+		segments.extend(segmentFactory.generateSegments_橫(w1-cr))
+		segments.extend(segmentFactory.generateSegments_上(h2))
+		return segments
+
 class StrokeInfo_豎彎(StrokeInfo):
 	@classmethod
 	def parseExpression(cls, parameterExpressionList):
@@ -1087,6 +1320,17 @@ class StrokeInfo_斜鉤(StrokeInfo):
 		points.extend(self.compute_上(points[-1][1], h2))
 		return points
 
+	def computeStrokeSegments(self):
+		paramList=self.parameterList
+		w1=paramList[0]
+		h1=paramList[1]
+		h2=paramList[2]
+
+		segments=[]
+		segments.extend(segmentFactory.generateSegments_斜鉤之斜(w1, h1))
+		segments.extend(segmentFactory.generateSegments_上(h2))
+		return segments
+
 class StrokeInfo_彎鉤(StrokeInfo):
 	@classmethod
 	def parseExpression(cls, parameterExpressionList):
@@ -1118,6 +1362,18 @@ class StrokeInfo_彎鉤(StrokeInfo):
 		points.extend(self.compute_彎鉤之彎(points[-1][1], w1, h1))
 		points.extend(self.compute_鉤(points[-1][1], w2, h2))
 		return points
+
+	def computeStrokeSegments(self):
+		paramList=self.parameterList
+		w1=paramList[0]
+		h1=paramList[1]
+		w2=paramList[2]
+		h2=paramList[3]
+
+		segments=[]
+		segments.extend(segmentFactory.generateSegments_彎鉤之彎(w1, h1))
+		segments.extend(segmentFactory.generateSegments_鉤(w2, h2))
+		return segments
 
 class StrokeInfo_撇鉤(StrokeInfo):
 	@classmethod
@@ -1306,6 +1562,19 @@ class StrokeInfo_豎撇(StrokeInfo):
 		points.extend(self.compute_豎撇(points[-1][1], w1, hs, hp))
 		return points
 
+	def computeStrokeSegments(self):
+		paramList=self.parameterList
+		w1=paramList[0]
+		h1=paramList[1]
+
+		hs = h1 - h1//2
+		hp = h1 - (hs)
+		wp = w1
+
+		segments=[]
+		segments.extend(segmentFactory.generateSegments_豎撇(w1, hs, hp))
+		return segments
+
 class StrokeInfo_提(StrokeInfo):
 	@classmethod
 	def parseExpression(cls, parameterExpressionList):
@@ -1329,6 +1598,13 @@ class StrokeInfo_提(StrokeInfo):
 		points=[(False, startPoint), ]
 		points.extend(self.compute_提(points[-1][1], w1, h1))
 		return points
+
+	def computeStrokeSegments(self):
+		paramList=self.parameterList
+		w1=paramList[0]
+		h1=paramList[1]
+
+		return segmentFactory.generateSegments_提(w1, h1)
 
 class StrokeInfo_捺(StrokeInfo):
 	@classmethod
@@ -1354,6 +1630,13 @@ class StrokeInfo_捺(StrokeInfo):
 		points.extend(self.compute_捺(points[-1][1], w1, h1))
 		return points
 
+	def computeStrokeSegments(self):
+		paramList=self.parameterList
+		w1=paramList[0]
+		h1=paramList[1]
+
+		return segmentFactory.generateSegments_捺(w1, h1)
+
 class StrokeInfo_臥捺(StrokeInfo):
 	@classmethod
 	def parseExpression(cls, parameterExpressionList):
@@ -1377,6 +1660,13 @@ class StrokeInfo_臥捺(StrokeInfo):
 		points=[(False, startPoint), ]
 		points.extend(self.compute_臥捺(points[-1][1], w1, h1))
 		return points
+
+	def computeStrokeSegments(self):
+		paramList=self.parameterList
+		w1=paramList[0]
+		h1=paramList[1]
+
+		return segmentFactory.generateSegments_臥捺(w1, h1)
 
 class StrokeInfo_提捺(StrokeInfo):
 	@classmethod
@@ -1533,6 +1823,12 @@ class QHStroke(Drawing):
 		bBoxPane=self.getInfoPane()
 		newPoints = [(isCurve, bBoxPane.transformRelativePointByTargetPane(point, pane)) for (isCurve, point) in points]
 		return newPoints
+
+	def toXieStroke(self):
+		strokeInfo=self.getStrokeInfo()
+		startPoint=strokeInfo.getStartPoint()
+		strokePath=strokeInfo.toStrokePath()
+		return XieStroke(startPoint, strokePath)
 
 class Stroke(QHStroke):
 	def __init__(self, strokeInfo, pane=None):
