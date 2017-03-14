@@ -1492,15 +1492,26 @@ def _generateStrokeInfo(name, parameterList):
 	return strokeInfo
 
 class Stroke(Drawing, Shape):
-	def __init__(self, startPoint, strokeInfo, infoPane, statePane):
+	def __init__(self, startPoint, strokeInfo=None, strokePath=None, infoPane=Pane.BBOX, statePane=Pane.BBOX):
 		super().__init__(infoPane, statePane)
-		self.strokeInfo=strokeInfo
 		self.startPoint=startPoint
-		self.strokePath=strokeInfo.toStrokePath()
+
+		if strokeInfo:
+			self.strokeInfo=strokeInfo
+			self.strokePath=strokeInfo.toStrokePath()
+			self.name=strokeInfo.getName()
+		else:
+			self.strokeInfo=None
+			self.strokePath=strokePath
+			self.name=""
 
 	def clone(self):
-		stroke=Stroke(self.startPoint, self.strokeInfo, self.getInfoPane(), self.getStatePane())
+		stroke=Stroke(self.startPoint, strokeInfo=self.strokeInfo, strokePath=self.strokePath,
+			infoPane=self.getInfoPane(), statePane=self.getStatePane())
 		return stroke
+
+	def getName(self):
+		return self.name
 
 	def getExpression(self):
 		def encodeStroke(stroke):
@@ -1520,17 +1531,11 @@ class Stroke(Drawing, Shape):
 		return encodeStroke(self)
 
 
-	def getName(self):
-		return self.getStrokeInfo().getName()
-
 	def getStartPoint(self):
 		return self.startPoint
 
 	def getStrokePath(self):
 		return self.strokePath
-
-	def getStrokeInfo(self):
-		return self.strokeInfo
 
 	def draw(self, drawingSystem):
 		startPoint = self.getStartPoint()
@@ -1560,7 +1565,7 @@ def generateStroke(name, startPoint, parameterList, bBox):
 	pane = Pane(*bBox)
 	infoPane = pane
 	statePane = pane
-	return Stroke(startPoint, strokeInfo, infoPane, statePane)
+	return Stroke(startPoint, strokeInfo=strokeInfo, infoPane=infoPane, statePane=statePane)
 
 class StrokeGroupInfo:
 	def __init__(self, strokeList, bBoxPane):
