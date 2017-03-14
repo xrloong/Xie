@@ -197,4 +197,25 @@ class SegmentFactory:
 			self.generateSegment_QCurve((-cr, tmpY), (0, tmpY)),
 			self.generateSegment_Beeline((wr + wl - cr, 0)), ]
 
+class StrokePath(Shape):
+	def __init__(self, segments):
+		self.segments=segments
+
+	def getSegments(self):
+		return self.segments
+
+	def draw(self, drawingSystem):
+		segments=self.getSegments()
+
+		for segment in segments:
+			segment.draw(drawingSystem)
+
+	def getPoints(self, startPoint):
+		points = []
+		currentPoint = startPoint
+		for segment  in self.getSegments():
+			points.extend(segment.getPoints(currentPoint))
+			endPoint = segment.getEndPoint()
+			currentPoint = (currentPoint[0] + endPoint[0], currentPoint[1] + endPoint[1])
+		return points
 
