@@ -224,31 +224,6 @@ class StrokePath(Shape):
 			currentPoint = (currentPoint[0] + endPoint[0], currentPoint[1] + endPoint[1])
 		return points
 
-class XieStroke(Shape):
-	def __init__(self, startPoint, strokePath):
-		self.startPoint=startPoint
-		self.strokePath=strokePath
-
-	def getStartPoint(self):
-		return self.startPoint
-
-	def getStrokePath(self):
-		return self.strokePath
-
-	def draw(self, drawingSystem):
-		startPoint = self.getStartPoint()
-		drawingSystem.startDrawing(startPoint)
-
-		strokePath = self.getStrokePath()
-		strokePath.draw(drawingSystem)
-
-		drawingSystem.endDrawing()
-
-	def getPoints(self):
-		points = [(False, self.getStartPoint())]
-		points.extend(self.getStrokePath().getPoints(self.getStartPoint()))
-		return points
-
 class Character(Shape):
 	def __init__(self, strokes=[], name=""):
 		self.name = name
@@ -1516,7 +1491,7 @@ def _generateStrokeInfo(name, parameterList):
 	strokeInfo = clsStrokeInfo(name, parameterList)
 	return strokeInfo
 
-class QHStroke(Drawing):
+class Stroke(Drawing, Shape):
 	def __init__(self, startPoint, strokeInfo, infoPane, statePane):
 		super().__init__(infoPane, statePane)
 		self.strokeInfo=strokeInfo
@@ -1524,7 +1499,7 @@ class QHStroke(Drawing):
 		self.strokePath=strokeInfo.toStrokePath()
 
 	def clone(self):
-		stroke=QHStroke(self.startPoint, self.strokeInfo, self.getInfoPane(), self.getStatePane())
+		stroke=Stroke(self.startPoint, self.strokeInfo, self.getInfoPane(), self.getStatePane())
 		return stroke
 
 	def getExpression(self):
@@ -1557,6 +1532,15 @@ class QHStroke(Drawing):
 	def getStrokeInfo(self):
 		return self.strokeInfo
 
+	def draw(self, drawingSystem):
+		startPoint = self.getStartPoint()
+		drawingSystem.startDrawing(startPoint)
+
+		strokePath = self.getStrokePath()
+		strokePath.draw(drawingSystem)
+
+		drawingSystem.endDrawing()
+
 	def getPoints(self):
 		startPoint=self.getStartPoint()
 		strokePath=self.getStrokePath()
@@ -1568,13 +1552,6 @@ class QHStroke(Drawing):
 		bBoxPane=self.getInfoPane()
 		newPoints = [(isCurve, bBoxPane.transformRelativePointByTargetPane(point, pane)) for (isCurve, point) in points]
 		return newPoints
-
-class Stroke(QHStroke):
-	def __init__(self, startPoint, strokeInfo, infoPane, statePane):
-		super().__init__(startPoint, strokeInfo, infoPane, statePane)
-
-	def clone(self):
-		return Stroke(self.startPoint, self.strokeInfo, self.getInfoPane(), self.getStatePane())
 
 
 def generateStroke(name, startPoint, parameterList, bBox):
