@@ -251,15 +251,18 @@ class StrokeInfo:
 	def getName(self):
 		return self.name
 
+	def getParameterList(self):
+		return self.parameterList
+
 	@classmethod
 	def parseExpression(cls, parameterExpressionList):
 		return []
 
-	def computeStrokeSegments(self):
+	def computeStrokeSegments(self, paramList):
 		return []
 
 	def toStrokePath(self):
-		strokeSegments=self.computeStrokeSegments()
+		strokeSegments=self.computeStrokeSegments(self.parameterList)
 		return StrokePath(strokeSegments)
 
 	@staticmethod
@@ -296,8 +299,7 @@ class StrokeInfo_點(StrokeInfo):
 		assert int(l[1])>0
 		return [int(l[0]), int(l[1])]
 
-	def computeStrokeSegments(self):
-		paramList=self.parameterList
+	def computeStrokeSegments(self, paramList):
 		w=paramList[0]
 		h=paramList[1]
 
@@ -312,8 +314,7 @@ class StrokeInfo_圈(StrokeInfo):
 		assert int(l[1])>0
 		return [int(l[0]), int(l[1])]
 
-	def computeStrokeSegments(self):
-		paramList=self.parameterList
+	def computeStrokeSegments(self, paramList):
 		w=paramList[0]
 		h=paramList[1]
 
@@ -327,8 +328,7 @@ class StrokeInfo_橫(StrokeInfo):
 		assert int(l[0])>0
 		return [int(l[0])]
 
-	def computeStrokeSegments(self):
-		paramList=self.parameterList
+	def computeStrokeSegments(self, paramList):
 		w1=paramList[0]
 
 		return segmentFactory.generateSegments_橫(w1)
@@ -343,8 +343,7 @@ class StrokeInfo_橫鉤(StrokeInfo):
 		assert int(l[2])>0
 		return [int(l[0]), int(l[1]), int(l[2]), ]
 
-	def computeStrokeSegments(self):
-		paramList=self.parameterList
+	def computeStrokeSegments(self, paramList):
 		w1=paramList[0]
 		w2=paramList[1]
 		h2=paramList[2]
@@ -363,8 +362,7 @@ class StrokeInfo_橫折(StrokeInfo):
 		assert int(l[1])>0
 		return [int(l[0]), int(l[1]), ]
 
-	def computeStrokeSegments(self):
-		paramList=self.parameterList
+	def computeStrokeSegments(self, paramList):
 		w1=paramList[0]
 		h2=paramList[1]
 
@@ -383,8 +381,7 @@ class StrokeInfo_橫折折(StrokeInfo):
 		assert int(l[2])>0
 		return [int(l[0]), int(l[1]), int(l[2]), ]
 
-	def computeStrokeSegments(self):
-		paramList=self.parameterList
+	def computeStrokeSegments(self, paramList):
 		w1=paramList[0]
 		h2=paramList[1]
 		w3=paramList[2]
@@ -406,8 +403,7 @@ class StrokeInfo_橫折提(StrokeInfo):
 		assert int(l[3])>0
 		return [int(l[0]), int(l[1]), int(l[2]), int(l[3]), ]
 
-	def computeStrokeSegments(self):
-		paramList=self.parameterList
+	def computeStrokeSegments(self, paramList):
 		w1=paramList[0]
 		h2=paramList[1]
 		w3=paramList[2]
@@ -432,8 +428,7 @@ class StrokeInfo_橫折折撇(StrokeInfo):
 		assert int(l[5])>0
 		return [int(l[0]), int(l[1]), int(l[2]), int(l[3]), int(l[4]), int(l[5]), ]
 
-	def computeStrokeSegments(self):
-		paramList=self.parameterList
+	def computeStrokeSegments(self, paramList):
 		w1=paramList[0]
 		w2=paramList[1]
 		h2=paramList[2]
@@ -462,8 +457,7 @@ class StrokeInfo_橫撇彎鉤(StrokeInfo):
 		assert int(l[6])>0
 		return [int(l[0]), int(l[1]), int(l[2]), int(l[3]), int(l[4]), int(l[5]), int(l[6]), ]
 
-	def computeStrokeSegments(self):
-		paramList=self.parameterList
+	def computeStrokeSegments(self, paramList):
 		w1=paramList[0]
 		w2=paramList[1]
 		h2=paramList[2]
@@ -491,8 +485,7 @@ class StrokeInfo_橫折鉤(StrokeInfo):
 		assert int(l[4])>0
 		return [int(l[0]), int(l[1]), int(l[2]), int(l[3]), int(l[4]), ]
 
-	def computeStrokeSegments(self):
-		paramList=self.parameterList
+	def computeStrokeSegments(self, paramList):
 		w1=paramList[0]
 		w2=paramList[1]
 		h2=paramList[2]
@@ -516,8 +509,7 @@ class StrokeInfo_橫折彎(StrokeInfo):
 		assert int(l[3])>0
 		return [int(l[0]), int(l[1]), int(l[2]), int(l[3]), ]
 
-	def computeStrokeSegments(self):
-		paramList=self.parameterList
+	def computeStrokeSegments(self, paramList):
 		w1=paramList[0]
 		h2=paramList[1]
 		w2=paramList[2]
@@ -540,8 +532,7 @@ class StrokeInfo_橫撇(StrokeInfo):
 		assert int(l[2])>0
 		return [int(l[0]), int(l[1]), int(l[2]), ]
 
-	def computeStrokeSegments(self):
-		paramList=self.parameterList
+	def computeStrokeSegments(self, paramList):
 		w1=paramList[0]
 		w2=paramList[1]
 		h2=paramList[2]
@@ -564,8 +555,7 @@ class StrokeInfo_橫斜彎鉤(StrokeInfo):
 		assert int(l[5])>0
 		return [int(l[0]), int(l[1]), int(l[2]), int(l[3]), int(l[4]), int(l[5]), ]
 
-	def computeStrokeSegments(self):
-		paramList=self.parameterList
+	def computeStrokeSegments(self, paramList):
 		w1=paramList[0]
 		h2=paramList[1]
 		w2l=paramList[2]
@@ -594,8 +584,7 @@ class StrokeInfo_橫折折折鉤(StrokeInfo):
 		assert int(l[7])>0
 		return [int(l[0]), int(l[1]), int(l[2]), int(l[3]), int(l[4]), int(l[5]), int(l[6]), int(l[7]), ]
 
-	def computeStrokeSegments(self):
-		paramList=self.parameterList
+	def computeStrokeSegments(self, paramList):
 		w1=paramList[0]
 		w2=paramList[1]
 		h2=paramList[2]
@@ -624,8 +613,7 @@ class StrokeInfo_橫斜鉤(StrokeInfo):
 		assert int(l[3])>0
 		return [int(l[0]), int(l[1]), int(l[2]), int(l[3]), ]
 
-	def computeStrokeSegments(self):
-		paramList=self.parameterList
+	def computeStrokeSegments(self, paramList):
 		w1=paramList[0]
 		w2=paramList[1]
 		h2=paramList[2]
@@ -648,8 +636,7 @@ class StrokeInfo_橫折折折(StrokeInfo):
 		assert len(l)==4
 		return [int(l[0]), int(l[1]), int(l[2]), int(l[3]), ]
 
-	def computeStrokeSegments(self):
-		paramList=self.parameterList
+	def computeStrokeSegments(self, paramList):
 		w1=paramList[0]
 		h2=paramList[1]
 		w3=paramList[2]
@@ -670,8 +657,7 @@ class StrokeInfo_豎(StrokeInfo):
 		assert int(l[0])>0
 		return [int(l[0]), ]
 
-	def computeStrokeSegments(self):
-		paramList=self.parameterList
+	def computeStrokeSegments(self, paramList):
 		h1=paramList[0]
 
 		return segmentFactory.generateSegments_豎(h1)
@@ -685,8 +671,7 @@ class StrokeInfo_豎折(StrokeInfo):
 		assert int(l[1])>0
 		return [int(l[0]), int(l[1]), ]
 
-	def computeStrokeSegments(self):
-		paramList=self.parameterList
+	def computeStrokeSegments(self, paramList):
 		h1=paramList[0]
 		w2=paramList[1]
 
@@ -704,8 +689,7 @@ class StrokeInfo_豎彎左(StrokeInfo):
 		assert int(l[1])>0
 		return [int(l[0]), int(l[1]), ]
 
-	def computeStrokeSegments(self):
-		paramList=self.parameterList
+	def computeStrokeSegments(self, paramList):
 		h1=paramList[0]
 		w2=paramList[1]
 
@@ -724,8 +708,7 @@ class StrokeInfo_豎提(StrokeInfo):
 		assert int(l[2])>0
 		return [int(l[0]), int(l[1]), int(l[2]), ]
 
-	def computeStrokeSegments(self):
-		paramList=self.parameterList
+	def computeStrokeSegments(self, paramList):
 		h1=paramList[0]
 		w2=paramList[1]
 		h2=paramList[2]
@@ -745,8 +728,7 @@ class StrokeInfo_豎折折(StrokeInfo):
 		assert int(l[2])>0
 		return [int(l[0]), int(l[1]), int(l[2]), ]
 
-	def computeStrokeSegments(self):
-		paramList=self.parameterList
+	def computeStrokeSegments(self, paramList):
 		h1=paramList[0]
 		w2=paramList[1]
 		h3=paramList[2]
@@ -771,8 +753,7 @@ class StrokeInfo_豎折彎鉤(StrokeInfo):
 		assert int(l[6])>0
 		return [int(l[0]), int(l[1]), int(l[2]), int(l[3]), int(l[4]), int(l[5]), int(l[6]), ]
 
-	def computeStrokeSegments(self):
-		paramList=self.parameterList
+	def computeStrokeSegments(self, paramList):
 		w1=paramList[0]
 		h1=paramList[1]
 		w2=paramList[2]
@@ -804,8 +785,7 @@ class StrokeInfo_豎彎鉤(StrokeInfo):
 		assert int(l[3])>0
 		return [int(l[0]), int(l[1]), int(l[2]), int(l[3]), ]
 
-	def computeStrokeSegments(self):
-		paramList=self.parameterList
+	def computeStrokeSegments(self, paramList):
 		h1=paramList[0]
 		w1=paramList[1]
 		cr=paramList[2]
@@ -828,8 +808,7 @@ class StrokeInfo_豎彎(StrokeInfo):
 		assert int(l[2])>0
 		return [int(l[0]), int(l[1]), int(l[2]), ]
 
-	def computeStrokeSegments(self):
-		paramList=self.parameterList
+	def computeStrokeSegments(self, paramList):
 		w1=paramList[0]
 		h1=paramList[1]
 		cr=paramList[2]
@@ -850,8 +829,7 @@ class StrokeInfo_豎鉤(StrokeInfo):
 		assert int(l[2])>0
 		return [int(l[0]), int(l[1]), int(l[2]), ]
 
-	def computeStrokeSegments(self):
-		paramList=self.parameterList
+	def computeStrokeSegments(self, paramList):
 		h1=paramList[0]
 		w2=paramList[1]
 		h2=paramList[2]
@@ -878,8 +856,7 @@ class StrokeInfo_斜鉤(StrokeInfo):
 		assert int(l[2])>0
 		return [int(l[0]), int(l[1]), int(l[2]), ]
 
-	def computeStrokeSegments(self):
-		paramList=self.parameterList
+	def computeStrokeSegments(self, paramList):
 		w1=paramList[0]
 		h1=paramList[1]
 		h2=paramList[2]
@@ -900,8 +877,7 @@ class StrokeInfo_彎鉤(StrokeInfo):
 		assert int(l[3])>0
 		return [int(l[0]), int(l[1]), int(l[2]), int(l[3]), ]
 
-	def computeStrokeSegments(self):
-		paramList=self.parameterList
+	def computeStrokeSegments(self, paramList):
 		w1=paramList[0]
 		h1=paramList[1]
 		w2=paramList[2]
@@ -923,8 +899,7 @@ class StrokeInfo_撇鉤(StrokeInfo):
 		assert int(l[3])>0
 		return [int(l[0]), int(l[1]), int(l[2]), int(l[3]), ]
 
-	def computeStrokeSegments(self):
-		paramList=self.parameterList
+	def computeStrokeSegments(self, paramList):
 		w1=paramList[0]
 		h1=paramList[1]
 		w2=paramList[2]
@@ -944,8 +919,7 @@ class StrokeInfo_撇(StrokeInfo):
 		assert int(l[1])>0
 		return [int(l[0]), int(l[1]), ]
 
-	def computeStrokeSegments(self):
-		paramList=self.parameterList
+	def computeStrokeSegments(self, paramList):
 		w1=paramList[0]
 		h1=paramList[1]
 
@@ -964,8 +938,7 @@ class StrokeInfo_撇點(StrokeInfo):
 		assert int(l[3])>0
 		return [int(l[0]), int(l[1]), int(l[2]), int(l[3]), ]
 
-	def computeStrokeSegments(self):
-		paramList=self.parameterList
+	def computeStrokeSegments(self, paramList):
 		w1=paramList[0]
 		h1=paramList[1]
 		w2=paramList[2]
@@ -987,8 +960,7 @@ class StrokeInfo_撇橫(StrokeInfo):
 #		assert int(l[3])>0
 		return [int(l[0]), int(l[1]), int(l[2]), int(l[3]), ]
 
-	def computeStrokeSegments(self):
-		paramList=self.parameterList
+	def computeStrokeSegments(self, paramList):
 		w1=paramList[0]
 		h1=paramList[1]
 		w2=paramList[2]
@@ -1016,8 +988,7 @@ class StrokeInfo_撇橫撇(StrokeInfo):
 		assert int(l[4])>0
 		return [int(l[0]), int(l[1]), int(l[2]), int(l[3]), int(l[4]), ]
 
-	def computeStrokeSegments(self):
-		paramList=self.parameterList
+	def computeStrokeSegments(self, paramList):
 		w1=paramList[0]
 		h1=paramList[1]
 		w2=paramList[2]
@@ -1039,8 +1010,7 @@ class StrokeInfo_豎撇(StrokeInfo):
 		assert int(l[1])>0
 		return [int(l[0]), int(l[1]), ]
 
-	def computeStrokeSegments(self):
-		paramList=self.parameterList
+	def computeStrokeSegments(self, paramList):
 		w1=paramList[0]
 		h1=paramList[1]
 
@@ -1061,8 +1031,7 @@ class StrokeInfo_提(StrokeInfo):
 		assert int(l[1])>0
 		return [int(l[0]), int(l[1]), ]
 
-	def computeStrokeSegments(self):
-		paramList=self.parameterList
+	def computeStrokeSegments(self, paramList):
 		w1=paramList[0]
 		h1=paramList[1]
 
@@ -1077,8 +1046,7 @@ class StrokeInfo_捺(StrokeInfo):
 		assert int(l[1])>0
 		return [int(l[0]), int(l[1]), ]
 
-	def computeStrokeSegments(self):
-		paramList=self.parameterList
+	def computeStrokeSegments(self, paramList):
 		w1=paramList[0]
 		h1=paramList[1]
 
@@ -1093,8 +1061,7 @@ class StrokeInfo_臥捺(StrokeInfo):
 		assert int(l[1])>0
 		return [int(l[0]), int(l[1]), ]
 
-	def computeStrokeSegments(self):
-		paramList=self.parameterList
+	def computeStrokeSegments(self, paramList):
 		w1=paramList[0]
 		h1=paramList[1]
 
@@ -1111,8 +1078,7 @@ class StrokeInfo_提捺(StrokeInfo):
 		assert int(l[3])>0
 		return [int(l[0]), int(l[1]), int(l[2]), int(l[3]), ]
 
-	def computeStrokeSegments(self):
-		paramList=self.parameterList
+	def computeStrokeSegments(self, paramList):
 		w1=paramList[0]
 		h1=paramList[1]
 		w2=paramList[2]
@@ -1133,8 +1099,7 @@ class StrokeInfo_橫捺(StrokeInfo):
 		assert int(l[2])>0
 		return [int(l[0]), int(l[1]), int(l[2]), ]
 
-	def computeStrokeSegments(self):
-		paramList=self.parameterList
+	def computeStrokeSegments(self, paramList):
 		w1=paramList[0]
 		w2=paramList[1]
 		h2=paramList[2]
