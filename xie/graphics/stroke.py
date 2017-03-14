@@ -1576,9 +1576,7 @@ class QHStroke(Drawing):
 		return newPoints
 
 class Stroke(QHStroke):
-	def __init__(self, startPoint, strokeInfo, pane=None):
-		if not pane:
-			pane=strokeInfo.getBBoxPane()
+	def __init__(self, startPoint, strokeInfo, pane):
 		super().__init__(startPoint, strokeInfo)
 		super().setStatePane(pane)
 
@@ -1588,7 +1586,7 @@ class Stroke(QHStroke):
 
 def generateStroke(name, startPoint, parameterList, bBox):
 	strokeInfo = _generateStrokeInfo(name, parameterList, bBox)
-	return Stroke(startPoint, strokeInfo)
+	return Stroke(startPoint, strokeInfo, strokeInfo.getBBoxPane())
 
 class StrokeGroupInfo:
 	def __init__(self, strokeList, bBoxPane):
