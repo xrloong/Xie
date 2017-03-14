@@ -1564,17 +1564,16 @@ class QHStroke(Drawing):
 		return self.strokeInfo
 
 	def getPoints(self):
-		pane=self.getStatePane()
 		startPoint=self.getStartPoint()
-		points=self.toXieStroke().getPoints()
+		strokePath=self.getStrokePath()
+
+		points = [(False, startPoint)]
+		points.extend(strokePath.getPoints(startPoint))
+
+		pane=self.getStatePane()
 		bBoxPane=self.getInfoPane()
 		newPoints = [(isCurve, bBoxPane.transformRelativePointByTargetPane(point, pane)) for (isCurve, point) in points]
 		return newPoints
-
-	def toXieStroke(self):
-		startPoint=self.getStartPoint()
-		strokePath=self.getStrokePath()
-		return XieStroke(startPoint, strokePath)
 
 class Stroke(QHStroke):
 	def __init__(self, startPoint, strokeInfo, pane=None):
