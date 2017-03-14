@@ -1437,59 +1437,64 @@ class StrokeInfo_橫捺(StrokeInfo):
 		segments.extend(segmentFactory.generateSegments_捺(w2, h2))
 		return segments
 
-StrokeInfoMap = {
-	"點": StrokeInfo_點,
-#	"長頓點": StrokeInfo_點,
-	"圈": StrokeInfo_圈,
-	"橫": StrokeInfo_橫,
-	"橫鉤": StrokeInfo_橫鉤,
-	"橫折": StrokeInfo_橫折,
-	"橫折折": StrokeInfo_橫折折,
-	"橫折提": StrokeInfo_橫折提,
-	"橫折折撇": StrokeInfo_橫折折撇,
-	"橫撇彎鉤": StrokeInfo_橫撇彎鉤,
-	"橫折鉤": StrokeInfo_橫折鉤,
-	"橫折彎": StrokeInfo_橫折彎,
-	"橫撇": StrokeInfo_橫撇,
-	"橫斜彎鉤": StrokeInfo_橫斜彎鉤,
-	"橫折折折鉤": StrokeInfo_橫折折折鉤,
-	"橫斜鉤": StrokeInfo_橫斜鉤,
-	"橫折折折": StrokeInfo_橫折折折,
-	"豎": StrokeInfo_豎,
-	"豎折": StrokeInfo_豎折,
-	"豎彎左": StrokeInfo_豎彎左,
-	"豎提": StrokeInfo_豎提,
-	"豎折折": StrokeInfo_豎折折,
-	"豎折彎鉤": StrokeInfo_豎折彎鉤,
-	"豎彎鉤": StrokeInfo_豎彎鉤,
-	"豎彎": StrokeInfo_豎彎,
-	"豎鉤": StrokeInfo_豎鉤,
-	"扁斜鉤": StrokeInfo_豎彎鉤,
-	"斜鉤": StrokeInfo_斜鉤,
-	"彎鉤": StrokeInfo_彎鉤,
-	"撇鉤": StrokeInfo_撇鉤,
+class StrokeInfoFactory:
+	def __init__(self):
+		self.strokeInfoMap = {
+			"點": StrokeInfo_點,
+		#	"長頓點": StrokeInfo_點,
+			"圈": StrokeInfo_圈,
+			"橫": StrokeInfo_橫,
+			"橫鉤": StrokeInfo_橫鉤,
+			"橫折": StrokeInfo_橫折,
+			"橫折折": StrokeInfo_橫折折,
+			"橫折提": StrokeInfo_橫折提,
+			"橫折折撇": StrokeInfo_橫折折撇,
+			"橫撇彎鉤": StrokeInfo_橫撇彎鉤,
+			"橫折鉤": StrokeInfo_橫折鉤,
+			"橫折彎": StrokeInfo_橫折彎,
+			"橫撇": StrokeInfo_橫撇,
+			"橫斜彎鉤": StrokeInfo_橫斜彎鉤,
+			"橫折折折鉤": StrokeInfo_橫折折折鉤,
+			"橫斜鉤": StrokeInfo_橫斜鉤,
+			"橫折折折": StrokeInfo_橫折折折,
+			"豎": StrokeInfo_豎,
+			"豎折": StrokeInfo_豎折,
+			"豎彎左": StrokeInfo_豎彎左,
+			"豎提": StrokeInfo_豎提,
+			"豎折折": StrokeInfo_豎折折,
+			"豎折彎鉤": StrokeInfo_豎折彎鉤,
+			"豎彎鉤": StrokeInfo_豎彎鉤,
+			"豎彎": StrokeInfo_豎彎,
+			"豎鉤": StrokeInfo_豎鉤,
+			"扁斜鉤": StrokeInfo_豎彎鉤,
+			"斜鉤": StrokeInfo_斜鉤,
+			"彎鉤": StrokeInfo_彎鉤,
+			"撇鉤": StrokeInfo_撇鉤,
 
-	"撇": StrokeInfo_撇,
-	"撇點": StrokeInfo_撇點,
-	"撇橫": StrokeInfo_撇橫,
-	"撇提": StrokeInfo_撇橫,
-	"撇折": StrokeInfo_撇橫,
-	"撇橫撇": StrokeInfo_撇橫撇,
-	"豎撇": StrokeInfo_豎撇,
-	"提": StrokeInfo_提,
-	"捺": StrokeInfo_捺,
-	"臥捺": StrokeInfo_臥捺,
-	"提捺": StrokeInfo_提捺,
-	"橫捺": StrokeInfo_橫捺,
-}
+			"撇": StrokeInfo_撇,
+			"撇點": StrokeInfo_撇點,
+			"撇橫": StrokeInfo_撇橫,
+			"撇提": StrokeInfo_撇橫,
+			"撇折": StrokeInfo_撇橫,
+			"撇橫撇": StrokeInfo_撇橫撇,
+			"豎撇": StrokeInfo_豎撇,
+			"提": StrokeInfo_提,
+			"捺": StrokeInfo_捺,
+			"臥捺": StrokeInfo_臥捺,
+			"提捺": StrokeInfo_提捺,
+			"橫捺": StrokeInfo_橫捺,
+		}
 
-def _generateStrokeInfo(name, parameterList):
-	clsStrokeInfo = StrokeInfoMap.get(name, None)
-	assert clsStrokeInfo!=None
 
-	parameterList = clsStrokeInfo.parseExpression(parameterList)
-	strokeInfo = clsStrokeInfo(name, parameterList)
-	return strokeInfo
+	def generateStrokeInfo(self, name, parameterList):
+		clsStrokeInfo = self.strokeInfoMap.get(name, None)
+		assert clsStrokeInfo!=None
+
+		parameterList = clsStrokeInfo.parseExpression(parameterList)
+		strokeInfo = clsStrokeInfo(name, parameterList)
+		return strokeInfo
+
+strokeInfoFactory=StrokeInfoFactory()
 
 class Stroke(Drawing, Shape):
 	def __init__(self, startPoint, strokeInfo=None, strokePath=None, infoPane=Pane.BBOX, statePane=Pane.BBOX):
@@ -1560,7 +1565,7 @@ class Stroke(Drawing, Shape):
 
 
 def generateStroke(name, startPoint, parameterList, bBox):
-	strokeInfo = _generateStrokeInfo(name, parameterList)
+	strokeInfo = strokeInfoFactory.generateStrokeInfo(name, parameterList)
 
 	pane = Pane(*bBox)
 	infoPane = pane
