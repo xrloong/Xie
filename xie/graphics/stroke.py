@@ -1526,6 +1526,7 @@ class QHStroke(Drawing):
 		super().__init__(pane)
 		self.strokeInfo=strokeInfo
 		self.startPoint=startPoint
+		self.strokePath=strokeInfo.toStrokePath()
 
 	def clone(self):
 		stroke=QHStroke(self.startPoint, self.strokeInfo)
@@ -1556,6 +1557,9 @@ class QHStroke(Drawing):
 	def getStartPoint(self):
 		return self.startPoint
 
+	def getStrokePath(self):
+		return self.strokePath
+
 	def getStrokeInfo(self):
 		return self.strokeInfo
 
@@ -1569,9 +1573,7 @@ class QHStroke(Drawing):
 
 	def toXieStroke(self):
 		startPoint=self.getStartPoint()
-
-		strokeInfo=self.getStrokeInfo()
-		strokePath=strokeInfo.toStrokePath()
+		strokePath=self.getStrokePath()
 		return XieStroke(startPoint, strokePath)
 
 class Stroke(QHStroke):
