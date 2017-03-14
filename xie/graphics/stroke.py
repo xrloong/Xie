@@ -48,25 +48,30 @@ class Character(Shape):
 			stroke.draw(drawingSystem)
 
 class StrokeInfo:
-	def __init__(self, name, parameterList):
+	def __init__(self, name, strokePath):
 		self.name=name
-		self.parameterList=parameterList
+		self.strokePath=strokePath
 
 	def getName(self):
 		return self.name
 
-	def getParameterList(self):
-		return self.parameterList
+	def getStrokePath(self):
+		return self.strokePath
 
-	@classmethod
-	def parseExpression(cls, parameterExpressionList):
+class StrokeInfoGenerator:
+	def generate(self, name, parameterList):
+		strokePath = self.computeStrokePath(parameterList)
+		strokeInfo = StrokeInfo(name, strokePath)
+		return strokeInfo
+
+	def parseExpression(self, parameterExpressionList):
 		return []
 
 	def computeStrokeSegments(self, paramList):
 		return []
 
-	def toStrokePath(self):
-		strokeSegments=self.computeStrokeSegments(self.parameterList)
+	def computeStrokePath(self, parameterList):
+		strokeSegments=self.computeStrokeSegments(parameterList)
 		return StrokePath(strokeSegments)
 
 	@staticmethod
@@ -95,9 +100,8 @@ class StrokeInfo:
 		return extremeValue
 
 
-class StrokeInfo_點(StrokeInfo):
-	@classmethod
-	def parseExpression(cls, parameterExpressionList):
+class StrokeInfoGenerator_點(StrokeInfoGenerator):
+	def parseExpression(self, parameterExpressionList):
 		l=parameterExpressionList
 		assert len(l)==2
 		assert int(l[1])>0
@@ -109,9 +113,8 @@ class StrokeInfo_點(StrokeInfo):
 
 		return segmentFactory.generateSegments_點(w, h)
 
-class StrokeInfo_圈(StrokeInfo):
-	@classmethod
-	def parseExpression(cls, parameterExpressionList):
+class StrokeInfoGenerator_圈(StrokeInfoGenerator):
+	def parseExpression(self, parameterExpressionList):
 		l=parameterExpressionList
 		assert len(l)==2
 		assert int(l[0])>0
@@ -124,9 +127,8 @@ class StrokeInfo_圈(StrokeInfo):
 
 		return segmentFactory.generateSegments_圈(w, h)
 
-class StrokeInfo_橫(StrokeInfo):
-	@classmethod
-	def parseExpression(cls, parameterExpressionList):
+class StrokeInfoGenerator_橫(StrokeInfoGenerator):
+	def parseExpression(self, parameterExpressionList):
 		l=parameterExpressionList
 		assert len(l)==1
 		assert int(l[0])>0
@@ -137,9 +139,8 @@ class StrokeInfo_橫(StrokeInfo):
 
 		return segmentFactory.generateSegments_橫(w1)
 
-class StrokeInfo_橫鉤(StrokeInfo):
-	@classmethod
-	def parseExpression(cls, parameterExpressionList):
+class StrokeInfoGenerator_橫鉤(StrokeInfoGenerator):
+	def parseExpression(self, parameterExpressionList):
 		l=parameterExpressionList
 		assert len(l)==3
 		assert int(l[0])>0
@@ -157,9 +158,8 @@ class StrokeInfo_橫鉤(StrokeInfo):
 		segments.extend(segmentFactory.generateSegments_撇(w2, h2))
 		return segments
 
-class StrokeInfo_橫折(StrokeInfo):
-	@classmethod
-	def parseExpression(cls, parameterExpressionList):
+class StrokeInfoGenerator_橫折(StrokeInfoGenerator):
+	def parseExpression(self, parameterExpressionList):
 		l=parameterExpressionList
 		assert len(l)==2
 		assert int(l[0])>0
@@ -175,9 +175,8 @@ class StrokeInfo_橫折(StrokeInfo):
 		segments.extend(segmentFactory.generateSegments_豎(h2))
 		return segments
 
-class StrokeInfo_橫折折(StrokeInfo):
-	@classmethod
-	def parseExpression(cls, parameterExpressionList):
+class StrokeInfoGenerator_橫折折(StrokeInfoGenerator):
+	def parseExpression(self, parameterExpressionList):
 		l=parameterExpressionList
 		assert len(l)==3
 		assert int(l[0])>0
@@ -196,9 +195,8 @@ class StrokeInfo_橫折折(StrokeInfo):
 		segments.extend(segmentFactory.generateSegments_橫(w3))
 		return segments
 
-class StrokeInfo_橫折提(StrokeInfo):
-	@classmethod
-	def parseExpression(cls, parameterExpressionList):
+class StrokeInfoGenerator_橫折提(StrokeInfoGenerator):
+	def parseExpression(self, parameterExpressionList):
 		l=parameterExpressionList
 		assert len(l)==4
 		assert int(l[0])>0
@@ -219,9 +217,8 @@ class StrokeInfo_橫折提(StrokeInfo):
 		segments.extend(segmentFactory.generateSegments_提(w3, h3))
 		return segments
 
-class StrokeInfo_橫折折撇(StrokeInfo):
-	@classmethod
-	def parseExpression(cls, parameterExpressionList):
+class StrokeInfoGenerator_橫折折撇(StrokeInfoGenerator):
+	def parseExpression(self, parameterExpressionList):
 		l=parameterExpressionList
 		assert len(l)==4
 		assert int(l[0])>0
@@ -247,9 +244,8 @@ class StrokeInfo_橫折折撇(StrokeInfo):
 		segments.extend(segmentFactory.generateSegments_撇(w4, h4))
 		return segments
 
-class StrokeInfo_橫撇彎鉤(StrokeInfo):
-	@classmethod
-	def parseExpression(cls, parameterExpressionList):
+class StrokeInfoGenerator_橫撇彎鉤(StrokeInfoGenerator):
+	def parseExpression(self, parameterExpressionList):
 		l=parameterExpressionList
 		assert len(l)==4
 		assert int(l[0])>0
@@ -277,9 +273,8 @@ class StrokeInfo_橫撇彎鉤(StrokeInfo):
 		segments.extend(segmentFactory.generateSegments_鉤(w4, h4))
 		return segments
 
-class StrokeInfo_橫折鉤(StrokeInfo):
-	@classmethod
-	def parseExpression(cls, parameterExpressionList):
+class StrokeInfoGenerator_橫折鉤(StrokeInfoGenerator):
+	def parseExpression(self, parameterExpressionList):
 		l=parameterExpressionList
 		assert len(l)==5
 		assert int(l[0])>0
@@ -302,9 +297,8 @@ class StrokeInfo_橫折鉤(StrokeInfo):
 		segments.extend(segmentFactory.generateSegments_鉤(w3, h3))
 		return segments
 
-class StrokeInfo_橫折彎(StrokeInfo):
-	@classmethod
-	def parseExpression(cls, parameterExpressionList):
+class StrokeInfoGenerator_橫折彎(StrokeInfoGenerator):
+	def parseExpression(self, parameterExpressionList):
 		l=parameterExpressionList
 		assert len(l)==4
 		assert int(l[0])>0
@@ -326,9 +320,8 @@ class StrokeInfo_橫折彎(StrokeInfo):
 		segments.extend(segmentFactory.generateSegments_橫(w2 - cr))
 		return segments
 
-class StrokeInfo_橫撇(StrokeInfo):
-	@classmethod
-	def parseExpression(cls, parameterExpressionList):
+class StrokeInfoGenerator_橫撇(StrokeInfoGenerator):
+	def parseExpression(self, parameterExpressionList):
 		l=parameterExpressionList
 		assert len(l)==3
 		assert int(l[0])>0
@@ -346,9 +339,8 @@ class StrokeInfo_橫撇(StrokeInfo):
 		segments.extend(segmentFactory.generateSegments_撇(w2, h2))
 		return segments
 
-class StrokeInfo_橫斜彎鉤(StrokeInfo):
-	@classmethod
-	def parseExpression(cls, parameterExpressionList):
+class StrokeInfoGenerator_橫斜彎鉤(StrokeInfoGenerator):
+	def parseExpression(self, parameterExpressionList):
 		l=parameterExpressionList
 		assert len(l)==6
 		assert int(l[0])>0
@@ -373,9 +365,8 @@ class StrokeInfo_橫斜彎鉤(StrokeInfo):
 		segments.extend(segmentFactory.generateSegments_上(h3))
 		return segments
 
-class StrokeInfo_橫折折折鉤(StrokeInfo):
-	@classmethod
-	def parseExpression(cls, parameterExpressionList):
+class StrokeInfoGenerator_橫折折折鉤(StrokeInfoGenerator):
+	def parseExpression(self, parameterExpressionList):
 		l=parameterExpressionList
 		assert len(l)==8
 		assert int(l[0])>0
@@ -406,9 +397,8 @@ class StrokeInfo_橫折折折鉤(StrokeInfo):
 		segments.extend(segmentFactory.generateSegments_鉤(w5, h5))
 		return segments
 
-class StrokeInfo_橫斜鉤(StrokeInfo):
-	@classmethod
-	def parseExpression(cls, parameterExpressionList):
+class StrokeInfoGenerator_橫斜鉤(StrokeInfoGenerator):
+	def parseExpression(self, parameterExpressionList):
 		l=parameterExpressionList
 		assert len(l)==4
 		assert int(l[0])>0
@@ -429,9 +419,8 @@ class StrokeInfo_橫斜鉤(StrokeInfo):
 		segments.extend(segmentFactory.generateSegments_上(h3))
 		return segments
 
-class StrokeInfo_橫折折折(StrokeInfo):
-	@classmethod
-	def parseExpression(cls, parameterExpressionList):
+class StrokeInfoGenerator_橫折折折(StrokeInfoGenerator):
+	def parseExpression(self, parameterExpressionList):
 		l=parameterExpressionList
 		assert int(l[0])>0
 		assert int(l[1])>0
@@ -453,9 +442,8 @@ class StrokeInfo_橫折折折(StrokeInfo):
 		segments.extend(segmentFactory.generateSegments_豎(h4))
 		return segments
 
-class StrokeInfo_豎(StrokeInfo):
-	@classmethod
-	def parseExpression(cls, parameterExpressionList):
+class StrokeInfoGenerator_豎(StrokeInfoGenerator):
+	def parseExpression(self, parameterExpressionList):
 		l=parameterExpressionList
 		assert len(l)==1
 		assert int(l[0])>0
@@ -466,9 +454,8 @@ class StrokeInfo_豎(StrokeInfo):
 
 		return segmentFactory.generateSegments_豎(h1)
 
-class StrokeInfo_豎折(StrokeInfo):
-	@classmethod
-	def parseExpression(cls, parameterExpressionList):
+class StrokeInfoGenerator_豎折(StrokeInfoGenerator):
+	def parseExpression(self, parameterExpressionList):
 		l=parameterExpressionList
 		assert len(l)==2
 		assert int(l[0])>0
@@ -484,9 +471,8 @@ class StrokeInfo_豎折(StrokeInfo):
 		segments.extend(segmentFactory.generateSegments_橫(w2))
 		return segments
 
-class StrokeInfo_豎彎左(StrokeInfo):
-	@classmethod
-	def parseExpression(cls, parameterExpressionList):
+class StrokeInfoGenerator_豎彎左(StrokeInfoGenerator):
+	def parseExpression(self, parameterExpressionList):
 		l=parameterExpressionList
 		assert len(l)==2
 		assert int(l[0])>0
@@ -502,9 +488,8 @@ class StrokeInfo_豎彎左(StrokeInfo):
 		segments.extend(segmentFactory.generateSegments_左(w2))
 		return segments
 
-class StrokeInfo_豎提(StrokeInfo):
-	@classmethod
-	def parseExpression(cls, parameterExpressionList):
+class StrokeInfoGenerator_豎提(StrokeInfoGenerator):
+	def parseExpression(self, parameterExpressionList):
 		l=parameterExpressionList
 		assert len(l)==3
 		assert int(l[0])>0
@@ -522,9 +507,8 @@ class StrokeInfo_豎提(StrokeInfo):
 		segments.extend(segmentFactory.generateSegments_提(w2, h2))
 		return segments
 
-class StrokeInfo_豎折折(StrokeInfo):
-	@classmethod
-	def parseExpression(cls, parameterExpressionList):
+class StrokeInfoGenerator_豎折折(StrokeInfoGenerator):
+	def parseExpression(self, parameterExpressionList):
 		l=parameterExpressionList
 		assert len(l)==3
 		assert int(l[0])>0
@@ -543,9 +527,8 @@ class StrokeInfo_豎折折(StrokeInfo):
 		segments.extend(segmentFactory.generateSegments_豎(h3))
 		return segments
 
-class StrokeInfo_豎折彎鉤(StrokeInfo):
-	@classmethod
-	def parseExpression(cls, parameterExpressionList):
+class StrokeInfoGenerator_豎折彎鉤(StrokeInfoGenerator):
+	def parseExpression(self, parameterExpressionList):
 		l=parameterExpressionList
 		assert len(l)==7
 		assert int(l[0])>=0
@@ -578,9 +561,8 @@ class StrokeInfo_豎折彎鉤(StrokeInfo):
 		segments.extend(segmentFactory.generateSegments_鉤(w4, h4))
 		return segments
 
-class StrokeInfo_豎彎鉤(StrokeInfo):
-	@classmethod
-	def parseExpression(cls, parameterExpressionList):
+class StrokeInfoGenerator_豎彎鉤(StrokeInfoGenerator):
+	def parseExpression(self, parameterExpressionList):
 		l=parameterExpressionList
 		assert len(l)==4
 		assert int(l[0])>0
@@ -602,9 +584,8 @@ class StrokeInfo_豎彎鉤(StrokeInfo):
 		segments.extend(segmentFactory.generateSegments_上(h2))
 		return segments
 
-class StrokeInfo_豎彎(StrokeInfo):
-	@classmethod
-	def parseExpression(cls, parameterExpressionList):
+class StrokeInfoGenerator_豎彎(StrokeInfoGenerator):
+	def parseExpression(self, parameterExpressionList):
 		l=parameterExpressionList
 		assert len(l)==3
 		assert int(l[0])>0
@@ -623,9 +604,8 @@ class StrokeInfo_豎彎(StrokeInfo):
 		segments.extend(segmentFactory.generateSegments_橫(w1))
 		return segments
 
-class StrokeInfo_豎鉤(StrokeInfo):
-	@classmethod
-	def parseExpression(cls, parameterExpressionList):
+class StrokeInfoGenerator_豎鉤(StrokeInfoGenerator):
+	def parseExpression(self, parameterExpressionList):
 		l=parameterExpressionList
 		assert len(l)==3
 		assert int(l[0])>0
@@ -650,9 +630,8 @@ class StrokeInfo_豎鉤(StrokeInfo):
 		segments.extend(segmentFactory.generateSegments_鉤(wg, hg))
 		return segments
 
-class StrokeInfo_斜鉤(StrokeInfo):
-	@classmethod
-	def parseExpression(cls, parameterExpressionList):
+class StrokeInfoGenerator_斜鉤(StrokeInfoGenerator):
+	def parseExpression(self, parameterExpressionList):
 		l=parameterExpressionList
 		assert len(l)==3
 		assert int(l[0])>0
@@ -670,9 +649,8 @@ class StrokeInfo_斜鉤(StrokeInfo):
 		segments.extend(segmentFactory.generateSegments_上(h2))
 		return segments
 
-class StrokeInfo_彎鉤(StrokeInfo):
-	@classmethod
-	def parseExpression(cls, parameterExpressionList):
+class StrokeInfoGenerator_彎鉤(StrokeInfoGenerator):
+	def parseExpression(self, parameterExpressionList):
 		l=parameterExpressionList
 		assert len(l)==4
 #		assert int(l[0])>0
@@ -692,9 +670,8 @@ class StrokeInfo_彎鉤(StrokeInfo):
 		segments.extend(segmentFactory.generateSegments_鉤(w2, h2))
 		return segments
 
-class StrokeInfo_撇鉤(StrokeInfo):
-	@classmethod
-	def parseExpression(cls, parameterExpressionList):
+class StrokeInfoGenerator_撇鉤(StrokeInfoGenerator):
+	def parseExpression(self, parameterExpressionList):
 		l=parameterExpressionList
 		assert len(l)==4
 #		assert int(l[0])>0
@@ -714,9 +691,8 @@ class StrokeInfo_撇鉤(StrokeInfo):
 		segments.extend(segmentFactory.generateSegments_鉤(w2, h2))
 		return segments
 
-class StrokeInfo_撇(StrokeInfo):
-	@classmethod
-	def parseExpression(cls, parameterExpressionList):
+class StrokeInfoGenerator_撇(StrokeInfoGenerator):
+	def parseExpression(self, parameterExpressionList):
 		l=parameterExpressionList
 		assert len(l)==2
 		assert int(l[0])>0
@@ -731,9 +707,8 @@ class StrokeInfo_撇(StrokeInfo):
 		segments.extend(segmentFactory.generateSegments_撇(w1, h1))
 		return segments
 
-class StrokeInfo_撇點(StrokeInfo):
-	@classmethod
-	def parseExpression(cls, parameterExpressionList):
+class StrokeInfoGenerator_撇點(StrokeInfoGenerator):
+	def parseExpression(self, parameterExpressionList):
 		l=parameterExpressionList
 		assert len(l)==4
 		assert int(l[0])>0
@@ -753,9 +728,8 @@ class StrokeInfo_撇點(StrokeInfo):
 		segments.extend(segmentFactory.generateSegments_點(w2, h2))
 		return segments
 
-class StrokeInfo_撇橫(StrokeInfo):
-	@classmethod
-	def parseExpression(cls, parameterExpressionList):
+class StrokeInfoGenerator_撇橫(StrokeInfoGenerator):
+	def parseExpression(self, parameterExpressionList):
 		l=parameterExpressionList
 		assert len(l)==4
 		assert int(l[0])>0
@@ -780,9 +754,8 @@ class StrokeInfo_撇橫(StrokeInfo):
 			segments.extend(segmentFactory.generateSegments_橫(w2))
 		return segments
 
-class StrokeInfo_撇橫撇(StrokeInfo):
-	@classmethod
-	def parseExpression(cls, parameterExpressionList):
+class StrokeInfoGenerator_撇橫撇(StrokeInfoGenerator):
+	def parseExpression(self, parameterExpressionList):
 		l=parameterExpressionList
 		assert len(l)==5
 		assert int(l[0])>0
@@ -805,9 +778,8 @@ class StrokeInfo_撇橫撇(StrokeInfo):
 		segments.extend(segmentFactory.generateSegments_撇(w3, h3))
 		return segments
 
-class StrokeInfo_豎撇(StrokeInfo):
-	@classmethod
-	def parseExpression(cls, parameterExpressionList):
+class StrokeInfoGenerator_豎撇(StrokeInfoGenerator):
+	def parseExpression(self, parameterExpressionList):
 		l=parameterExpressionList
 		assert len(l)==2
 		assert int(l[0])>0
@@ -826,9 +798,8 @@ class StrokeInfo_豎撇(StrokeInfo):
 		segments.extend(segmentFactory.generateSegments_豎撇(w1, hs, hp))
 		return segments
 
-class StrokeInfo_提(StrokeInfo):
-	@classmethod
-	def parseExpression(cls, parameterExpressionList):
+class StrokeInfoGenerator_提(StrokeInfoGenerator):
+	def parseExpression(self, parameterExpressionList):
 		l=parameterExpressionList
 		assert len(l)==2
 		assert int(l[0])>0
@@ -841,9 +812,8 @@ class StrokeInfo_提(StrokeInfo):
 
 		return segmentFactory.generateSegments_提(w1, h1)
 
-class StrokeInfo_捺(StrokeInfo):
-	@classmethod
-	def parseExpression(cls, parameterExpressionList):
+class StrokeInfoGenerator_捺(StrokeInfoGenerator):
+	def parseExpression(self, parameterExpressionList):
 		l=parameterExpressionList
 		assert len(l)==2
 		assert int(l[0])>0
@@ -856,9 +826,8 @@ class StrokeInfo_捺(StrokeInfo):
 
 		return segmentFactory.generateSegments_捺(w1, h1)
 
-class StrokeInfo_臥捺(StrokeInfo):
-	@classmethod
-	def parseExpression(cls, parameterExpressionList):
+class StrokeInfoGenerator_臥捺(StrokeInfoGenerator):
+	def parseExpression(self, parameterExpressionList):
 		l=parameterExpressionList
 		assert len(l)==2
 		assert int(l[0])>0
@@ -871,9 +840,8 @@ class StrokeInfo_臥捺(StrokeInfo):
 
 		return segmentFactory.generateSegments_臥捺(w1, h1)
 
-class StrokeInfo_提捺(StrokeInfo):
-	@classmethod
-	def parseExpression(cls, parameterExpressionList):
+class StrokeInfoGenerator_提捺(StrokeInfoGenerator):
+	def parseExpression(self, parameterExpressionList):
 		l=parameterExpressionList
 		assert len(l)==4
 		assert int(l[0])>0
@@ -893,9 +861,8 @@ class StrokeInfo_提捺(StrokeInfo):
 		segments.extend(segmentFactory.generateSegments_捺(w2, h2))
 		return segments
 
-class StrokeInfo_橫捺(StrokeInfo):
-	@classmethod
-	def parseExpression(cls, parameterExpressionList):
+class StrokeInfoGenerator_橫捺(StrokeInfoGenerator):
+	def parseExpression(self, parameterExpressionList):
 		l=parameterExpressionList
 		assert len(l)==3
 		assert int(l[0])>0
@@ -916,58 +883,58 @@ class StrokeInfo_橫捺(StrokeInfo):
 class StrokeInfoFactory:
 	def __init__(self):
 		self.strokeInfoMap = {
-			"點": StrokeInfo_點,
-		#	"長頓點": StrokeInfo_點,
-			"圈": StrokeInfo_圈,
-			"橫": StrokeInfo_橫,
-			"橫鉤": StrokeInfo_橫鉤,
-			"橫折": StrokeInfo_橫折,
-			"橫折折": StrokeInfo_橫折折,
-			"橫折提": StrokeInfo_橫折提,
-			"橫折折撇": StrokeInfo_橫折折撇,
-			"橫撇彎鉤": StrokeInfo_橫撇彎鉤,
-			"橫折鉤": StrokeInfo_橫折鉤,
-			"橫折彎": StrokeInfo_橫折彎,
-			"橫撇": StrokeInfo_橫撇,
-			"橫斜彎鉤": StrokeInfo_橫斜彎鉤,
-			"橫折折折鉤": StrokeInfo_橫折折折鉤,
-			"橫斜鉤": StrokeInfo_橫斜鉤,
-			"橫折折折": StrokeInfo_橫折折折,
-			"豎": StrokeInfo_豎,
-			"豎折": StrokeInfo_豎折,
-			"豎彎左": StrokeInfo_豎彎左,
-			"豎提": StrokeInfo_豎提,
-			"豎折折": StrokeInfo_豎折折,
-			"豎折彎鉤": StrokeInfo_豎折彎鉤,
-			"豎彎鉤": StrokeInfo_豎彎鉤,
-			"豎彎": StrokeInfo_豎彎,
-			"豎鉤": StrokeInfo_豎鉤,
-			"扁斜鉤": StrokeInfo_豎彎鉤,
-			"斜鉤": StrokeInfo_斜鉤,
-			"彎鉤": StrokeInfo_彎鉤,
-			"撇鉤": StrokeInfo_撇鉤,
+			"點": StrokeInfoGenerator_點(),
+#			"長頓點": StrokeInfoGenerator_點(),
+			"圈": StrokeInfoGenerator_圈(),
+			"橫": StrokeInfoGenerator_橫(),
+			"橫鉤": StrokeInfoGenerator_橫鉤(),
+			"橫折": StrokeInfoGenerator_橫折(),
+			"橫折折": StrokeInfoGenerator_橫折折(),
+			"橫折提": StrokeInfoGenerator_橫折提(),
+			"橫折折撇": StrokeInfoGenerator_橫折折撇(),
+			"橫撇彎鉤": StrokeInfoGenerator_橫撇彎鉤(),
+			"橫折鉤": StrokeInfoGenerator_橫折鉤(),
+			"橫折彎": StrokeInfoGenerator_橫折彎(),
+			"橫撇": StrokeInfoGenerator_橫撇(),
+			"橫斜彎鉤": StrokeInfoGenerator_橫斜彎鉤(),
+			"橫折折折鉤": StrokeInfoGenerator_橫折折折鉤(),
+			"橫斜鉤": StrokeInfoGenerator_橫斜鉤(),
+			"橫折折折": StrokeInfoGenerator_橫折折折(),
+			"豎": StrokeInfoGenerator_豎(),
+			"豎折": StrokeInfoGenerator_豎折(),
+			"豎彎左": StrokeInfoGenerator_豎彎左(),
+			"豎提": StrokeInfoGenerator_豎提(),
+			"豎折折": StrokeInfoGenerator_豎折折(),
+			"豎折彎鉤": StrokeInfoGenerator_豎折彎鉤(),
+			"豎彎鉤": StrokeInfoGenerator_豎彎鉤(),
+			"豎彎": StrokeInfoGenerator_豎彎(),
+			"豎鉤": StrokeInfoGenerator_豎鉤(),
+			"扁斜鉤": StrokeInfoGenerator_豎彎鉤(),
+			"斜鉤": StrokeInfoGenerator_斜鉤(),
+			"彎鉤": StrokeInfoGenerator_彎鉤(),
+			"撇鉤": StrokeInfoGenerator_撇鉤(),
 
-			"撇": StrokeInfo_撇,
-			"撇點": StrokeInfo_撇點,
-			"撇橫": StrokeInfo_撇橫,
-			"撇提": StrokeInfo_撇橫,
-			"撇折": StrokeInfo_撇橫,
-			"撇橫撇": StrokeInfo_撇橫撇,
-			"豎撇": StrokeInfo_豎撇,
-			"提": StrokeInfo_提,
-			"捺": StrokeInfo_捺,
-			"臥捺": StrokeInfo_臥捺,
-			"提捺": StrokeInfo_提捺,
-			"橫捺": StrokeInfo_橫捺,
+			"撇": StrokeInfoGenerator_撇(),
+			"撇點": StrokeInfoGenerator_撇點(),
+			"撇橫": StrokeInfoGenerator_撇橫(),
+			"撇提": StrokeInfoGenerator_撇橫(),
+			"撇折": StrokeInfoGenerator_撇橫(),
+			"撇橫撇": StrokeInfoGenerator_撇橫撇(),
+			"豎撇": StrokeInfoGenerator_豎撇(),
+			"提": StrokeInfoGenerator_提(),
+			"捺": StrokeInfoGenerator_捺(),
+			"臥捺": StrokeInfoGenerator_臥捺(),
+			"提捺": StrokeInfoGenerator_提捺(),
+			"橫捺": StrokeInfoGenerator_橫捺(),
 		}
 
 
 	def generateStrokeInfo(self, name, parameterList):
-		clsStrokeInfo = self.strokeInfoMap.get(name, None)
-		assert clsStrokeInfo!=None
+		strokeInfoGenerator = self.strokeInfoMap.get(name, None)
+		assert strokeInfoGenerator!=None
 
-		parameterList = clsStrokeInfo.parseExpression(parameterList)
-		strokeInfo = clsStrokeInfo(name, parameterList)
+		parameterList = strokeInfoGenerator.parseExpression(parameterList)
+		strokeInfo = strokeInfoGenerator.generate(name, parameterList)
 		return strokeInfo
 
 strokeInfoFactory=StrokeInfoFactory()
@@ -979,7 +946,7 @@ class Stroke(Drawing, Shape):
 
 		if strokeInfo:
 			self.strokeInfo=strokeInfo
-			self.strokePath=strokeInfo.toStrokePath()
+			self.strokePath=strokeInfo.getStrokePath()
 			self.name=strokeInfo.getName()
 		else:
 			self.strokeInfo=None
