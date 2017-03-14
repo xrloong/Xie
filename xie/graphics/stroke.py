@@ -2,10 +2,6 @@ from .shape import Drawing
 from .shape import Shape
 from .shape import Pane
 
-from .segment import SegmentFactory
-
-segmentFactory=SegmentFactory()
-
 class StrokePath(Shape):
 	def __init__(self, segments):
 		self.segments=segments
@@ -59,6 +55,12 @@ class StrokeInfo:
 		return self.strokePath
 
 class StrokeInfoGenerator:
+	def __init__(self, segmentFactory):
+		self.segmentFactory = segmentFactory
+
+	def getSegmentFactory(self):
+		return self.segmentFactory
+
 	def generate(self, name, parameterList):
 		strokePath = self.computeStrokePath(parameterList)
 		strokeInfo = StrokeInfo(name, strokePath)
@@ -111,7 +113,7 @@ class StrokeInfoGenerator_點(StrokeInfoGenerator):
 		w=paramList[0]
 		h=paramList[1]
 
-		return segmentFactory.generateSegments_點(w, h)
+		return self.getSegmentFactory().generateSegments_點(w, h)
 
 class StrokeInfoGenerator_圈(StrokeInfoGenerator):
 	def parseExpression(self, parameterExpressionList):
@@ -125,7 +127,7 @@ class StrokeInfoGenerator_圈(StrokeInfoGenerator):
 		w=paramList[0]
 		h=paramList[1]
 
-		return segmentFactory.generateSegments_圈(w, h)
+		return self.getSegmentFactory().generateSegments_圈(w, h)
 
 class StrokeInfoGenerator_橫(StrokeInfoGenerator):
 	def parseExpression(self, parameterExpressionList):
@@ -137,7 +139,7 @@ class StrokeInfoGenerator_橫(StrokeInfoGenerator):
 	def computeStrokeSegments(self, paramList):
 		w1=paramList[0]
 
-		return segmentFactory.generateSegments_橫(w1)
+		return self.getSegmentFactory().generateSegments_橫(w1)
 
 class StrokeInfoGenerator_橫鉤(StrokeInfoGenerator):
 	def parseExpression(self, parameterExpressionList):
@@ -154,8 +156,8 @@ class StrokeInfoGenerator_橫鉤(StrokeInfoGenerator):
 		h2=paramList[2]
 
 		segments=[]
-		segments.extend(segmentFactory.generateSegments_橫(w1))
-		segments.extend(segmentFactory.generateSegments_撇(w2, h2))
+		segments.extend(self.getSegmentFactory().generateSegments_橫(w1))
+		segments.extend(self.getSegmentFactory().generateSegments_撇(w2, h2))
 		return segments
 
 class StrokeInfoGenerator_橫折(StrokeInfoGenerator):
@@ -171,8 +173,8 @@ class StrokeInfoGenerator_橫折(StrokeInfoGenerator):
 		h2=paramList[1]
 
 		segments=[]
-		segments.extend(segmentFactory.generateSegments_橫(w1))
-		segments.extend(segmentFactory.generateSegments_豎(h2))
+		segments.extend(self.getSegmentFactory().generateSegments_橫(w1))
+		segments.extend(self.getSegmentFactory().generateSegments_豎(h2))
 		return segments
 
 class StrokeInfoGenerator_橫折折(StrokeInfoGenerator):
@@ -190,9 +192,9 @@ class StrokeInfoGenerator_橫折折(StrokeInfoGenerator):
 		w3=paramList[2]
 
 		segments=[]
-		segments.extend(segmentFactory.generateSegments_橫(w1))
-		segments.extend(segmentFactory.generateSegments_豎(h2))
-		segments.extend(segmentFactory.generateSegments_橫(w3))
+		segments.extend(self.getSegmentFactory().generateSegments_橫(w1))
+		segments.extend(self.getSegmentFactory().generateSegments_豎(h2))
+		segments.extend(self.getSegmentFactory().generateSegments_橫(w3))
 		return segments
 
 class StrokeInfoGenerator_橫折提(StrokeInfoGenerator):
@@ -212,9 +214,9 @@ class StrokeInfoGenerator_橫折提(StrokeInfoGenerator):
 		h3=paramList[3]
 
 		segments=[]
-		segments.extend(segmentFactory.generateSegments_橫(w1))
-		segments.extend(segmentFactory.generateSegments_豎(h2))
-		segments.extend(segmentFactory.generateSegments_提(w3, h3))
+		segments.extend(self.getSegmentFactory().generateSegments_橫(w1))
+		segments.extend(self.getSegmentFactory().generateSegments_豎(h2))
+		segments.extend(self.getSegmentFactory().generateSegments_提(w3, h3))
 		return segments
 
 class StrokeInfoGenerator_橫折折撇(StrokeInfoGenerator):
@@ -238,10 +240,10 @@ class StrokeInfoGenerator_橫折折撇(StrokeInfoGenerator):
 		h4=paramList[5]
 
 		segments=[]
-		segments.extend(segmentFactory.generateSegments_橫(w1))
-		segments.extend(segmentFactory.generateSegments_撇(w2, h2))
-		segments.extend(segmentFactory.generateSegments_橫(w3))
-		segments.extend(segmentFactory.generateSegments_撇(w4, h4))
+		segments.extend(self.getSegmentFactory().generateSegments_橫(w1))
+		segments.extend(self.getSegmentFactory().generateSegments_撇(w2, h2))
+		segments.extend(self.getSegmentFactory().generateSegments_橫(w3))
+		segments.extend(self.getSegmentFactory().generateSegments_撇(w4, h4))
 		return segments
 
 class StrokeInfoGenerator_橫撇彎鉤(StrokeInfoGenerator):
@@ -267,10 +269,10 @@ class StrokeInfoGenerator_橫撇彎鉤(StrokeInfoGenerator):
 		h4=paramList[6]
 
 		segments=[]
-		segments.extend(segmentFactory.generateSegments_橫(w1))
-		segments.extend(segmentFactory.generateSegments_撇(w2, h2))
-		segments.extend(segmentFactory.generateSegments_彎鉤之彎(w3, h3))
-		segments.extend(segmentFactory.generateSegments_鉤(w4, h4))
+		segments.extend(self.getSegmentFactory().generateSegments_橫(w1))
+		segments.extend(self.getSegmentFactory().generateSegments_撇(w2, h2))
+		segments.extend(self.getSegmentFactory().generateSegments_彎鉤之彎(w3, h3))
+		segments.extend(self.getSegmentFactory().generateSegments_鉤(w4, h4))
 		return segments
 
 class StrokeInfoGenerator_橫折鉤(StrokeInfoGenerator):
@@ -292,9 +294,9 @@ class StrokeInfoGenerator_橫折鉤(StrokeInfoGenerator):
 		h3=paramList[4]
 
 		segments=[]
-		segments.extend(segmentFactory.generateSegments_橫(w1))
-		segments.extend(segmentFactory.generateSegments_撇鉤之撇(w2, h2))
-		segments.extend(segmentFactory.generateSegments_鉤(w3, h3))
+		segments.extend(self.getSegmentFactory().generateSegments_橫(w1))
+		segments.extend(self.getSegmentFactory().generateSegments_撇鉤之撇(w2, h2))
+		segments.extend(self.getSegmentFactory().generateSegments_鉤(w3, h3))
 		return segments
 
 class StrokeInfoGenerator_橫折彎(StrokeInfoGenerator):
@@ -314,10 +316,10 @@ class StrokeInfoGenerator_橫折彎(StrokeInfoGenerator):
 		cr=paramList[3]
 
 		segments=[]
-		segments.extend(segmentFactory.generateSegments_橫(w1))
-		segments.extend(segmentFactory.generateSegments_豎(h2 - cr))
-		segments.extend(segmentFactory.generateSegments_曲(cr))
-		segments.extend(segmentFactory.generateSegments_橫(w2 - cr))
+		segments.extend(self.getSegmentFactory().generateSegments_橫(w1))
+		segments.extend(self.getSegmentFactory().generateSegments_豎(h2 - cr))
+		segments.extend(self.getSegmentFactory().generateSegments_曲(cr))
+		segments.extend(self.getSegmentFactory().generateSegments_橫(w2 - cr))
 		return segments
 
 class StrokeInfoGenerator_橫撇(StrokeInfoGenerator):
@@ -335,8 +337,8 @@ class StrokeInfoGenerator_橫撇(StrokeInfoGenerator):
 		h2=paramList[2]
 
 		segments=[]
-		segments.extend(segmentFactory.generateSegments_橫(w1))
-		segments.extend(segmentFactory.generateSegments_撇(w2, h2))
+		segments.extend(self.getSegmentFactory().generateSegments_橫(w1))
+		segments.extend(self.getSegmentFactory().generateSegments_撇(w2, h2))
 		return segments
 
 class StrokeInfoGenerator_橫斜彎鉤(StrokeInfoGenerator):
@@ -360,9 +362,9 @@ class StrokeInfoGenerator_橫斜彎鉤(StrokeInfoGenerator):
 		h3=paramList[5]
 
 		segments=[]
-		segments.extend(segmentFactory.generateSegments_橫(w1))
-		segments.extend(segmentFactory.generateSegments_撇曲(w2l, w2r, h2, cr))
-		segments.extend(segmentFactory.generateSegments_上(h3))
+		segments.extend(self.getSegmentFactory().generateSegments_橫(w1))
+		segments.extend(self.getSegmentFactory().generateSegments_撇曲(w2l, w2r, h2, cr))
+		segments.extend(self.getSegmentFactory().generateSegments_上(h3))
 		return segments
 
 class StrokeInfoGenerator_橫折折折鉤(StrokeInfoGenerator):
@@ -390,11 +392,11 @@ class StrokeInfoGenerator_橫折折折鉤(StrokeInfoGenerator):
 		h5=paramList[7]
 
 		segments=[]
-		segments.extend(segmentFactory.generateSegments_橫(w1))
-		segments.extend(segmentFactory.generateSegments_撇(w2, h2))
-		segments.extend(segmentFactory.generateSegments_橫(w3))
-		segments.extend(segmentFactory.generateSegments_撇鉤之撇(w4, h4))
-		segments.extend(segmentFactory.generateSegments_鉤(w5, h5))
+		segments.extend(self.getSegmentFactory().generateSegments_橫(w1))
+		segments.extend(self.getSegmentFactory().generateSegments_撇(w2, h2))
+		segments.extend(self.getSegmentFactory().generateSegments_橫(w3))
+		segments.extend(self.getSegmentFactory().generateSegments_撇鉤之撇(w4, h4))
+		segments.extend(self.getSegmentFactory().generateSegments_鉤(w5, h5))
 		return segments
 
 class StrokeInfoGenerator_橫斜鉤(StrokeInfoGenerator):
@@ -414,9 +416,9 @@ class StrokeInfoGenerator_橫斜鉤(StrokeInfoGenerator):
 		h3=paramList[3]
 
 		segments=[]
-		segments.extend(segmentFactory.generateSegments_橫(w1))
-		segments.extend(segmentFactory.generateSegments_斜鉤之斜(w2, h2))
-		segments.extend(segmentFactory.generateSegments_上(h3))
+		segments.extend(self.getSegmentFactory().generateSegments_橫(w1))
+		segments.extend(self.getSegmentFactory().generateSegments_斜鉤之斜(w2, h2))
+		segments.extend(self.getSegmentFactory().generateSegments_上(h3))
 		return segments
 
 class StrokeInfoGenerator_橫折折折(StrokeInfoGenerator):
@@ -436,10 +438,10 @@ class StrokeInfoGenerator_橫折折折(StrokeInfoGenerator):
 		h4=paramList[3]
 
 		segments=[]
-		segments.extend(segmentFactory.generateSegments_橫(w1))
-		segments.extend(segmentFactory.generateSegments_豎(h2))
-		segments.extend(segmentFactory.generateSegments_橫(w3))
-		segments.extend(segmentFactory.generateSegments_豎(h4))
+		segments.extend(self.getSegmentFactory().generateSegments_橫(w1))
+		segments.extend(self.getSegmentFactory().generateSegments_豎(h2))
+		segments.extend(self.getSegmentFactory().generateSegments_橫(w3))
+		segments.extend(self.getSegmentFactory().generateSegments_豎(h4))
 		return segments
 
 class StrokeInfoGenerator_豎(StrokeInfoGenerator):
@@ -452,7 +454,7 @@ class StrokeInfoGenerator_豎(StrokeInfoGenerator):
 	def computeStrokeSegments(self, paramList):
 		h1=paramList[0]
 
-		return segmentFactory.generateSegments_豎(h1)
+		return self.getSegmentFactory().generateSegments_豎(h1)
 
 class StrokeInfoGenerator_豎折(StrokeInfoGenerator):
 	def parseExpression(self, parameterExpressionList):
@@ -467,8 +469,8 @@ class StrokeInfoGenerator_豎折(StrokeInfoGenerator):
 		w2=paramList[1]
 
 		segments=[]
-		segments.extend(segmentFactory.generateSegments_豎(h1))
-		segments.extend(segmentFactory.generateSegments_橫(w2))
+		segments.extend(self.getSegmentFactory().generateSegments_豎(h1))
+		segments.extend(self.getSegmentFactory().generateSegments_橫(w2))
 		return segments
 
 class StrokeInfoGenerator_豎彎左(StrokeInfoGenerator):
@@ -484,8 +486,8 @@ class StrokeInfoGenerator_豎彎左(StrokeInfoGenerator):
 		w2=paramList[1]
 
 		segments=[]
-		segments.extend(segmentFactory.generateSegments_豎(h1))
-		segments.extend(segmentFactory.generateSegments_左(w2))
+		segments.extend(self.getSegmentFactory().generateSegments_豎(h1))
+		segments.extend(self.getSegmentFactory().generateSegments_左(w2))
 		return segments
 
 class StrokeInfoGenerator_豎提(StrokeInfoGenerator):
@@ -503,8 +505,8 @@ class StrokeInfoGenerator_豎提(StrokeInfoGenerator):
 		h2=paramList[2]
 
 		segments=[]
-		segments.extend(segmentFactory.generateSegments_豎(h1))
-		segments.extend(segmentFactory.generateSegments_提(w2, h2))
+		segments.extend(self.getSegmentFactory().generateSegments_豎(h1))
+		segments.extend(self.getSegmentFactory().generateSegments_提(w2, h2))
 		return segments
 
 class StrokeInfoGenerator_豎折折(StrokeInfoGenerator):
@@ -522,9 +524,9 @@ class StrokeInfoGenerator_豎折折(StrokeInfoGenerator):
 		h3=paramList[2]
 
 		segments=[]
-		segments.extend(segmentFactory.generateSegments_豎(h1))
-		segments.extend(segmentFactory.generateSegments_橫(w2))
-		segments.extend(segmentFactory.generateSegments_豎(h3))
+		segments.extend(self.getSegmentFactory().generateSegments_豎(h1))
+		segments.extend(self.getSegmentFactory().generateSegments_橫(w2))
+		segments.extend(self.getSegmentFactory().generateSegments_豎(h3))
 		return segments
 
 class StrokeInfoGenerator_豎折彎鉤(StrokeInfoGenerator):
@@ -551,14 +553,14 @@ class StrokeInfoGenerator_豎折彎鉤(StrokeInfoGenerator):
 
 		segments=[]
 		if w1>0:
-			segments.extend(segmentFactory.generateSegments_撇(w1, h1))
+			segments.extend(self.getSegmentFactory().generateSegments_撇(w1, h1))
 		elif w1<0:
 			assert False
 		else:
-			segments.extend(segmentFactory.generateSegments_豎(h1))
-		segments.extend(segmentFactory.generateSegments_橫(w2))
-		segments.extend(segmentFactory.generateSegments_撇鉤之撇(w3, h3))
-		segments.extend(segmentFactory.generateSegments_鉤(w4, h4))
+			segments.extend(self.getSegmentFactory().generateSegments_豎(h1))
+		segments.extend(self.getSegmentFactory().generateSegments_橫(w2))
+		segments.extend(self.getSegmentFactory().generateSegments_撇鉤之撇(w3, h3))
+		segments.extend(self.getSegmentFactory().generateSegments_鉤(w4, h4))
 		return segments
 
 class StrokeInfoGenerator_豎彎鉤(StrokeInfoGenerator):
@@ -578,10 +580,10 @@ class StrokeInfoGenerator_豎彎鉤(StrokeInfoGenerator):
 		h2=paramList[3]
 
 		segments=[]
-		segments.extend(segmentFactory.generateSegments_豎(h1-cr))
-		segments.extend(segmentFactory.generateSegments_曲(cr))
-		segments.extend(segmentFactory.generateSegments_橫(w1-cr))
-		segments.extend(segmentFactory.generateSegments_上(h2))
+		segments.extend(self.getSegmentFactory().generateSegments_豎(h1-cr))
+		segments.extend(self.getSegmentFactory().generateSegments_曲(cr))
+		segments.extend(self.getSegmentFactory().generateSegments_橫(w1-cr))
+		segments.extend(self.getSegmentFactory().generateSegments_上(h2))
 		return segments
 
 class StrokeInfoGenerator_豎彎(StrokeInfoGenerator):
@@ -599,9 +601,9 @@ class StrokeInfoGenerator_豎彎(StrokeInfoGenerator):
 		cr=paramList[2]
 
 		segments=[]
-		segments.extend(segmentFactory.generateSegments_豎(h1))
-		segments.extend(segmentFactory.generateSegments_曲(cr))
-		segments.extend(segmentFactory.generateSegments_橫(w1))
+		segments.extend(self.getSegmentFactory().generateSegments_豎(h1))
+		segments.extend(self.getSegmentFactory().generateSegments_曲(cr))
+		segments.extend(self.getSegmentFactory().generateSegments_橫(w1))
 		return segments
 
 class StrokeInfoGenerator_豎鉤(StrokeInfoGenerator):
@@ -626,8 +628,8 @@ class StrokeInfoGenerator_豎鉤(StrokeInfoGenerator):
 		hg=wg
 
 		segments=[]
-		segments.extend(segmentFactory.generateSegments_豎撇(wp, hs, hp))
-		segments.extend(segmentFactory.generateSegments_鉤(wg, hg))
+		segments.extend(self.getSegmentFactory().generateSegments_豎撇(wp, hs, hp))
+		segments.extend(self.getSegmentFactory().generateSegments_鉤(wg, hg))
 		return segments
 
 class StrokeInfoGenerator_斜鉤(StrokeInfoGenerator):
@@ -645,8 +647,8 @@ class StrokeInfoGenerator_斜鉤(StrokeInfoGenerator):
 		h2=paramList[2]
 
 		segments=[]
-		segments.extend(segmentFactory.generateSegments_斜鉤之斜(w1, h1))
-		segments.extend(segmentFactory.generateSegments_上(h2))
+		segments.extend(self.getSegmentFactory().generateSegments_斜鉤之斜(w1, h1))
+		segments.extend(self.getSegmentFactory().generateSegments_上(h2))
 		return segments
 
 class StrokeInfoGenerator_彎鉤(StrokeInfoGenerator):
@@ -666,8 +668,8 @@ class StrokeInfoGenerator_彎鉤(StrokeInfoGenerator):
 		h2=paramList[3]
 
 		segments=[]
-		segments.extend(segmentFactory.generateSegments_彎鉤之彎(w1, h1))
-		segments.extend(segmentFactory.generateSegments_鉤(w2, h2))
+		segments.extend(self.getSegmentFactory().generateSegments_彎鉤之彎(w1, h1))
+		segments.extend(self.getSegmentFactory().generateSegments_鉤(w2, h2))
 		return segments
 
 class StrokeInfoGenerator_撇鉤(StrokeInfoGenerator):
@@ -687,8 +689,8 @@ class StrokeInfoGenerator_撇鉤(StrokeInfoGenerator):
 		h2=paramList[3]
 
 		segments=[]
-		segments.extend(segmentFactory.generateSegments_彎鉤之彎(w1, h1))
-		segments.extend(segmentFactory.generateSegments_鉤(w2, h2))
+		segments.extend(self.getSegmentFactory().generateSegments_彎鉤之彎(w1, h1))
+		segments.extend(self.getSegmentFactory().generateSegments_鉤(w2, h2))
 		return segments
 
 class StrokeInfoGenerator_撇(StrokeInfoGenerator):
@@ -704,7 +706,7 @@ class StrokeInfoGenerator_撇(StrokeInfoGenerator):
 		h1=paramList[1]
 
 		segments=[]
-		segments.extend(segmentFactory.generateSegments_撇(w1, h1))
+		segments.extend(self.getSegmentFactory().generateSegments_撇(w1, h1))
 		return segments
 
 class StrokeInfoGenerator_撇點(StrokeInfoGenerator):
@@ -724,8 +726,8 @@ class StrokeInfoGenerator_撇點(StrokeInfoGenerator):
 		h2=paramList[3]
 
 		segments=[]
-		segments.extend(segmentFactory.generateSegments_撇(w1, h1))
-		segments.extend(segmentFactory.generateSegments_點(w2, h2))
+		segments.extend(self.getSegmentFactory().generateSegments_撇(w1, h1))
+		segments.extend(self.getSegmentFactory().generateSegments_點(w2, h2))
 		return segments
 
 class StrokeInfoGenerator_撇橫(StrokeInfoGenerator):
@@ -745,13 +747,13 @@ class StrokeInfoGenerator_撇橫(StrokeInfoGenerator):
 		h2=paramList[3]
 
 		segments=[]
-		segments.extend(segmentFactory.generateSegments_撇(w1, h1))
+		segments.extend(self.getSegmentFactory().generateSegments_撇(w1, h1))
 		if h2>0:
-			segments.extend(segmentFactory.generateSegments_點(w2, h2))
+			segments.extend(self.getSegmentFactory().generateSegments_點(w2, h2))
 		elif h2<0:
-			segments.extend(segmentFactory.generateSegments_提(w2, -h2))
+			segments.extend(self.getSegmentFactory().generateSegments_提(w2, -h2))
 		else:
-			segments.extend(segmentFactory.generateSegments_橫(w2))
+			segments.extend(self.getSegmentFactory().generateSegments_橫(w2))
 		return segments
 
 class StrokeInfoGenerator_撇橫撇(StrokeInfoGenerator):
@@ -773,9 +775,9 @@ class StrokeInfoGenerator_撇橫撇(StrokeInfoGenerator):
 		h3=paramList[4]
 
 		segments=[]
-		segments.extend(segmentFactory.generateSegments_撇(w1, h1))
-		segments.extend(segmentFactory.generateSegments_橫(w2))
-		segments.extend(segmentFactory.generateSegments_撇(w3, h3))
+		segments.extend(self.getSegmentFactory().generateSegments_撇(w1, h1))
+		segments.extend(self.getSegmentFactory().generateSegments_橫(w2))
+		segments.extend(self.getSegmentFactory().generateSegments_撇(w3, h3))
 		return segments
 
 class StrokeInfoGenerator_豎撇(StrokeInfoGenerator):
@@ -795,7 +797,7 @@ class StrokeInfoGenerator_豎撇(StrokeInfoGenerator):
 		wp = w1
 
 		segments=[]
-		segments.extend(segmentFactory.generateSegments_豎撇(w1, hs, hp))
+		segments.extend(self.getSegmentFactory().generateSegments_豎撇(w1, hs, hp))
 		return segments
 
 class StrokeInfoGenerator_提(StrokeInfoGenerator):
@@ -810,7 +812,7 @@ class StrokeInfoGenerator_提(StrokeInfoGenerator):
 		w1=paramList[0]
 		h1=paramList[1]
 
-		return segmentFactory.generateSegments_提(w1, h1)
+		return self.getSegmentFactory().generateSegments_提(w1, h1)
 
 class StrokeInfoGenerator_捺(StrokeInfoGenerator):
 	def parseExpression(self, parameterExpressionList):
@@ -824,7 +826,7 @@ class StrokeInfoGenerator_捺(StrokeInfoGenerator):
 		w1=paramList[0]
 		h1=paramList[1]
 
-		return segmentFactory.generateSegments_捺(w1, h1)
+		return self.getSegmentFactory().generateSegments_捺(w1, h1)
 
 class StrokeInfoGenerator_臥捺(StrokeInfoGenerator):
 	def parseExpression(self, parameterExpressionList):
@@ -838,7 +840,7 @@ class StrokeInfoGenerator_臥捺(StrokeInfoGenerator):
 		w1=paramList[0]
 		h1=paramList[1]
 
-		return segmentFactory.generateSegments_臥捺(w1, h1)
+		return self.getSegmentFactory().generateSegments_臥捺(w1, h1)
 
 class StrokeInfoGenerator_提捺(StrokeInfoGenerator):
 	def parseExpression(self, parameterExpressionList):
@@ -857,8 +859,8 @@ class StrokeInfoGenerator_提捺(StrokeInfoGenerator):
 		h2=paramList[3]
 
 		segments=[]
-		segments.extend(segmentFactory.generateSegments_提(w1, h1))
-		segments.extend(segmentFactory.generateSegments_捺(w2, h2))
+		segments.extend(self.getSegmentFactory().generateSegments_提(w1, h1))
+		segments.extend(self.getSegmentFactory().generateSegments_捺(w2, h2))
 		return segments
 
 class StrokeInfoGenerator_橫捺(StrokeInfoGenerator):
@@ -876,56 +878,59 @@ class StrokeInfoGenerator_橫捺(StrokeInfoGenerator):
 		h2=paramList[2]
 
 		segments=[]
-		segments.extend(segmentFactory.generateSegments_橫(w1))
-		segments.extend(segmentFactory.generateSegments_捺(w2, h2))
+		segments.extend(self.getSegmentFactory().generateSegments_橫(w1))
+		segments.extend(self.getSegmentFactory().generateSegments_捺(w2, h2))
 		return segments
 
 class StrokeInfoFactory:
 	def __init__(self):
-		self.strokeInfoMap = {
-			"點": StrokeInfoGenerator_點(),
-#			"長頓點": StrokeInfoGenerator_點(),
-			"圈": StrokeInfoGenerator_圈(),
-			"橫": StrokeInfoGenerator_橫(),
-			"橫鉤": StrokeInfoGenerator_橫鉤(),
-			"橫折": StrokeInfoGenerator_橫折(),
-			"橫折折": StrokeInfoGenerator_橫折折(),
-			"橫折提": StrokeInfoGenerator_橫折提(),
-			"橫折折撇": StrokeInfoGenerator_橫折折撇(),
-			"橫撇彎鉤": StrokeInfoGenerator_橫撇彎鉤(),
-			"橫折鉤": StrokeInfoGenerator_橫折鉤(),
-			"橫折彎": StrokeInfoGenerator_橫折彎(),
-			"橫撇": StrokeInfoGenerator_橫撇(),
-			"橫斜彎鉤": StrokeInfoGenerator_橫斜彎鉤(),
-			"橫折折折鉤": StrokeInfoGenerator_橫折折折鉤(),
-			"橫斜鉤": StrokeInfoGenerator_橫斜鉤(),
-			"橫折折折": StrokeInfoGenerator_橫折折折(),
-			"豎": StrokeInfoGenerator_豎(),
-			"豎折": StrokeInfoGenerator_豎折(),
-			"豎彎左": StrokeInfoGenerator_豎彎左(),
-			"豎提": StrokeInfoGenerator_豎提(),
-			"豎折折": StrokeInfoGenerator_豎折折(),
-			"豎折彎鉤": StrokeInfoGenerator_豎折彎鉤(),
-			"豎彎鉤": StrokeInfoGenerator_豎彎鉤(),
-			"豎彎": StrokeInfoGenerator_豎彎(),
-			"豎鉤": StrokeInfoGenerator_豎鉤(),
-			"扁斜鉤": StrokeInfoGenerator_豎彎鉤(),
-			"斜鉤": StrokeInfoGenerator_斜鉤(),
-			"彎鉤": StrokeInfoGenerator_彎鉤(),
-			"撇鉤": StrokeInfoGenerator_撇鉤(),
+		from .segment import SegmentFactory
 
-			"撇": StrokeInfoGenerator_撇(),
-			"撇點": StrokeInfoGenerator_撇點(),
-			"撇橫": StrokeInfoGenerator_撇橫(),
-			"撇提": StrokeInfoGenerator_撇橫(),
-			"撇折": StrokeInfoGenerator_撇橫(),
-			"撇橫撇": StrokeInfoGenerator_撇橫撇(),
-			"豎撇": StrokeInfoGenerator_豎撇(),
-			"提": StrokeInfoGenerator_提(),
-			"捺": StrokeInfoGenerator_捺(),
-			"臥捺": StrokeInfoGenerator_臥捺(),
-			"提捺": StrokeInfoGenerator_提捺(),
-			"橫捺": StrokeInfoGenerator_橫捺(),
+		segmentFactory = SegmentFactory()
+		self.strokeInfoMap = {
+			"點": StrokeInfoGenerator_點(segmentFactory),
+#			"長頓點": StrokeInfoGenerator_點(segmentFactory),
+			"圈": StrokeInfoGenerator_圈(segmentFactory),
+			"橫": StrokeInfoGenerator_橫(segmentFactory),
+			"橫鉤": StrokeInfoGenerator_橫鉤(segmentFactory),
+			"橫折": StrokeInfoGenerator_橫折(segmentFactory),
+			"橫折折": StrokeInfoGenerator_橫折折(segmentFactory),
+			"橫折提": StrokeInfoGenerator_橫折提(segmentFactory),
+			"橫折折撇": StrokeInfoGenerator_橫折折撇(segmentFactory),
+			"橫撇彎鉤": StrokeInfoGenerator_橫撇彎鉤(segmentFactory),
+			"橫折鉤": StrokeInfoGenerator_橫折鉤(segmentFactory),
+			"橫折彎": StrokeInfoGenerator_橫折彎(segmentFactory),
+			"橫撇": StrokeInfoGenerator_橫撇(segmentFactory),
+			"橫斜彎鉤": StrokeInfoGenerator_橫斜彎鉤(segmentFactory),
+			"橫折折折鉤": StrokeInfoGenerator_橫折折折鉤(segmentFactory),
+			"橫斜鉤": StrokeInfoGenerator_橫斜鉤(segmentFactory),
+			"橫折折折": StrokeInfoGenerator_橫折折折(segmentFactory),
+			"豎": StrokeInfoGenerator_豎(segmentFactory),
+			"豎折": StrokeInfoGenerator_豎折(segmentFactory),
+			"豎彎左": StrokeInfoGenerator_豎彎左(segmentFactory),
+			"豎提": StrokeInfoGenerator_豎提(segmentFactory),
+			"豎折折": StrokeInfoGenerator_豎折折(segmentFactory),
+			"豎折彎鉤": StrokeInfoGenerator_豎折彎鉤(segmentFactory),
+			"豎彎鉤": StrokeInfoGenerator_豎彎鉤(segmentFactory),
+			"豎彎": StrokeInfoGenerator_豎彎(segmentFactory),
+			"豎鉤": StrokeInfoGenerator_豎鉤(segmentFactory),
+			"扁斜鉤": StrokeInfoGenerator_豎彎鉤(segmentFactory),
+			"斜鉤": StrokeInfoGenerator_斜鉤(segmentFactory),
+			"彎鉤": StrokeInfoGenerator_彎鉤(segmentFactory),
+			"撇鉤": StrokeInfoGenerator_撇鉤(segmentFactory),
+
+			"撇": StrokeInfoGenerator_撇(segmentFactory),
+			"撇點": StrokeInfoGenerator_撇點(segmentFactory),
+			"撇橫": StrokeInfoGenerator_撇橫(segmentFactory),
+			"撇提": StrokeInfoGenerator_撇橫(segmentFactory),
+			"撇折": StrokeInfoGenerator_撇橫(segmentFactory),
+			"撇橫撇": StrokeInfoGenerator_撇橫撇(segmentFactory),
+			"豎撇": StrokeInfoGenerator_豎撇(segmentFactory),
+			"提": StrokeInfoGenerator_提(segmentFactory),
+			"捺": StrokeInfoGenerator_捺(segmentFactory),
+			"臥捺": StrokeInfoGenerator_臥捺(segmentFactory),
+			"提捺": StrokeInfoGenerator_提捺(segmentFactory),
+			"橫捺": StrokeInfoGenerator_橫捺(segmentFactory),
 		}
 
 
