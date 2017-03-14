@@ -162,9 +162,9 @@ Pane.BBOX=Pane(
 	)
 
 class Drawing:
-	def __init__(self, pane):
-		self.infoPane=pane
-		self.statePane=pane
+	def __init__(self, infoPane, statePane):
+		self.infoPane=infoPane
+		self.statePane=statePane
 
 	def getDrawingList(self):
 		return []
