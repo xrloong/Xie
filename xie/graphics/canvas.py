@@ -2,6 +2,8 @@ class CanvasController:
 	def __init__(self, width=1000, height=1000):
 		self.width=width
 		self.height=height
+		self.infoPane=None
+		self.statePane=None
 
 	def getWidth(self):
 		return self.width
@@ -20,6 +22,25 @@ class CanvasController:
 
 	def qCurveTo(self, cp, p):
 		pass
+
+	def updateStrokeInfo(self, stroke):
+		pass
+
+	def updateCharacterInfo(self, character):
+		pass
+
+	def onPreDrawStroke(self, stroke):
+		pass
+
+	def onPostDrawStroke(self, stroke):
+		pass
+
+	def setPane(self, infoPane, statePane):
+		self.infoPane=infoPane
+		self.statePane=statePane
+
+	def converPointByPane(self, p):
+		return p
 
 class TkCanvasController(CanvasController):
 	def __init__(self, tkcanvas, width, height):
@@ -102,4 +123,70 @@ class SvgCanvasController(CanvasController):
 
 	def getExpression(self):
 		return self.expression
+
+class HexTextCanvasController(CanvasController):
+	def __init__(self):
+		super().__init__(256, 256)
+		self.clear()
+
+	def clearStrokeExpression(self):
+		self.pointExpressionList=[]
+
+	def getStrokeExpression(self):
+		return self.encodeStrokeExpression(self.pointExpressionList)
+
+	def converPointByPane(self, p):
+		return self.infoPane.transformRelativePointByTargetPane(p, self.statePane)
+
+	def encodeStartPoint(self, p):
+		ip=(int(p[0]), int(p[1]))
+		return "0000{0[0]:02X}{0[1]:02X}".format(ip)
+
+	def encodeEndPoint(self, p):
+		ip=(int(p[0]), int(p[1]))
+		return "0001{0[0]:02X}{0[1]:02X}".format(ip)
+
+	def encodeControlPoint(self, p):
+		ip=(int(p[0]), int(p[1]))
+		return "0002{0[0]:02X}{0[1]:02X}".format(ip)
+
+	def encodeStrokeExpression(self, pointExpressionList):
+		return ",".join(pointExpressionList)
+
+	def encodeCharacterExpression(self, strokeExpressionList):
+		return ";".join(strokeExpressionList)
+
+	def clear(self):
+		self.clearStrokeExpression()
+
+	def moveTo(self, p):
+		self.pointExpressionList=[self.encodeStartPoint(self.converPointByPane(p))]
+
+	def lineTo(self, p, drawoption=None):
+		self.pointExpressionList.append(self.encodeEndPoint(self.converPointByPane(p)))
+
+	def qCurveTo(self, cp, p):
+		self.pointExpressionList.append(self.encodeControlPoint(self.converPointByPane(cp)))
+		self.pointExpressionList.append(self.encodeEndPoint(self.converPointByPane(p)))
+
+
+class BaseTextCanvasController(HexTextCanvasController):
+	def __init__(self):
+		super().__init__()
+
+	def clear(self):
+		super().clear()
+		self.expressionList=[]
+
+	def onPreDrawStroke(self, stroke):
+		self.clearStrokeExpression()
+
+	def onPostDrawStroke(self, stroke):
+		e=self.getStrokeExpression()
+		if e:
+			self.expressionList.append(e)
+			self.clearStrokeExpression()
+
+	def getCharacterExpression(self):
+		return self.encodeCharacterExpression(self.expressionList)
 

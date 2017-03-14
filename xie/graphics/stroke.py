@@ -47,24 +47,6 @@ class Stroke(Drawing, Shape):
 	def getName(self):
 		return self.name
 
-	def getExpression(self):
-		def encodeStroke(stroke):
-			points=stroke.getPoints()
-			point = points[0]
-			isCurve = point[0]
-			assert isCurve is False
-			pointExpressionList = ["0000{0[0]:02X}{0[1]:02X}".format(point[1]), ]
-
-			for point in points[1:]:
-				isCurve = point[0]
-				if isCurve:
-					pointExpressionList.append("0002{0[0]:02X}{0[1]:02X}".format(point[1]))
-				else:
-					pointExpressionList.append("0001{0[0]:02X}{0[1]:02X}".format(point[1]))
-			return ",".join(pointExpressionList)
-		return encodeStroke(self)
-
-
 	def getStartPoint(self):
 		return self.startPoint
 
@@ -73,12 +55,18 @@ class Stroke(Drawing, Shape):
 
 	def draw(self, drawingSystem):
 		startPoint = self.getStartPoint()
+
+		stroke=self
+		drawingSystem.onPreDrawStroke(stroke)
+		drawingSystem.setPane(stroke.getInfoPane(), stroke.getStatePane())
+
 		drawingSystem.startDrawing(startPoint)
 
-		strokePath = self.getStrokePath()
+		strokePath = stroke.getStrokePath()
 		strokePath.draw(drawingSystem)
 
 		drawingSystem.endDrawing()
+		drawingSystem.onPostDrawStroke(stroke)
 
 	def getPoints(self):
 		startPoint=self.getStartPoint()

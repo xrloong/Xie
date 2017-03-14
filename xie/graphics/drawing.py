@@ -1,9 +1,14 @@
+from .canvas import HexTextCanvasController
+
 class DrawingSystem():
 	def __init__(self, canvasController):
 		self.canvasController=canvasController
 		self.lastPoint = None
 		self.sourceBoundary = None
 		self.sourceBoundaryState = []
+
+		self.infoPane=None
+		self.statePane=None
 
 	def getWidth(self):
 		return self.canvasController.getWidth()
@@ -45,6 +50,21 @@ class DrawingSystem():
 
 	def restore(self):
 		self.sourceBoundary = self.sourceBoundaryState.pop()
+
+	def setPane(self, infoPane, statePane):
+		self.canvasController.setPane(infoPane, statePane)
+
+	def updateStrokeInfo(self, stroke):
+		self.canvasController.updateStrokeInfo(stroke)
+
+	def updateCharacterInfo(self, character):
+		self.canvasController.updateCharacterInfo(character)
+
+	def onPreDrawStroke(self, stroke):
+		self.canvasController.onPreDrawStroke(stroke)
+
+	def onPostDrawStroke(self, stroke):
+		self.canvasController.onPostDrawStroke(stroke)
 
 	def startDrawing(self, startPoin):
 		self._moveTo(self._convertPointByBoundary(startPoin))
