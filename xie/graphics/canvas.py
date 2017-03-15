@@ -128,6 +128,8 @@ class HexTextCanvasController(CanvasController):
 	def __init__(self):
 		super().__init__(256, 256)
 		self.clear()
+		from .utils import TextCodec
+		self.textCodec=TextCodec()
 
 	def clearStrokeExpression(self):
 		self.pointExpressionList=[]
@@ -140,21 +142,21 @@ class HexTextCanvasController(CanvasController):
 
 	def encodeStartPoint(self, p):
 		ip=(int(p[0]), int(p[1]))
-		return "0000{0[0]:02X}{0[1]:02X}".format(ip)
+		return self.textCodec.encodeStartPoint(ip)
 
 	def encodeEndPoint(self, p):
 		ip=(int(p[0]), int(p[1]))
-		return "0001{0[0]:02X}{0[1]:02X}".format(ip)
+		return self.textCodec.encodeEndPoint(ip)
 
 	def encodeControlPoint(self, p):
 		ip=(int(p[0]), int(p[1]))
-		return "0002{0[0]:02X}{0[1]:02X}".format(ip)
+		return self.textCodec.encodeControlPoint(ip)
 
 	def encodeStrokeExpression(self, pointExpressionList):
-		return ",".join(pointExpressionList)
+		return self.textCodec.encodeStrokeExpression(pointExpressionList)
 
 	def encodeCharacterExpression(self, strokeExpressionList):
-		return ";".join(strokeExpressionList)
+		return self.textCodec.encodeCharacterExpression(strokeExpressionList)
 
 	def clear(self):
 		self.clearStrokeExpression()
