@@ -68,18 +68,6 @@ class Stroke(Drawing, Shape):
 		drawingSystem.endDrawing()
 		drawingSystem.onPostDrawStroke(stroke)
 
-	def getPoints(self):
-		startPoint=self.getStartPoint()
-		strokePath=self.getStrokePath()
-
-		points = [(False, startPoint)]
-		points.extend(strokePath.getPoints(startPoint))
-
-		pane=self.getStatePane()
-		bBoxPane=self.getInfoPane()
-		newPoints = [(isCurve, bBoxPane.transformRelativePointByTargetPane(point, pane)) for (isCurve, point) in points]
-		return newPoints
-
 
 def generateStroke(name, startPoint, parameterList, bBox):
 	strokeInfo = strokeInfoFactory.generateStrokeInfo(name, parameterList)

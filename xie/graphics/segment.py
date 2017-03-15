@@ -14,10 +14,6 @@ class BaseBeelineSegment(Segment):
 	def draw(self, drawingSystem):
 		drawingSystem.lineTo(self.getEndPoint())
 
-	def getPoints(self, startPoint):
-		endPoint = self.getEndPoint()
-		return [(False, (startPoint[0] + endPoint[0], startPoint[1] + endPoint[1])), ]
-
 class BaseQCurveSegment(Segment):
 	def getControlPoint(self):
 		return (0, 0)
@@ -27,12 +23,6 @@ class BaseQCurveSegment(Segment):
 
 	def draw(self, drawingSystem):
 		drawingSystem.qCurveTo(self.getControlPoint(), self.getEndPoint())
-
-	def getPoints(self, startPoint):
-		endPoint = self.getEndPoint()
-		controlPoint = self.getControlPoint()
-		return [(True, (startPoint[0] + controlPoint[0], startPoint[1] + controlPoint[1])),
-			(False, (startPoint[0] + endPoint[0], startPoint[1] + endPoint[1])), ]
 
 class BeelineSegment(BaseBeelineSegment):
 	def __init__(self, point):
@@ -209,13 +199,4 @@ class StrokePath(Shape):
 
 		for segment in segments:
 			segment.draw(drawingSystem)
-
-	def getPoints(self, startPoint):
-		points = []
-		currentPoint = startPoint
-		for segment  in self.getSegments():
-			points.extend(segment.getPoints(currentPoint))
-			endPoint = segment.getEndPoint()
-			currentPoint = (currentPoint[0] + endPoint[0], currentPoint[1] + endPoint[1])
-		return points
 
