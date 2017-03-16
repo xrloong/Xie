@@ -95,8 +95,8 @@ class StrokeGroupInfo:
 	def getBBoxPane(self):
 		return self.bBoxPane
 
-	@staticmethod
-	def generateInstanceByStrokeList(strokeList, bBox):
+	@classmethod
+	def generateInstanceByStrokeList(cls, strokeList):
 		def mergeBoundaryList(boundaryList):
 			from xie.graphics.shape import mergeBoundary
 			r = boundaryList[0]
