@@ -69,11 +69,12 @@ class Stroke(Drawing, Shape):
 		drawingSystem.onPostDrawStroke(stroke)
 
 
-def generateStroke(name, startPoint, parameterList, bBox):
+def generateStroke(name, startPoint, parameterList):
 	strokeInfo = strokeInfoFactory.generateStrokeInfo(name, parameterList)
 	strokePath=strokeInfo.getStrokePath()
+	boundary=strokePath.computeBoundaryWithStartPoint(startPoint)
 
-	pane = Pane(*bBox)
+	pane = Pane(*boundary)
 	infoPane = pane
 	statePane = pane
 	return Stroke(startPoint, strokeInfo=strokeInfo, infoPane=infoPane, statePane=statePane)
