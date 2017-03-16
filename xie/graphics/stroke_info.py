@@ -33,31 +33,6 @@ class StrokeInfoGenerator:
 		strokeSegments=self.computeStrokeSegments(parameterList)
 		return StrokePath(strokeSegments)
 
-	@staticmethod
-	def computeExtreme(points, extreme, solveExtreme, retrieveValue):
-		firstPointPair = points[0]
-		prevPoint = firstPointPair[1]
-		midPoint = None
-
-		extremeValue = retrieveValue(prevPoint)
-		for p in points[1:]:
-			isCurve = p[0]
-			currPoint = p[1]
-
-			extremeValue = extreme(extremeValue, retrieveValue(currPoint))
-			if isCurve:
-				midPoint=currPoint
-			else:
-				if midPoint:
-					s0, s1, s2 = retrieveValue(prevPoint), retrieveValue(midPoint), retrieveValue(currPoint)
-					tmpExtremeValue = solveExtreme(s0, s1, s2)
-					extremeValue = extreme(extremeValue, tmpExtremeValue)
-
-				prevPoint=currPoint
-				midPoint=None
-
-		return extremeValue
-
 
 class StrokeInfoGenerator_點(StrokeInfoGenerator):
 	def parseExpression(self, parameterExpressionList):
