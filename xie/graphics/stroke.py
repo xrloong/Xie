@@ -68,6 +68,11 @@ class Stroke(Drawing, Shape):
 		drawingSystem.endDrawing()
 		drawingSystem.onPostDrawStroke(stroke)
 
+	def computeBoundary(self):
+		startPoint=self.getStartPoint()
+		strokePath=self.getStrokePath()
+		return strokePath.computeBoundaryWithStartPoint(startPoint)
+
 
 def generateStroke(name, startPoint, parameterList):
 	strokeInfo = strokeInfoFactory.generateStrokeInfo(name, parameterList)
@@ -92,6 +97,16 @@ class StrokeGroupInfo:
 
 	@staticmethod
 	def generateInstanceByStrokeList(strokeList, bBox):
+		def mergeBoundaryList(boundaryList):
+			from xie.graphics.shape import mergeBoundary
+			r = boundaryList[0]
+			for b in boundaryList[1:]:
+				r = mergeBoundary(r, b)
+			return r
+
+		boundaryList=[stroke.computeBoundary() for stroke in strokeList]
+		bBox=mergeBoundaryList(boundaryList)
+
 		return StrokeGroupInfo(strokeList, Pane(*bBox))
 
 	@staticmethod
