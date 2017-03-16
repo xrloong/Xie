@@ -135,6 +135,10 @@ class StrokeGroup(Drawing):
 	def getCount(self):
 		return len(self.getStrokeList())
 
+	@classmethod
+	def generateInstanceByInfo(cls, strokeGroupInfo):
+		return StrokeGroup(strokeGroupInfo)
+
 	@staticmethod
 	def generateStrokeGroup(sg, pane):
 		strokeGroup=sg.clone()
