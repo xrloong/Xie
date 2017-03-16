@@ -133,9 +133,6 @@ class Pane:
 		newX=int((x-self.getLeft())*targetPane.getWidth()/self.getWidth())+targetPane.getLeft()
 		newY=int((y-self.getTop())*targetPane.getHeight()/self.getHeight())+targetPane.getTop()
 
-		assert newX==max(targetPane.left, min(targetPane.right, newX))
-		assert newY==max(targetPane.top, min(targetPane.bottom, newY))
-
 		return (newX, newY)
 
 	def transformRelativePaneByTargetPane(self, relativePane, targetPane):
@@ -263,4 +260,11 @@ class Rectangle(Drawable):
 		drawSystem.lineTo((-self.w, 0))
 		drawSystem.lineTo((0, -self.h))
 		drawSystem.endDrawing()
+
+def offsetBoundary(boundary, offset):
+	return (boundary[0]+offset[0], boundary[1]+offset[1], boundary[2]+offset[0], boundary[3]+offset[1],)
+
+def mergeBoundary(boundaryA, boundaryB):
+	return (min(boundaryA[0], boundaryB[0]), min(boundaryA[1], boundaryB[1]),
+		max(boundaryA[2], boundaryB[2]), max(boundaryA[3], boundaryB[3]),)
 

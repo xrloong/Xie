@@ -71,6 +71,7 @@ class Stroke(Drawing, Shape):
 
 def generateStroke(name, startPoint, parameterList, bBox):
 	strokeInfo = strokeInfoFactory.generateStrokeInfo(name, parameterList)
+	strokePath=strokeInfo.getStrokePath()
 
 	pane = Pane(*bBox)
 	infoPane = pane

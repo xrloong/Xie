@@ -1,4 +1,7 @@
 from .shape import Shape
+from .shape import mergeBoundary
+from .shape import offsetBoundary
+from .quadratic import solveMin, solveMax
 
 class Segment(Shape):
 	def __init__(self):
@@ -7,12 +10,21 @@ class Segment(Shape):
 	def draw(self, drawingSystem):
 		pass
 
+	def computeBoundary(self):
+		return (0, 0, 0, 0)
+
 class BaseBeelineSegment(Segment):
 	def getEndPoint(self):
 		return (0, 0)
 
 	def draw(self, drawingSystem):
 		drawingSystem.lineTo(self.getEndPoint())
+
+	def computeBoundary(self):
+		startPoint=(0, 0)
+		endPoint=self.getEndPoint()
+		return (min(startPoint[0], endPoint[0]), min(startPoint[1], endPoint[1]),
+			max(startPoint[0], endPoint[0]), max(startPoint[1], endPoint[1]))
 
 class BaseQCurveSegment(Segment):
 	def getControlPoint(self):
@@ -23,6 +35,16 @@ class BaseQCurveSegment(Segment):
 
 	def draw(self, drawingSystem):
 		drawingSystem.qCurveTo(self.getControlPoint(), self.getEndPoint())
+
+	def computeBoundary(self):
+		startPoint=(0, 0)
+		controlPoint=self.getControlPoint()
+		endPoint=self.getEndPoint()
+		minX = solveMin(startPoint[0], controlPoint[0], endPoint[0])
+		minY = solveMin(startPoint[1], controlPoint[1], endPoint[1])
+		maxX = solveMax(startPoint[0], controlPoint[0], endPoint[0])
+		maxY = solveMax(startPoint[1], controlPoint[1], endPoint[1])
+		return (minX, minY, maxX, maxY)
 
 class BeelineSegment(BaseBeelineSegment):
 	def __init__(self, point):
@@ -199,4 +221,23 @@ class StrokePath(Shape):
 
 		for segment in segments:
 			segment.draw(drawingSystem)
+
+	def computeBoundary(self):
+		segments=self.getSegments()
+
+		currentPoint=(0, 0)
+		totalBoundary=(0, 0, 0, 0)
+		for segment in segments:
+			boundary=segment.computeBoundary()
+			newBoundary=offsetBoundary(boundary, currentPoint)
+			totalBoundary=mergeBoundary(totalBoundary, newBoundary)
+
+			endPoint=segment.getEndPoint()
+			currentPoint=(currentPoint[0]+endPoint[0], currentPoint[1]+endPoint[1], )
+
+		return totalBoundary
+
+	def computeBoundaryWithStartPoint(self, startPoint):
+		strokePathBoundary = self.computeBoundary()
+		return offsetBoundary(strokePathBoundary, startPoint)
 
