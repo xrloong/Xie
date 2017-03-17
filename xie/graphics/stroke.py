@@ -114,16 +114,16 @@ class StrokeGroupInfo:
 		return StrokeGroupInfo(strokeList, bBoxPane)
 
 class StrokeGroup(Drawing):
-	def __init__(self, strokeGroupInfo):
-		pane=strokeGroupInfo.getBBoxPane()
-		super().__init__(pane, pane)
+	def __init__(self, strokeGroupInfo, infoPane, statePane):
+		super().__init__(infoPane, statePane)
 		self.strokeGroupInfo=strokeGroupInfo
 
 	def clone(self):
 		strokeList=[s.clone() for s in self.getStrokeList()]
 		strokeGroupInfo=StrokeGroupInfo.generateInstanceFromComposition(strokeList, self.getInfoPane())
-		strokeGroup=StrokeGroup(strokeGroupInfo)
-		strokeGroup.setStatePane(self.getStatePane())
+		infoPane=strokeGroupInfo.getBBoxPane()
+		statePane=self.getStatePane()
+		strokeGroup=StrokeGroup(strokeGroupInfo, infoPane, statePane)
 		return strokeGroup
 
 	def getDrawingList(self):
@@ -137,7 +137,10 @@ class StrokeGroup(Drawing):
 
 	@classmethod
 	def generateInstanceByInfo(cls, strokeGroupInfo):
-		return StrokeGroup(strokeGroupInfo)
+		pane=strokeGroupInfo.getBBoxPane()
+		infoPane=pane
+		statePane=pane
+		return StrokeGroup(strokeGroupInfo, infoPane, statePane)
 
 	@classmethod
 	def generateInstanceByStrokeGroupPane(cls, sg, pane):
