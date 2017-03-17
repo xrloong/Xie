@@ -126,6 +126,13 @@ class StrokeGroup(Drawing):
 	def getCount(self):
 		return len(self.getStrokeList())
 
+	def draw(self, drawingSystem):
+		strokeList = self.getStrokeList();
+
+		drawingSystem.clear()
+		for stroke in strokeList:
+			stroke.draw(drawingSystem)
+
 	@classmethod
 	def generateInstanceByInfo(cls, strokeGroupInfo):
 		pane=strokeGroupInfo.getBBoxPane()
