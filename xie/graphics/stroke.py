@@ -39,11 +39,6 @@ class Stroke(Drawing, Shape):
 			self.strokePath=strokePath
 			self.name=""
 
-	def clone(self):
-		stroke=Stroke(self.startPoint, strokeInfo=self.strokeInfo, strokePath=self.strokePath,
-			infoPane=self.getInfoPane(), statePane=self.getStatePane())
-		return stroke
-
 	def getName(self):
 		return self.name
 
@@ -73,10 +68,13 @@ class Stroke(Drawing, Shape):
 		strokePath=self.getStrokePath()
 		return strokePath.computeBoundaryWithStartPoint(startPoint)
 
-	def transformBy(self, sgTargetPane, newSgTargetPane):
+	def generateCopyToApplyNewPane(self, sgTargetPane, newSgTargetPane):
 		sTargetPane=self.getStatePane()
 		newSTargetPane=sgTargetPane.transformRelativePaneByTargetPane(sTargetPane, newSgTargetPane)
-		self.setStatePane(newSTargetPane)
+
+		strokeCopy=Stroke(self.startPoint, strokeInfo=self.strokeInfo,
+			infoPane=self.getInfoPane(), statePane=newSTargetPane)
+		return strokeCopy
 
 def generateStroke(name, startPoint, parameterList):
 	strokeInfo = strokeInfoFactory.generateStrokeInfo(name, parameterList)
@@ -140,9 +138,7 @@ class StrokeGroup(Drawing):
 		newSgTargetPane=pane
 		sgInfoPane=sg.getInfoPane()
 
-		strokeList=[s.clone() for s in sg.getStrokeList()]
-		for stroke in strokeList:
-			stroke.transformBy(sgInfoPane, newSgTargetPane)
+		strokeList=[s.generateCopyToApplyNewPane(sgInfoPane, newSgTargetPane) for s in sg.getStrokeList()]
 
 		infoPane=sg.getInfoPane()
 		statePane=sg.getStatePane()
