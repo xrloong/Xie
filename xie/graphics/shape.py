@@ -163,9 +163,6 @@ class Drawing:
 		self.infoPane=infoPane
 		self.statePane=statePane
 
-	def getDrawingList(self):
-		return []
-
 	def getInfoPane(self):
 		return self.infoPane
 
