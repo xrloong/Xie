@@ -54,11 +54,11 @@ class DrawingSystem():
 	def setPane(self, infoPane, statePane):
 		self.canvasController.setPane(infoPane, statePane)
 
-	def updateStrokeInfo(self, stroke):
-		self.canvasController.updateStrokeInfo(stroke)
+	def onPreDrawCharacter(self, character):
+		self.canvasController.onPreDrawCharacter(character)
 
-	def updateCharacterInfo(self, character):
-		self.canvasController.updateCharacterInfo(character)
+	def onPostDrawCharacter(self, character):
+		self.canvasController.onPostDrawCharacter(character)
 
 	def onPreDrawStroke(self, stroke):
 		self.canvasController.onPreDrawStroke(stroke)

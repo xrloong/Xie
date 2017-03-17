@@ -23,10 +23,10 @@ class CanvasController:
 	def qCurveTo(self, cp, p):
 		pass
 
-	def updateStrokeInfo(self, stroke):
+	def onPreDrawCharacter(self, character):
 		pass
 
-	def updateCharacterInfo(self, character):
+	def onPostDrawCharacter(self, character):
 		pass
 
 	def onPreDrawStroke(self, stroke):

@@ -1,7 +1,8 @@
 # coding=utf8
 
 class Shape:
-	pass
+	def draw(self, drawSystem):
+		pass
 
 class Pane:
 	EMBOX_X_MIN=0x00
