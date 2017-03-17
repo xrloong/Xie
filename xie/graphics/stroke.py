@@ -73,6 +73,10 @@ class Stroke(Drawing, Shape):
 		strokePath=self.getStrokePath()
 		return strokePath.computeBoundaryWithStartPoint(startPoint)
 
+	def transformBy(self, sgTargetPane, newSgTargetPane):
+		sTargetPane=self.getStatePane()
+		newSTargetPane=sgTargetPane.transformRelativePaneByTargetPane(sTargetPane, newSgTargetPane)
+		self.setStatePane(newSTargetPane)
 
 def generateStroke(name, startPoint, parameterList):
 	strokeInfo = strokeInfoFactory.generateStrokeInfo(name, parameterList)
