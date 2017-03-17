@@ -139,8 +139,8 @@ class StrokeGroup(Drawing):
 	def generateInstanceByInfo(cls, strokeGroupInfo):
 		return StrokeGroup(strokeGroupInfo)
 
-	@staticmethod
-	def generateStrokeGroup(sg, pane):
+	@classmethod
+	def generateInstanceByStrokeGroupPane(cls, sg, pane):
 		strokeGroup=sg.clone()
 
 		newSgTargetPane=pane
@@ -156,8 +156,8 @@ class StrokeGroup(Drawing):
 
 		return strokeGroup
 
-	@staticmethod
-	def generateStrokeGroupInfo(strokeGroupPanePair):
+	@classmethod
+	def generateInstanceByStrokeGroupPanePairList(cls, strokeGroupPanePairList):
 		def computeBBox(paneList):
 			left=min(map(lambda pane: pane.getLeft(), paneList))
 			top=min(map(lambda pane: pane.getTop(), paneList))
@@ -167,13 +167,14 @@ class StrokeGroup(Drawing):
 
 		resultStrokeList=[]
 		paneList=[]
-		for strokeGroup, pane in strokeGroupPanePair:
-			strokeGroup=StrokeGroup.generateStrokeGroup(strokeGroup, pane)
+		for strokeGroup, pane in strokeGroupPanePairList:
+			strokeGroup=StrokeGroup.generateInstanceByStrokeGroupPane(strokeGroup, pane)
 			resultStrokeList.extend(strokeGroup.getStrokeList())
 			paneList.append(strokeGroup.getInfoPane())
 
 		pane=computeBBox(paneList)
 		strokeGroupInfo=StrokeGroupInfo.generateInstanceFromComposition(resultStrokeList, pane)
+		strokeGroup=StrokeGroup.generateInstanceByInfo(strokeGroupInfo)
 
-		return strokeGroupInfo
+		return strokeGroup
 
