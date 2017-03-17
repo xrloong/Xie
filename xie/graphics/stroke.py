@@ -140,10 +140,7 @@ class StrokeGroup(Drawing):
 
 		strokeList=[s.generateCopyToApplyNewPane(sgInfoPane, newSgTargetPane) for s in sg.getStrokeList()]
 
-		infoPane=sg.getInfoPane()
-		statePane=sg.getStatePane()
-		strokeGroupInfo=StrokeGroupInfo.generateInstanceFromComposition(strokeList, infoPane)
-
+		strokeGroupInfo=StrokeGroupInfo.generateInstanceByStrokeList(strokeList)
 
 		infoPane=newSgTargetPane
 		statePane=newSgTargetPane
