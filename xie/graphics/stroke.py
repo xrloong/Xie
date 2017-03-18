@@ -25,28 +25,37 @@ class Character(Shape):
 
 strokeInfoFactory=StrokeInfoFactory()
 
-class Stroke(Drawing, Shape):
-	def __init__(self, startPoint, strokeInfo=None, strokePath=None, infoPane=Pane.BBOX, statePane=Pane.BBOX):
-		super().__init__(infoPane, statePane)
+class Stroke(Shape):
+	def __init__(self, startPoint, strokeInfo, statePane=None):
 		self.startPoint=startPoint
+		self.strokeInfo=strokeInfo
 
-		if strokeInfo:
-			self.strokeInfo=strokeInfo
-			self.strokePath=strokeInfo.getStrokePath()
-			self.name=strokeInfo.getName()
+		strokePath=strokeInfo.getStrokePath()
+		boundary=strokePath.computeBoundaryWithStartPoint(startPoint)
+
+		self.infoPane = Pane(*boundary)
+		if statePane:
+			self.statePane=statePane
 		else:
-			self.strokeInfo=None
-			self.strokePath=strokePath
-			self.name=""
-
-	def getName(self):
-		return self.name
+			self.statePane=self.infoPane
 
 	def getStartPoint(self):
 		return self.startPoint
 
+	def getStrokeInfo(self):
+		return self.strokeInfo
+
+	def getName(self):
+		return self.getStrokeInfo().getName()
+
 	def getStrokePath(self):
-		return self.strokePath
+		return self.getStrokeInfo().getStrokePath()
+
+	def getInfoPane(self):
+		return self.infoPane
+
+	def getStatePane(self):
+		return self.statePane
 
 	def draw(self, drawingSystem):
 		startPoint = self.getStartPoint()
@@ -72,19 +81,12 @@ class Stroke(Drawing, Shape):
 		sTargetPane=self.getStatePane()
 		newSTargetPane=sgTargetPane.transformRelativePaneByTargetPane(sTargetPane, newSgTargetPane)
 
-		strokeCopy=Stroke(self.startPoint, strokeInfo=self.strokeInfo,
-			infoPane=self.getInfoPane(), statePane=newSTargetPane)
+		strokeCopy=Stroke(self.startPoint, self.strokeInfo, newSTargetPane)
 		return strokeCopy
 
 def generateStroke(name, startPoint, parameterList):
 	strokeInfo = strokeInfoFactory.generateStrokeInfo(name, parameterList)
-	strokePath=strokeInfo.getStrokePath()
-	boundary=strokePath.computeBoundaryWithStartPoint(startPoint)
-
-	pane = Pane(*boundary)
-	infoPane = pane
-	statePane = pane
-	return Stroke(startPoint, strokeInfo=strokeInfo, infoPane=infoPane, statePane=statePane)
+	return Stroke(startPoint, strokeInfo)
 
 class StrokeGroupInfo:
 	def __init__(self, strokeList, bBoxPane):
