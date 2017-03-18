@@ -158,23 +158,6 @@ Pane.BBOX=Pane(
 	Pane.BBOX_Y_MAX,
 	)
 
-class Drawing:
-	def __init__(self, infoPane, statePane):
-		self.infoPane=infoPane
-		self.statePane=statePane
-
-	def getInfoPane(self):
-		return self.infoPane
-
-	def getStatePane(self):
-		return self.statePane
-
-	def setInfoPane(self, pane):
-		self.infoPane=pane
-
-	def setStatePane(self, pane):
-		self.statePane=pane
-
 class Boundary(Pane):
 	def __init__(self, left, top, right, bottom):
 		assert left <= right and top <= bottom

@@ -1,4 +1,3 @@
-from .shape import Drawing
 from .shape import Shape
 from .shape import Pane
 
@@ -117,10 +116,18 @@ class StrokeGroupInfo:
 	def generateInstanceFromComposition(strokeList, bBoxPane):
 		return StrokeGroupInfo(strokeList, bBoxPane)
 
-class StrokeGroup(Drawing):
+class StrokeGroup(Shape):
 	def __init__(self, strokeGroupInfo, infoPane, statePane):
-		super().__init__(infoPane, statePane)
 		self.strokeGroupInfo=strokeGroupInfo
+
+		self.infoPane=infoPane
+		self.statePane=statePane
+
+	def getInfoPane(self):
+		return self.infoPane
+
+	def getStatePane(self):
+		return self.statePane
 
 	def getStrokeList(self):
 		return self.strokeGroupInfo.getStrokeList()
