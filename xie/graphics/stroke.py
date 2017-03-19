@@ -95,17 +95,14 @@ class StrokeGroupInfo:
 		return StrokeGroupInfo(strokeList, bBoxPane)
 
 class StrokeGroup(Shape):
-	def __init__(self, strokeGroupInfo, infoPane, statePane):
+	def __init__(self, strokeGroupInfo, infoPane):
 		self.strokeGroupInfo=strokeGroupInfo
 
 		self.infoPane=infoPane
-		self.statePane=statePane
+		self.statePane=infoPane
 
 	def getInfoPane(self):
 		return self.infoPane
-
-	def getStatePane(self):
-		return self.statePane
 
 	def getStrokeList(self):
 		return self.strokeGroupInfo.getStrokeList()
@@ -123,8 +120,7 @@ class StrokeGroup(Shape):
 	def generateInstanceByInfo(cls, strokeGroupInfo):
 		pane=strokeGroupInfo.getBBoxPane()
 		infoPane=pane
-		statePane=pane
-		return StrokeGroup(strokeGroupInfo, infoPane, statePane)
+		return StrokeGroup(strokeGroupInfo, infoPane)
 
 	@classmethod
 	def generateInstanceByStrokeGroupPane(cls, sg, pane):
@@ -136,8 +132,7 @@ class StrokeGroup(Shape):
 		strokeGroupInfo=StrokeGroupInfo.generateInstanceByStrokeList(strokeList)
 
 		infoPane=newSgTargetPane
-		statePane=newSgTargetPane
-		strokeGroup=StrokeGroup(strokeGroupInfo, infoPane, statePane)
+		strokeGroup=StrokeGroup(strokeGroupInfo, infoPane)
 
 		return strokeGroup
 
