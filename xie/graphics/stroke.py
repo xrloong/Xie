@@ -66,33 +66,32 @@ def generateStroke(name, startPoint, parameterList):
 	return Stroke(startPoint, strokeInfo)
 
 class StrokeGroupInfo:
-	def __init__(self, strokeList, bBoxPane):
+	def __init__(self, strokeList, statePane=None):
 		self.strokeList=strokeList
-		self.bBoxPane=bBoxPane
+
+		if not statePane:
+			def mergeBoundaryList(boundaryList):
+				from xie.graphics.shape import mergeBoundary
+				r = boundaryList[0]
+				for b in boundaryList[1:]:
+					r = mergeBoundary(r, b)
+				return r
+
+			boundaryList=[stroke.computeBoundary() for stroke in strokeList]
+			bBox=mergeBoundaryList(boundaryList)
+			statePane=Pane(*bBox)
+
+		self.statePane=statePane
 
 	def getStrokeList(self):
 		return self.strokeList
 
-	def getBBoxPane(self):
-		return self.bBoxPane
+	def getStatePane(self):
+		return self.statePane
 
 	@classmethod
-	def generateInstanceByStrokeList(cls, strokeList):
-		def mergeBoundaryList(boundaryList):
-			from xie.graphics.shape import mergeBoundary
-			r = boundaryList[0]
-			for b in boundaryList[1:]:
-				r = mergeBoundary(r, b)
-			return r
-
-		boundaryList=[stroke.computeBoundary() for stroke in strokeList]
-		bBox=mergeBoundaryList(boundaryList)
-
-		return StrokeGroupInfo(strokeList, Pane(*bBox))
-
-	@staticmethod
-	def generateInstanceFromComposition(strokeList, bBoxPane):
-		return StrokeGroupInfo(strokeList, bBoxPane)
+	def generateInstanceByStrokeList(cls, strokeList, pane=None):
+		return StrokeGroupInfo(strokeList, pane)
 
 class StrokeGroup(Shape):
 	def __init__(self, strokeGroupInfo, infoPane):
@@ -118,7 +117,7 @@ class StrokeGroup(Shape):
 
 	@classmethod
 	def generateInstanceByInfo(cls, strokeGroupInfo):
-		pane=strokeGroupInfo.getBBoxPane()
+		pane=strokeGroupInfo.getStatePane()
 		infoPane=pane
 		return StrokeGroup(strokeGroupInfo, infoPane)
 
@@ -153,7 +152,7 @@ class StrokeGroup(Shape):
 			paneList.append(strokeGroup.getInfoPane())
 
 		pane=computeBBox(paneList)
-		strokeGroupInfo=StrokeGroupInfo.generateInstanceFromComposition(resultStrokeList, pane)
+		strokeGroupInfo=StrokeGroupInfo.generateInstanceByStrokeList(resultStrokeList, pane)
 		strokeGroup=StrokeGroup.generateInstanceByInfo(strokeGroupInfo)
 
 		return strokeGroup
