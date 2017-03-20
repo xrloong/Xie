@@ -116,9 +116,9 @@ class StrokeGroup(Shape):
 			stroke.draw(drawingSystem)
 
 	@classmethod
-	def generateInstanceByInfo(cls, strokeGroupInfo):
-		pane=strokeGroupInfo.getStatePane()
-		infoPane=pane
+	def generateInstanceByInfo(cls, strokeGroupInfo, infoPane=None):
+		if not infoPane:
+			infoPane=strokeGroupInfo.getStatePane()
 		return StrokeGroup(strokeGroupInfo, infoPane)
 
 	@classmethod
@@ -131,7 +131,7 @@ class StrokeGroup(Shape):
 		strokeGroupInfo=StrokeGroupInfo.generateInstanceByStrokeList(strokeList)
 
 		infoPane=newSgTargetPane
-		strokeGroup=StrokeGroup(strokeGroupInfo, infoPane)
+		strokeGroup=StrokeGroup.generateInstanceByInfo(strokeGroupInfo, infoPane)
 
 		return strokeGroup
 
