@@ -123,8 +123,8 @@ class StrokeGroup(Shape):
 
 	@classmethod
 	def generateInstanceByStrokeList(cls, strokeList, pane=None):
-		strokeGroupInfo=StrokeGroupInfo.generateInstance(strokeList, pane)
-		return StrokeGroup.generateInstanceByInfo(strokeGroupInfo)
+		strokeGroupInfo=StrokeGroupInfo.generateInstance(strokeList)
+		return StrokeGroup.generateInstanceByInfo(strokeGroupInfo, pane)
 
 	@classmethod
 	def generateInstanceByStrokeGroupPane(cls, sg, pane):
@@ -157,8 +157,8 @@ class StrokeGroup(Shape):
 			paneList.append(strokeGroup.getInfoPane())
 
 		pane=computeBBox(paneList)
-		strokeGroupInfo=StrokeGroupInfo.generateInstance(resultStrokeList, pane)
-		strokeGroup=StrokeGroup.generateInstanceByInfo(strokeGroupInfo)
+		strokeGroupInfo=StrokeGroupInfo.generateInstance(resultStrokeList)
+		strokeGroup=StrokeGroup.generateInstanceByInfo(strokeGroupInfo, pane)
 
 		return strokeGroup
 
