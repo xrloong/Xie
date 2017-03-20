@@ -7,6 +7,9 @@ class Segment(Shape):
 	def __init__(self):
 		pass
 
+	def __ne__(self, other):
+		return not self.__eq__(other)
+
 	def draw(self, drawingSystem):
 		pass
 
@@ -14,6 +17,10 @@ class Segment(Shape):
 		return (0, 0, 0, 0)
 
 class BaseBeelineSegment(Segment):
+	def __eq__(self, other):
+		return (isinstance(other, self.__class__)
+			and self.getEndPoint() == other.getEndPoint())
+
 	def getEndPoint(self):
 		return (0, 0)
 
@@ -27,6 +34,15 @@ class BaseBeelineSegment(Segment):
 			max(startPoint[0], endPoint[0]), max(startPoint[1], endPoint[1]))
 
 class BaseQCurveSegment(Segment):
+	def __eq__(self, other):
+		return (
+			isinstance(other, self.__class__)
+			and (
+				self.getControlPoint() == other.getControlPoint()
+				and self.getEndPoint() == other.getEndPoint()
+			)
+		)
+
 	def getControlPoint(self):
 		return (0, 0)
 
@@ -51,6 +67,12 @@ class BeelineSegment(BaseBeelineSegment):
 		super().__init__()
 		self.point=point
 
+	def __str__(self):
+		return "Beeline({0})".format(self.point)
+
+	def __repr__(self):
+		return "BeelineSegment({0})".format(self.point)
+
 	def getEndPoint(self):
 		return self.point
 
@@ -59,6 +81,12 @@ class QCurveSegment(BaseQCurveSegment):
 		super().__init__()
 		self.control_point=control_point
 		self.point=point
+
+	def __str__(self):
+		return "QCurve({0}, {1})".format(self.control_point, self.point)
+
+	def __repr__(self):
+		return "QCurveSegment({0}, {1})".format(self.control_point, self.point)
 
 	def getControlPoint(self):
 		return self.control_point
@@ -212,6 +240,16 @@ class SegmentFactory:
 class StrokePath(Shape):
 	def __init__(self, segments):
 		self.segments=segments
+
+	def __eq__(self, other):
+		return (isinstance(other, self.__class__)
+			and self.getSegments() == other.getSegments())
+
+	def __str__(self):
+		return "-".join(map(lambda s: str(s), self.getSegments()))
+
+	def __repr__(self):
+		return "StrokePath({0})".format(",".join(map(lambda s: str(s), self.getSegments())))
 
 	def getSegments(self):
 		return self.segments
