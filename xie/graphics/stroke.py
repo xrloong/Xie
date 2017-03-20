@@ -146,13 +146,13 @@ class StrokeGroup(Shape):
 			return Pane(left, top, right, bottom)
 
 		resultStrokeList=[]
-		paneList=[]
 		for strokeGroup, pane in strokeGroupPanePairList:
 			strokeGroup=StrokeGroup.generateInstanceByStrokeGroupPane(strokeGroup, pane)
 			resultStrokeList.extend(strokeGroup.getStrokeList())
-			paneList.append(strokeGroup.getInfoPane())
 
+		paneList=[pane for strokeGroup, pane in strokeGroupPanePairList]
 		pane=computeBBox(paneList)
+
 		strokeGroupInfo=StrokeGroupInfo(resultStrokeList)
 		strokeGroup=StrokeGroup.generateInstanceByInfo(strokeGroupInfo, pane)
 
