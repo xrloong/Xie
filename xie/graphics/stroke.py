@@ -66,10 +66,15 @@ def generateStroke(name, startPoint, parameterList):
 	return Stroke(startPoint, strokeInfo)
 
 class StrokeGroupInfo:
-	def __init__(self, strokeList, statePane=None):
+	def __init__(self, strokeList):
 		self.strokeList=strokeList
+		self.infoPane=None
 
-		if not statePane:
+	def getStrokeList(self):
+		return self.strokeList
+
+	def getInfoPane(self):
+		if not self.infoPane:
 			def mergeBoundaryList(boundaryList):
 				from xie.graphics.shape import mergeBoundary
 				r = boundaryList[0]
@@ -77,21 +82,16 @@ class StrokeGroupInfo:
 					r = mergeBoundary(r, b)
 				return r
 
+			strokeList=self.getStrokeList()
 			boundaryList=[stroke.computeBoundary() for stroke in strokeList]
 			bBox=mergeBoundaryList(boundaryList)
-			statePane=Pane(*bBox)
+			self.infoPane=Pane(*bBox)
 
-		self.statePane=statePane
-
-	def getStrokeList(self):
-		return self.strokeList
-
-	def getStatePane(self):
-		return self.statePane
+		return self.infoPane
 
 	@classmethod
-	def generateInstance(cls, strokeList, pane=None):
-		return StrokeGroupInfo(strokeList, pane)
+	def generateInstance(cls, strokeList):
+		return StrokeGroupInfo(strokeList)
 
 class StrokeGroup(Shape):
 	def __init__(self, strokeGroupInfo, infoPane):
@@ -118,13 +118,13 @@ class StrokeGroup(Shape):
 	@classmethod
 	def generateInstanceByInfo(cls, strokeGroupInfo, infoPane=None):
 		if not infoPane:
-			infoPane=strokeGroupInfo.getStatePane()
+			infoPane=strokeGroupInfo.getInfoPane()
 		return StrokeGroup(strokeGroupInfo, infoPane)
 
 	@classmethod
-	def generateInstanceByStrokeList(cls, strokeList, pane=None):
+	def generateInstanceByStrokeList(cls, strokeList):
 		strokeGroupInfo=StrokeGroupInfo.generateInstance(strokeList)
-		return StrokeGroup.generateInstanceByInfo(strokeGroupInfo, pane)
+		return StrokeGroup.generateInstanceByInfo(strokeGroupInfo)
 
 	@classmethod
 	def generateInstanceByStrokeGroupPane(cls, sg, pane):
