@@ -147,7 +147,7 @@ class StrokeGroup(Shape):
 			strokeGroup=StrokeGroup.generateInstanceByStrokeGroupPane(strokeGroup, pane)
 			resultStrokeList.extend(strokeGroup.getStrokeList())
 
-		paneList=[pane for strokeGroup, pane in strokeGroupPanePairList]
+		paneList=[stroke.getStatePane() for stroke in resultStrokeList]
 		pane=computeBBox(paneList)
 
 		strokeGroupInfo=StrokeGroupInfo(resultStrokeList)
