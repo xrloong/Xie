@@ -111,12 +111,11 @@ class StrokeGroup(Shape):
 			stroke.draw(drawingSystem)
 
 	def generateCopyToApplyNewPane(self, newSgTargetPane):
-		sgInfoPane=self.getStatePane()
-		strokeList=[s.generateCopyToApplyNewPane(sgInfoPane, newSgTargetPane) for s in self.getStrokeList()]
+		sgStatePane=self.getStatePane()
+		strokeList=[s.generateCopyToApplyNewPane(sgStatePane, newSgTargetPane) for s in self.getStrokeList()]
 		strokeGroupInfo=StrokeGroupInfo(strokeList)
 
-		infoPane=newSgTargetPane
-		strokeGroup=StrokeGroup.generateInstanceByInfo(strokeGroupInfo, infoPane)
+		strokeGroup=StrokeGroup.generateInstanceByInfo(strokeGroupInfo)
 		return strokeGroup
 
 	@classmethod
