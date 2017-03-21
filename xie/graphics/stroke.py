@@ -55,10 +55,10 @@ class Stroke(Shape):
 		return strokePath.computeBoundaryWithStartPoint(startPoint)
 
 	def generateCopyToApplyNewPane(self, sgTargetPane, newSgTargetPane):
-		sTargetPane=self.getStatePane()
-		newSTargetPane=sgTargetPane.transformRelativePaneByTargetPane(sTargetPane, newSgTargetPane)
+		newSTargetPane=sgTargetPane.transformRelativePaneByTargetPane(self.getStatePane(), newSgTargetPane)
+		newStartPoint=sgTargetPane.transformRelativePointByTargetPane(self.getStartPoint(), newSgTargetPane)
 
-		strokeCopy=Stroke(self.startPoint, self.strokeInfo, newSTargetPane)
+		strokeCopy=Stroke(newStartPoint, self.strokeInfo, newSTargetPane)
 		return strokeCopy
 
 def generateStroke(name, startPoint, parameterList):
