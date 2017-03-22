@@ -143,14 +143,6 @@ class Pane:
 		return Pane(left, top, right, bottom)
 
 
-# 字身框（Em Box）
-Pane.EMBOX=Pane(
-	Pane.EMBOX_X_MIN,
-	Pane.EMBOX_Y_MIN,
-	Pane.EMBOX_X_MAX,
-	Pane.EMBOX_Y_MAX
-	)
-
 # 字面框（Bounding Box）
 Pane.BBOX=Pane(
 	Pane.BBOX_X_MIN,
