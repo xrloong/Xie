@@ -90,14 +90,13 @@ class StrokeGroupInfo:
 		return self.infoPane
 
 class StrokeGroup(Shape):
-	def __init__(self, strokeGroupInfo, infoPane):
+	def __init__(self, strokeGroupInfo, statePane):
 		self.strokeGroupInfo=strokeGroupInfo
 
-		self.infoPane=infoPane
-		self.statePane=infoPane
+		self.statePane=statePane
 
-	def getInfoPane(self):
-		return self.infoPane
+	def getStatePane(self):
+		return self.statePane
 
 	def getStrokeList(self):
 		return self.strokeGroupInfo.getStrokeList()
@@ -112,7 +111,7 @@ class StrokeGroup(Shape):
 			stroke.draw(drawingSystem)
 
 	def generateCopyToApplyNewPane(self, newSgTargetPane):
-		sgInfoPane=self.getInfoPane()
+		sgInfoPane=self.getStatePane()
 		strokeList=[s.generateCopyToApplyNewPane(sgInfoPane, newSgTargetPane) for s in self.getStrokeList()]
 		strokeGroupInfo=StrokeGroupInfo(strokeList)
 
@@ -121,10 +120,10 @@ class StrokeGroup(Shape):
 		return strokeGroup
 
 	@classmethod
-	def generateInstanceByInfo(cls, strokeGroupInfo, infoPane=None):
-		if not infoPane:
-			infoPane=strokeGroupInfo.getInfoPane()
-		return StrokeGroup(strokeGroupInfo, infoPane)
+	def generateInstanceByInfo(cls, strokeGroupInfo, statePane=None):
+		if not statePane:
+			statePane=strokeGroupInfo.getInfoPane()
+		return StrokeGroup(strokeGroupInfo, statePane)
 
 	@classmethod
 	def generateInstanceByStrokeList(cls, strokeList):
