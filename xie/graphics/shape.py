@@ -5,20 +5,10 @@ class Shape:
 		pass
 
 class Pane:
-	EMBOX_X_MIN=0x00
-	EMBOX_Y_MIN=0x00
-	EMBOX_X_MAX=0xFF
-	EMBOX_Y_MAX=0xFF
-	EMBOX_WIDTH=EMBOX_X_MAX-EMBOX_X_MIN+1
-	EMBOX_HEIGHT=EMBOX_Y_MAX-EMBOX_Y_MIN+1
-
 	BBOX_X_MIN=0x08
 	BBOX_Y_MIN=0x08
 	BBOX_X_MAX=0xF7
 	BBOX_Y_MAX=0xF7
-
-
-	EMBOX_REGION=[EMBOX_X_MIN, EMBOX_Y_MIN, EMBOX_X_MAX, EMBOX_Y_MAX]
 
 	def __init__(self, left, top, right, bottom):
 		self.left=left
@@ -26,17 +16,11 @@ class Pane:
 		self.right=right
 		self.bottom=bottom
 
-		self.setup()
-
 	def __str__(self):
 		return "%s"%([self.left, self.top, self.right, self.bottom])
 
 	def clone(self):
 		return Pane(self.left, self.top, self.right, self.bottom)
-
-	def setup(self):
-		self.hScale=self.width*1./Pane.EMBOX_WIDTH
-		self.vScale=self.height*1./Pane.EMBOX_HEIGHT
 
 	def offsetLeftAndRight(self, offset):
 		self.left += offset
@@ -72,8 +56,6 @@ class Pane:
 		self.right=right
 		self.bottom=bottom
 
-		self.setup()
-
 	def getLeft(self):
 		return self.left
 
@@ -92,41 +74,11 @@ class Pane:
 	def getHeight(self):
 		return self.height
 
-	def getHScale(self):
-		return self.hScale
-
-	def getVScale(self):
-		return self.vScale
-
 	def getLeftTop(self):
 		return (self.left, self.top)
 
 	def getRightBottom(self):
 		return (self.right, self.bottom)
-
-	def transformPoint(self, point):
-		[x, y]=point
-		left=self.getLeft()
-		top=self.getTop()
-
-		hScale=self.getHScale()
-		vScale=self.getVScale()
-
-		newX=int(x*hScale)+left
-		newY=int(y*vScale)+top
-
-		return (newX, newY)
-
-	def transformPane(self, pane):
-		(left, top)=self.transformPoint((pane.left, pane.top))
-		(right, bottom)=self.transformPoint((pane.right, pane.bottom))
-
-		pane.left=left
-		pane.top=top
-		pane.right=right
-		pane.bottom=bottom
-
-		pane.setup()
 
 	def transformRelativePointByTargetPane(self, point, targetPane):
 		(x, y)=point
