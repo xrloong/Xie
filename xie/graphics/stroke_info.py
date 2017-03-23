@@ -5,6 +5,12 @@ class StrokeInfo:
 		self.name=name
 		self.strokePath=strokePath
 
+	def __ne__(self, other):
+		return not self.__eq__(other)
+
+	def __eq__(self, other):
+		return isinstance(other, StrokeInfo) and (self.getName()==other.getName() and self.getStrokePath()==other.getStrokePath())
+
 	def getName(self):
 		return self.name
 
