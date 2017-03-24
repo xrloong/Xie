@@ -1,9 +1,11 @@
 import unittest
+import copy
 
 from xie.graphics.segment import BeelineSegment
 from xie.graphics.segment import QCurveSegment
 from xie.graphics.segment import StrokePath
 from xie.graphics.segment import SegmentFactory
+from xie.graphics.stroke_info import StrokeInfo
 
 class FactoryTestCase(unittest.TestCase):
 	def setUp(self):
@@ -434,4 +436,135 @@ class FactoryTestCase(unittest.TestCase):
 		self.assertEqual(self.segments_撇曲_2, self.segments_撇曲_2_r)
 		self.assertEqual(self.segments_撇曲_3, self.segments_撇曲_3_r)
 		self.assertEqual(self.segments_撇曲_4, self.segments_撇曲_4_r)
+
+class StrokeInfoFactoryTestCase(unittest.TestCase):
+	def setUp(self):
+		pass
+
+	def tearDown(self):
+		pass
+
+	def testStrokeInfo(self):
+		strokeInfo = StrokeInfo("空", StrokePath([]))
+		self.assertEqual(strokeInfo.getName(), "空")
+		self.assertEqual(strokeInfo.getStrokePath(), StrokePath([]))
+
+		segments=[BeelineSegment((37, 41)), QCurveSegment((0, -99), (57, -99))]
+		strokeInfo = StrokeInfo("測試", StrokePath(segments))
+		self.assertEqual(strokeInfo.getName(), "測試")
+		self.assertEqual(strokeInfo.getStrokePath(), StrokePath(segments))
+
+	def testStrokeInfo_點(self):
+		pass
+
+	def testStrokeInfo_圈(self):
+		pass
+
+	def testStrokeInfo_橫(self):
+		pass
+
+	def testStrokeInfo_橫鉤(self):
+		pass
+
+	def testStrokeInfo_橫折(self):
+		pass
+
+	def testStrokeInfo_橫折折(self):
+		pass
+
+	def testStrokeInfo_橫折提(self):
+		pass
+
+	def testStrokeInfo_橫折折撇(self):
+		pass
+
+	def testStrokeInfo_橫撇彎鉤(self):
+		pass
+
+	def testStrokeInfo_橫折鉤(self):
+		pass
+
+	def testStrokeInfo_橫折彎(self):
+		pass
+
+	def testStrokeInfo_橫撇(self):
+		pass
+
+	def testStrokeInfo_橫斜彎鉤(self):
+		pass
+
+	def testStrokeInfo_橫折折折鉤(self):
+		pass
+
+	def testStrokeInfo_橫斜鉤(self):
+		pass
+
+	def testStrokeInfo_橫折折折(self):
+		pass
+
+	def testStrokeInfo_豎(self):
+		pass
+
+	def testStrokeInfo_豎折(self):
+		pass
+
+	def testStrokeInfo_豎彎左(self):
+		pass
+
+	def testStrokeInfo_豎提(self):
+		pass
+
+	def testStrokeInfo_豎折折(self):
+		pass
+
+	def testStrokeInfo_豎折彎鉤(self):
+		pass
+
+	def testStrokeInfo_豎彎鉤(self):
+		pass
+
+	def testStrokeInfo_豎彎(self):
+		pass
+
+	def testStrokeInfo_豎鉤(self):
+		pass
+
+	def testStrokeInfo_斜鉤(self):
+		pass
+
+	def testStrokeInfo_彎鉤(self):
+		pass
+
+	def testStrokeInfo_撇鉤(self):
+		pass
+
+	def testStrokeInfo_撇(self):
+		pass
+
+	def testStrokeInfo_撇點(self):
+		pass
+
+	def testStrokeInfo_撇橫(self):
+		pass
+
+	def testStrokeInfo_撇橫撇(self):
+		pass
+
+	def testStrokeInfo_豎撇(self):
+		pass
+
+	def testStrokeInfo_提(self):
+		pass
+
+	def testStrokeInfo_捺(self):
+		pass
+
+	def testStrokeInfo_臥捺(self):
+		pass
+
+	def testStrokeInfo_提捺(self):
+		pass
+
+	def testStrokeInfo_橫捺(self):
+		pass
 

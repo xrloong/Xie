@@ -1,10 +1,6 @@
 from .shape import Shape
 from .shape import Pane
 
-from .stroke_info import StrokeInfoFactory
-
-strokeInfoFactory=StrokeInfoFactory()
-
 class Stroke(Shape):
 	def __init__(self, startPoint, strokeInfo, statePane=None):
 		self.startPoint=startPoint
@@ -61,10 +57,6 @@ class Stroke(Shape):
 		strokeCopy=Stroke(newStartPoint, self.strokeInfo, newSTargetPane)
 		return strokeCopy
 
-def generateStroke(name, startPoint, parameterList):
-	strokeInfo = strokeInfoFactory.generateStrokeInfo(name, parameterList)
-	return Stroke(startPoint, strokeInfo)
-
 class StrokeGroupInfo:
 	def __init__(self, strokeList):
 		self.strokeList=strokeList
@@ -118,37 +110,6 @@ class StrokeGroup(Shape):
 		strokeGroupInfo=StrokeGroupInfo(strokeList)
 
 		strokeGroup=StrokeGroup(strokeGroupInfo)
-		return strokeGroup
-
-	@classmethod
-	def generateInstanceByStrokeList(cls, strokeList):
-		strokeGroupInfo=StrokeGroupInfo(strokeList)
-		return StrokeGroup(strokeGroupInfo)
-
-	@classmethod
-	def generateInstanceByStrokeGroupPane(cls, sg, pane):
-		return sg.generateCopyToApplyNewPane(pane)
-
-	@classmethod
-	def generateInstanceByStrokeGroupPanePairList(cls, strokeGroupPanePairList):
-		def computeBBox(paneList):
-			left=min(map(lambda pane: pane.getLeft(), paneList))
-			top=min(map(lambda pane: pane.getTop(), paneList))
-			right=max(map(lambda pane: pane.getRight(), paneList))
-			bottom=max(map(lambda pane: pane.getBottom(), paneList))
-			return Pane(left, top, right, bottom)
-
-		resultStrokeList=[]
-		for strokeGroup, pane in strokeGroupPanePairList:
-			strokeGroup=StrokeGroup.generateInstanceByStrokeGroupPane(strokeGroup, pane)
-			resultStrokeList.extend(strokeGroup.getStrokeList())
-
-		paneList=[stroke.getStatePane() for stroke in resultStrokeList]
-		pane=computeBBox(paneList)
-
-		strokeGroupInfo=StrokeGroupInfo(resultStrokeList)
-		strokeGroup=StrokeGroup(strokeGroupInfo, pane)
-
 		return strokeGroup
 
 class Character(Shape):
