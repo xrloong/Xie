@@ -160,7 +160,7 @@ class StrokeInfoGenerator_橫折提(StrokeInfoGenerator):
 class StrokeInfoGenerator_橫折折撇(StrokeInfoGenerator):
 	def parseExpression(self, parameterExpressionList):
 		l=parameterExpressionList
-		assert len(l)==4
+		assert len(l)==6
 		assert int(l[0])>0
 		assert int(l[1])>0
 		assert int(l[2])>0
@@ -187,7 +187,7 @@ class StrokeInfoGenerator_橫折折撇(StrokeInfoGenerator):
 class StrokeInfoGenerator_橫撇彎鉤(StrokeInfoGenerator):
 	def parseExpression(self, parameterExpressionList):
 		l=parameterExpressionList
-		assert len(l)==4
+		assert len(l)==7
 		assert int(l[0])>0
 		assert int(l[1])>0
 		assert int(l[2])>0
