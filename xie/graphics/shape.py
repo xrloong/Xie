@@ -19,6 +19,15 @@ class Pane:
 	def __str__(self):
 		return "%s"%([self.left, self.top, self.right, self.bottom])
 
+	def __eq__(self, other):
+		return isinstance(other, Pane) and (
+				self.left == other.left and self.top == other.top
+				and self.right == other.right and self.bottom == other.bottom
+			)
+
+	def __ne__(self, other):
+		return not self.__eq__(other)
+
 	def clone(self):
 		return Pane(self.left, self.top, self.right, self.bottom)
 
