@@ -98,6 +98,9 @@ class StrokeGroup(Shape):
 	def getCount(self):
 		return len(self.getStrokeList())
 
+	def getStroke(self, index):
+		return self.getStrokeList()[index]
+
 	def draw(self, drawingSystem):
 		strokeList = self.getStrokeList();
 
