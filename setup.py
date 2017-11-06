@@ -1,10 +1,27 @@
 #!/usr/bin/env python3
 
+import io
+import re
 # Always prefer setuptools over distutils
 from setuptools import setup, find_packages
 # To use a consistent encoding
 from codecs import open
 from os import path
+
+def read(*names, **kwargs):
+    with io.open(
+        path.join(path.dirname(__file__), *names),
+        encoding=kwargs.get("encoding", "utf8")
+    ) as fp:
+        return fp.read()
+
+def find_version(*file_paths):
+    version_file = read(*file_paths)
+    version_match = re.search(r"^__version__ = ['\"]([^'\"]*)['\"]",
+                              version_file, re.M)
+    if version_match:
+        return version_match.group(1)
+    raise RuntimeError("Unable to find version string.")
 
 here = path.abspath(path.dirname(__file__))
 
@@ -18,7 +35,7 @@ setup(
 	# Versions should comply with PEP440.  For a discussion on single-sourcing
 	# the version across setup.py and the project code, see
 	# https://packaging.python.org/en/latest/single_source_version.html
-	version='0.0.9',
+	version=find_version("xie", "__init__.py"),
 
 	description='試圖以筆劃描述漢字的函式庫',
 #	long_description=long_description,
@@ -72,4 +89,5 @@ setup(
 			'xie=xie:xie',
 		],
 	},
+	test_suite='tests',
 )
