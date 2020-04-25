@@ -60,10 +60,8 @@ class TkCanvasController(CanvasController):
 	def moveTo(self, p):
 		self.setLastPoint(p)
 
-	def lineTo(self, p, drawoption=None):
-		if drawoption==None:
-			drawoption=self.drawoption
-		self.canvas.create_line(self.lastp[0], self.lastp[1], p[0], p[1], drawoption)
+	def lineTo(self, p):
+		self.canvas.create_line(self.lastp[0], self.lastp[1], p[0], p[1], self.drawoption)
 		self.lastp=p
 
 	def qCurveTo(self, cp, p):
@@ -108,15 +106,12 @@ class SvgCanvasController(CanvasController):
 
 	def clear(self):
 		self.expression=""
-		pass
 
 	def moveTo(self, p):
 		self.expression +="M %s %s"%(p[0], p[1])
-		pass
 
-	def lineTo(self, p, drawoption=None):
+	def lineTo(self, p):
 		self.expression +="L %s %s"%(p[0], p[1])
-		pass
 
 	def qCurveTo(self, cp, p):
 		self.expression +="Q %s %s %s %s"%(cp[0], cp[1], p[0], p[1])
@@ -164,7 +159,7 @@ class HexTextCanvasController(CanvasController):
 	def moveTo(self, p):
 		self.pointExpressionList=[self.encodeStartPoint(self.converPointByPane(p))]
 
-	def lineTo(self, p, drawoption=None):
+	def lineTo(self, p):
 		self.pointExpressionList.append(self.encodeEndPoint(self.converPointByPane(p)))
 
 	def qCurveTo(self, cp, p):
