@@ -1,7 +1,8 @@
 class CanvasController:
-	def __init__(self, width=1000, height=1000):
-		self.width=width
-		self.height=height
+	def __init__(self, size=(1000, 1000)):
+		self.size = size
+		self.width = size[0]
+		self.height = size[1]
 		self.infoPane=None
 		self.statePane=None
 
@@ -43,16 +44,16 @@ class CanvasController:
 		return p
 
 class TkCanvasController(CanvasController):
-	def __init__(self, tkcanvas, width, height):
-		super().__init__(width, height)
+	def __init__(self, parent, size):
+		super().__init__(size)
 
-		self.canvas=tkcanvas
+		import tkinter
+		self.canvas = tkinter.Canvas(parent, width=self.width, height=self.height)
+		self.drawoption = {'smooth':True, 'width':20, 'capstyle':tkinter.ROUND,}
+
 		self.clear()
 		self.point_list=[]
 		self.lastp=None
-
-		import tkinter
-		self.drawoption={'smooth':True, 'width':20, 'capstyle':tkinter.ROUND,}
 
 	def clear(self):
 		self.canvas.delete("all")
@@ -72,8 +73,8 @@ class TkCanvasController(CanvasController):
 		self.lastp=p
 
 class TrueTypeGlyphCanvasController(CanvasController):
-	def __init__(self, width, height):
-		super().__init__(width, height)
+	def __init__(self, size):
+		super().__init__(size)
 
 	def changeGlyph(self, glyph):
 		self.glyph=glyph
@@ -100,8 +101,8 @@ class TrueTypeGlyphCanvasController(CanvasController):
 		return (p[0], self.height-p[1])
 
 class SvgCanvasController(CanvasController):
-	def __init__(self, width, height):
-		super().__init__(width, height)
+	def __init__(self, size):
+		super().__init__(size)
 		self.expression=""
 
 	def clear(self):
@@ -120,8 +121,8 @@ class SvgCanvasController(CanvasController):
 		return self.expression
 
 class HexTextCanvasController(CanvasController):
-	def __init__(self):
-		super().__init__(256, 256)
+	def __init__(self, size=(256, 256)):
+		super().__init__(size)
 		self.clear()
 		from .utils import TextCodec
 		self.textCodec=TextCodec()

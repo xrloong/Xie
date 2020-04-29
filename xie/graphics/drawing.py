@@ -1,5 +1,3 @@
-from .canvas import HexTextCanvasController
-
 class DrawingSystem():
 	def __init__(self, canvasController):
 		self.canvasController=canvasController
