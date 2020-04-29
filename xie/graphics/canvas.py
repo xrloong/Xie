@@ -72,6 +72,46 @@ class TkCanvasController(CanvasController):
 	def setLastPoint(self, p):
 		self.lastp=p
 
+class WxCanvasController(CanvasController):
+	def __init__(self, parent, size):
+		super().__init__(size)
+
+		import wx
+		self.canvas = wx.lib.floatcanvas.FloatCanvas.FloatCanvas(parent,
+				ProjectionFun = lambda x: (1, -1),
+				size = size)
+
+		self.clear()
+		self.point_list = []
+		self.lastp = None
+
+		self.pathOptions = {"LineWidth": 20, "LineColor": "Black"}
+
+	def clear(self):
+		self.canvas.ClearAll()
+		self.canvas.ZoomToBB()
+
+	def moveTo(self, p):
+		self.setLastPoint(p)
+
+	def lineTo(self, p):
+		points = (self.lastp, p)
+		self.canvas.AddLine(points, **self.pathOptions)
+		self.canvas.ZoomToBB()
+
+		self.setLastPoint(p)
+
+	def qCurveTo(self, cp, p):
+		points = (self.lastp, cp, p)
+		self.canvas.AddSpline(points, **self.pathOptions)
+		self.canvas.ZoomToBB()
+
+		self.setLastPoint(p)
+
+	def setLastPoint(self, p):
+		self.lastp=p
+
+
 class TrueTypeGlyphCanvasController(CanvasController):
 	def __init__(self, size):
 		super().__init__(size)
