@@ -57,7 +57,7 @@ class Stroke(Shape):
 		strokeCopy=Stroke(newStartPoint, self.strokeInfo, newSTargetPane)
 		return strokeCopy
 
-class StrokeGroupInfo:
+class ComponentInfo:
 	def __init__(self, strokeList):
 		self.strokeList=strokeList
 		self.infoPane=None
@@ -81,19 +81,19 @@ class StrokeGroupInfo:
 
 		return self.infoPane
 
-class StrokeGroup(Shape):
-	def __init__(self, strokeGroupInfo, statePane=None):
-		self.strokeGroupInfo=strokeGroupInfo
+class Component(Shape):
+	def __init__(self, componentInfo, statePane=None):
+		self.componentInfo=componentInfo
 
 		if not statePane:
-			statePane=strokeGroupInfo.getInfoPane()
+			statePane=componentInfo.getInfoPane()
 		self.statePane=statePane
 
 	def getStatePane(self):
 		return self.statePane
 
 	def getStrokeList(self):
-		return self.strokeGroupInfo.getStrokeList()
+		return self.componentInfo.getStrokeList()
 
 	def getCount(self):
 		return len(self.getStrokeList())
@@ -110,22 +110,22 @@ class StrokeGroup(Shape):
 	def generateCopyToApplyNewPane(self, newSgTargetPane):
 		sgStatePane=self.getStatePane()
 		strokeList=[s.generateCopyToApplyNewPane(sgStatePane, newSgTargetPane) for s in self.getStrokeList()]
-		strokeGroupInfo=StrokeGroupInfo(strokeList)
+		componentInfo=ComponentInfo(strokeList)
 
-		strokeGroup=StrokeGroup(strokeGroupInfo)
-		return strokeGroup
+		component=Component(componentInfo)
+		return component
 
 class Character(Shape):
-	def __init__(self, name, strokeGroup, tag=None):
+	def __init__(self, name, component, tag=None):
 		self.name = name
-		self.strokeGroup = strokeGroup
+		self.component = component
 		self.tag = tag
 
 	def getName(self):
 		return self.name
 
-	def getStrokeGroup(self):
-		return self.strokeGroup
+	def getComponent(self):
+		return self.component
 
 	def getTag(self):
 		return self.tag
@@ -135,6 +135,6 @@ class Character(Shape):
 
 		drawingSystem.clear()
 		drawingSystem.onPreDrawCharacter(character)
-		drawingSystem.draw(character.getStrokeGroup())
+		drawingSystem.draw(character.getComponent())
 		drawingSystem.onPostDrawCharacter(character)
 
