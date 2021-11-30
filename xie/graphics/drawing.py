@@ -1,9 +1,10 @@
+from .shape import Boundary
+
 class DrawingSystem():
 	def __init__(self, canvasController):
 		self.canvasController=canvasController
 		self.lastPoint = None
-		self.sourceBoundary = None
-		self.sourceBoundaryState = []
+		self.sourceBoundary = Boundary.Default
 
 		self.infoPane=None
 		self.statePane=None
@@ -39,15 +40,6 @@ class DrawingSystem():
 			return (tx + (x-sx)*tW/sW, ty + (y-sy)*tH/sH)
 		else:
 			return point
-
-	def setSourceBoundary(self, sourceBoundary):
-		self.sourceBoundary = sourceBoundary
-
-	def save(self):
-		self.sourceBoundaryState.append(self.sourceBoundary)
-
-	def restore(self):
-		self.sourceBoundary = self.sourceBoundaryState.pop()
 
 	def setPane(self, infoPane, statePane):
 		self.canvasController.setPane(infoPane, statePane)
