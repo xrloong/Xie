@@ -64,8 +64,8 @@ class DrawingSystem():
 	def onPostDrawStroke(self, stroke):
 		self.canvasController.onPostDrawStroke(stroke)
 
-	def startDrawing(self, startPoin):
-		self._moveTo(self._convertPointByBoundary(startPoin))
+	def startDrawing(self, startPoint):
+		self._moveTo(self._convertPointByBoundary(startPoint))
 
 	def endDrawing(self):
 		self._clearLastPoint()
