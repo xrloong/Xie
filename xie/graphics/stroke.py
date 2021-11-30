@@ -1,8 +1,9 @@
-from .shape import Shape
-from .shape import Pane
+from . import Shape, Pane
+from . import StrokeInfo
+from . import DrawingSystem
 
 class Stroke(Shape):
-	def __init__(self, startPoint, strokeInfo, statePane=None):
+	def __init__(self, startPoint, strokeInfo: StrokeInfo, statePane=None):
 		self.startPoint=startPoint
 		self.strokeInfo=strokeInfo
 
@@ -33,7 +34,7 @@ class Stroke(Shape):
 	def getStatePane(self):
 		return self.statePane
 
-	def draw(self, drawingSystem):
+	def draw(self, drawingSystem: DrawingSystem):
 		startPoint = self.getStartPoint()
 
 		stroke=self
@@ -50,91 +51,10 @@ class Stroke(Shape):
 		strokePath=self.getStrokePath()
 		return strokePath.computeBoundaryWithStartPoint(startPoint)
 
-	def generateCopyToApplyNewPane(self, sgTargetPane, newSgTargetPane):
+	def generateCopyToApplyNewPane(self, sgTargetPane: Pane, newSgTargetPane: Pane):
 		newSTargetPane=sgTargetPane.transformRelativePaneByTargetPane(self.getStatePane(), newSgTargetPane)
 		newStartPoint=sgTargetPane.transformRelativePointByTargetPane(self.getStartPoint(), newSgTargetPane)
 
 		strokeCopy=Stroke(newStartPoint, self.strokeInfo, newSTargetPane)
 		return strokeCopy
-
-class ComponentInfo:
-	def __init__(self, strokeList):
-		self.strokeList=strokeList
-		self.infoPane=None
-
-	def getStrokeList(self):
-		return self.strokeList
-
-	def getInfoPane(self):
-		if not self.infoPane:
-			def mergeBoundaryList(boundaryList):
-				from xie.graphics.shape import mergeBoundary
-				r = boundaryList[0]
-				for b in boundaryList[1:]:
-					r = mergeBoundary(r, b)
-				return r
-
-			strokeList=self.getStrokeList()
-			boundaryList=[stroke.computeBoundary() for stroke in strokeList]
-			bBox=mergeBoundaryList(boundaryList)
-			self.infoPane=Pane(*bBox)
-
-		return self.infoPane
-
-class Component(Shape):
-	def __init__(self, componentInfo, statePane=None):
-		self.componentInfo=componentInfo
-
-		if not statePane:
-			statePane=componentInfo.getInfoPane()
-		self.statePane=statePane
-
-	def getStatePane(self):
-		return self.statePane
-
-	def getStrokeList(self):
-		return self.componentInfo.getStrokeList()
-
-	def getCount(self):
-		return len(self.getStrokeList())
-
-	def getStroke(self, index):
-		return self.getStrokeList()[index]
-
-	def draw(self, drawingSystem):
-		strokeList = self.getStrokeList();
-
-		for stroke in strokeList:
-			stroke.draw(drawingSystem)
-
-	def generateCopyToApplyNewPane(self, newSgTargetPane):
-		sgStatePane=self.getStatePane()
-		strokeList=[s.generateCopyToApplyNewPane(sgStatePane, newSgTargetPane) for s in self.getStrokeList()]
-		componentInfo=ComponentInfo(strokeList)
-
-		component=Component(componentInfo)
-		return component
-
-class Character(Shape):
-	def __init__(self, name, component, tag=None):
-		self.name = name
-		self.component = component
-		self.tag = tag
-
-	def getName(self):
-		return self.name
-
-	def getComponent(self):
-		return self.component
-
-	def getTag(self):
-		return self.tag
-
-	def draw(self, drawingSystem):
-		character=self
-
-		drawingSystem.clear()
-		drawingSystem.onPreDrawCharacter(character)
-		drawingSystem.draw(character.getComponent())
-		drawingSystem.onPostDrawCharacter(character)
 
