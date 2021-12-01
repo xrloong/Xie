@@ -1,4 +1,42 @@
-from .shape import Boundary
+class Boundary():
+	def __init__(self, left, top, right, bottom):
+		assert left <= right and top <= bottom
+		self.left=left
+		self.top=top
+		self.right=right
+		self.bottom=bottom
+
+	def getLeft(self):
+		return self.left
+
+	def getTop(self):
+		return self.top
+
+	def getRight(self):
+		return self.right
+
+	def getBottom(self):
+		return self.bottom
+
+	def getTopLeft(self):
+		return (self.left, self.top)
+
+	def getTopRight(self):
+		return (self.right, self.top)
+
+	def getBottomLeft(self):
+		return (self.left, self.bottom)
+
+	def getBottomRight(self):
+		return (self.right, self.bottom)
+
+	def getWidth(self):
+		return self.right - self.left
+
+	def getHeight(self):
+		return self.bottom - self.top
+
+Boundary.Default = Boundary(0, 0, 256, 256)
 
 class DrawingSystem():
 	def __init__(self, canvasController):
