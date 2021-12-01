@@ -125,11 +125,7 @@ Pane.BBOX=Pane(
 	Pane.BBOX_Y_MAX,
 	)
 
-class Drawable:
-	def draw(self, drawSystem):
-		pass
-
-class Rectangle(Drawable):
+class Rectangle(Shape):
 	def __init__(self, x=0, y=0, w=0, h=0):
 		super().__init__()
 		self.x=x
