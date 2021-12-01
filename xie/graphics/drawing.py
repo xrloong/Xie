@@ -1,48 +1,7 @@
-class Boundary():
-	def __init__(self, left, top, right, bottom):
-		assert left <= right and top <= bottom
-		self.left=left
-		self.top=top
-		self.right=right
-		self.bottom=bottom
-
-	def getLeft(self):
-		return self.left
-
-	def getTop(self):
-		return self.top
-
-	def getRight(self):
-		return self.right
-
-	def getBottom(self):
-		return self.bottom
-
-	def getTopLeft(self):
-		return (self.left, self.top)
-
-	def getTopRight(self):
-		return (self.right, self.top)
-
-	def getBottomLeft(self):
-		return (self.left, self.bottom)
-
-	def getBottomRight(self):
-		return (self.right, self.bottom)
-
-	def getWidth(self):
-		return self.right - self.left
-
-	def getHeight(self):
-		return self.bottom - self.top
-
-Boundary.Default = Boundary(0, 0, 256, 256)
-
 class DrawingSystem():
 	def __init__(self, canvasController):
 		self.canvasController=canvasController
 		self.lastPoint = None
-		self.sourceBoundary = Boundary.Default
 
 		self.infoPane=None
 		self.statePane=None
@@ -68,16 +27,15 @@ class DrawingSystem():
 		return (startPoint[0]+point[0], startPoint[1]+point[1])
 
 	def _convertPointByBoundary(self, point):
-		if self.sourceBoundary:
-			tx, ty = 0, 0
-			tW, tH = self.getWidth(), self.getHeight()
-			sx, sy = self.sourceBoundary.getLeft(), self.sourceBoundary.getTop()
-			sW, sH = self.sourceBoundary.getWidth(), self.sourceBoundary.getHeight()
-			x, y = point
+		# source boundary
+		Bx, By = 0, 0
+		BW, BH = 256, 256
 
-			return (tx + (x-sx)*tW/sW, ty + (y-sy)*tH/sH)
-		else:
-			return point
+		tx, ty = 0, 0
+		tW, tH = self.getWidth(), self.getHeight()
+		x, y = point
+
+		return (tx + (x-Bx)*tW/BW, ty + (y-By)*tH/BH)
 
 	def setPane(self, infoPane, statePane):
 		self.canvasController.setPane(infoPane, statePane)
