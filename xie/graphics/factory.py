@@ -12,8 +12,13 @@ class ShapeFactory:
 	def generateStrokeInfo(self, name, parameterList):
 		return self.strokeInfoFactory.generateStrokeInfo(name, parameterList)
 
-	def generateStroke(self, name, startPoint, parameterList):
+	def generateParameterBasedStroke(self, name, parameterList, startPoint):
 		strokeInfo = self.generateStrokeInfo(name, parameterList)
+		return Stroke(startPoint, strokeInfo)
+
+	def generateSegmentBasedStroke(self, name, segments, startPoint):
+		strokePath = StrokePath(segments)
+		strokeInfo = StrokeInfo(name, strokePath)
 		return Stroke(startPoint, strokeInfo)
 
 	def generateComponentByStrokeList(self, strokeList):
