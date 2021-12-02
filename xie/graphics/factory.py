@@ -9,11 +9,11 @@ class ShapeFactory:
 	def __init__(self):
 		self.strokeInfoFactory=StrokeInfoFactory()
 
-	def generateStrokeInfo(self, name, parameterList):
-		return self.strokeInfoFactory.generateStrokeInfo(name, parameterList)
+#	def generateStrokeInfo(self, name, parameterList):
+#		return self.strokeInfoFactory.generateStrokeInfo(name, parameterList)
 
 	def generateParameterBasedStroke(self, name, parameterList, startPoint):
-		strokeInfo = self.generateStrokeInfo(name, parameterList)
+		strokeInfo = self.strokeInfoFactory.generateStrokeInfo(name, parameterList)
 		return Stroke(startPoint, strokeInfo)
 
 	def generateSegmentBasedStroke(self, name, segments, startPoint):

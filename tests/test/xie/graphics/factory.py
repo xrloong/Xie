@@ -7,6 +7,7 @@ from xie.graphics.segment import StrokePath
 from xie.graphics.segment import SegmentFactory
 from xie.graphics.stroke_info import StrokeInfo
 from xie.graphics.factory import ShapeFactory
+from xie.graphics.factory import StrokeInfoFactory
 
 class FactoryTestCase(unittest.TestCase):
 	def setUp(self):
@@ -441,6 +442,7 @@ class FactoryTestCase(unittest.TestCase):
 class StrokeInfoFactoryTestCase(unittest.TestCase):
 	def setUp(self):
 		self.segmentFactory = SegmentFactory()
+		self.strokeInfoFactory = StrokeInfoFactory()
 		self.shapeFactory = ShapeFactory()
 		self.generateTestDataStrokeInfos()
 
@@ -448,7 +450,7 @@ class StrokeInfoFactoryTestCase(unittest.TestCase):
 		pass
 
 	def generateStrokeInfo(self, name, paramList):
-		return self.shapeFactory.generateStrokeInfo(name, paramList)
+		return self.strokeInfoFactory.generateStrokeInfo(name, paramList)
 
 	def generateTestDataStrokeInfos(self):
 		self.strokeInfo_點_1=self.generateStrokeInfo("點", (5, 95))
