@@ -23,7 +23,7 @@ class ShapeFactory:
 		return Component(componentInfo)
 
 	def generateComponentByComponentPane(self, component, pane):
-		return component.generateCopyToApplyNewPane(pane)
+		return component.generateCopyWithNewPane(pane)
 
 	def generateComponentByComponentPanePairList(self, componentPanePairList):
 		def computeBBox(paneList):
