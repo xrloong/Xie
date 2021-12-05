@@ -22,8 +22,8 @@ class ShapeFactory:
 		componentInfo=ComponentInfo(strokeList)
 		return Component(componentInfo)
 
-	def generateComponentByComponentPane(self, sg, pane):
-		return sg.generateCopyToApplyNewPane(pane)
+	def generateComponentByComponentPane(self, component, pane):
+		return component.generateCopyToApplyNewPane(pane)
 
 	def generateComponentByComponentPanePairList(self, componentPanePairList):
 		def computeBBox(paneList):
