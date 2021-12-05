@@ -1,6 +1,5 @@
 from .stroke import Stroke
-from . import Component
-from . import ComponentInfo
+from .component import ComponentInfo, Component
 from .stroke_info import *
 
 from .shape import Pane

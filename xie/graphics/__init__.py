@@ -1,9 +1,8 @@
-from .shape import Shape, Pane, Rectangle
-from .stroke_info import StrokeInfo
+from .shape import Pane, Rectangle
 from .drawing import DrawingSystem
 
 from .stroke import Stroke
-from .component import Component, ComponentInfo
+from .component import Component
 from .character import Character
 from .factory import ShapeFactory
 from .segment import SegmentFactory

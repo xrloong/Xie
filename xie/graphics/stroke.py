@@ -1,5 +1,5 @@
-from . import Shape, Pane
-from . import StrokeInfo
+from .shape import Shape, Pane
+from .stroke_info import StrokeInfo
 from . import DrawingSystem
 
 class Stroke(Shape):

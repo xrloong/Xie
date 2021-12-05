@@ -1,5 +1,5 @@
-from . import Shape
-from . import Component
+from .shape import Shape
+from .component import Component
 from . import DrawingSystem
 
 class Character(Shape):

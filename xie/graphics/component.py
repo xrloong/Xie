@@ -1,4 +1,4 @@
-from . import Shape, Pane
+from .shape import Shape, Pane
 
 class ComponentInfo:
 	def __init__(self, strokeList):
