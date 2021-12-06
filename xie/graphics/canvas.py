@@ -40,7 +40,7 @@ class CanvasController:
 		self.infoPane=infoPane
 		self.statePane=statePane
 
-	def converPointByPane(self, p):
+	def convertPointByPane(self, p):
 		return p
 
 class TkCanvasController(CanvasController):
@@ -128,16 +128,16 @@ class TrueTypeGlyphCanvasController(CanvasController):
 	def moveTo(self, p):
 		if self.hasDraw:
 			self.glyphPen.endPath()
-		self.glyphPen.moveTo(self.converCoordinate(p))
+		self.glyphPen.moveTo(self.convertCoordinate(p))
 		self.hasDraw=True
 
 	def lineTo(self, p):
-		self.glyphPen.lineTo(self.converCoordinate(p))
+		self.glyphPen.lineTo(self.convertCoordinate(p))
 
 	def qCurveTo(self, cp, p):
-		self.glyphPen.qCurveTo(self.converCoordinate(cp), self.converCoordinate(p))
+		self.glyphPen.qCurveTo(self.convertCoordinate(cp), self.convertCoordinate(p))
 
-	def converCoordinate(self, p):
+	def convertCoordinate(self, p):
 		return (p[0], self.height-p[1])
 
 class SvgCanvasController(CanvasController):
@@ -173,7 +173,7 @@ class HexTextCanvasController(CanvasController):
 	def getStrokeExpression(self):
 		return self.encodeStrokeExpression(self.pointExpressionList)
 
-	def converPointByPane(self, p):
+	def convertPointByPane(self, p):
 		return self.infoPane.transformRelativePointByTargetPane(p, self.statePane)
 
 	def encodeStartPoint(self, p):
@@ -198,14 +198,14 @@ class HexTextCanvasController(CanvasController):
 		self.clearStrokeExpression()
 
 	def moveTo(self, p):
-		self.pointExpressionList=[self.encodeStartPoint(self.converPointByPane(p))]
+		self.pointExpressionList=[self.encodeStartPoint(self.convertPointByPane(p))]
 
 	def lineTo(self, p):
-		self.pointExpressionList.append(self.encodeEndPoint(self.converPointByPane(p)))
+		self.pointExpressionList.append(self.encodeEndPoint(self.convertPointByPane(p)))
 
 	def qCurveTo(self, cp, p):
-		self.pointExpressionList.append(self.encodeControlPoint(self.converPointByPane(cp)))
-		self.pointExpressionList.append(self.encodeEndPoint(self.converPointByPane(p)))
+		self.pointExpressionList.append(self.encodeControlPoint(self.convertPointByPane(cp)))
+		self.pointExpressionList.append(self.encodeEndPoint(self.convertPointByPane(p)))
 
 
 class BaseTextCanvasController(HexTextCanvasController):
