@@ -3,9 +3,6 @@ class DrawingSystem():
 		self.canvasController=canvasController
 		self.lastPoint = None
 
-		self.infoPane=None
-		self.statePane=None
-
 	def getWidth(self):
 		return self.canvasController.getWidth()
 
