@@ -1,10 +1,13 @@
+import numpy
+
 class CanvasController:
 	def __init__(self, size=(1000, 1000)):
 		self.size = size
 		self.width = size[0]
 		self.height = size[1]
-		self.infoPane=None
-		self.statePane=None
+
+		self.matrix = numpy.eye(3)
+		self.matrixStack = []
 
 	def getWidth(self):
 		return self.width
@@ -36,12 +39,26 @@ class CanvasController:
 	def onPostDrawStroke(self, stroke):
 		pass
 
+	def save(self):
+		self.matrixStack.append(self.matrix)
+
+	def restore(self):
+		self.matrix = self.matrixStack.pop()
+
 	def setPane(self, infoPane, statePane):
-		self.infoPane=infoPane
-		self.statePane=statePane
+		sx=statePane.getWidth()/infoPane.getWidth()
+		sy=statePane.getHeight()/infoPane.getHeight()
+		self.matrix = numpy.array([
+					[sx, 0, -infoPane.getLeft()*sx+statePane.getLeft()],
+					[0, sy, -infoPane.getTop()*sy+statePane.getTop()],
+					[0, 0, 1],
+				])
 
 	def convertPointByPane(self, p):
-		return p
+		pp = (p[0], p[1], 1)
+		result = self.matrix.dot(pp)
+		resultList = result.tolist()
+		return (int(resultList[0]), int(resultList[1]))
 
 class TkCanvasController(CanvasController):
 	def __init__(self, parent, size):
@@ -172,9 +189,6 @@ class HexTextCanvasController(CanvasController):
 
 	def getStrokeExpression(self):
 		return self.encodeStrokeExpression(self.pointExpressionList)
-
-	def convertPointByPane(self, p):
-		return self.infoPane.transformRelativePointByTargetPane(p, self.statePane)
 
 	def encodeStartPoint(self, p):
 		ip=(int(p[0]), int(p[1]))

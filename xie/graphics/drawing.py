@@ -37,6 +37,12 @@ class DrawingSystem():
 	def setPane(self, infoPane, statePane):
 		self.canvasController.setPane(infoPane, statePane)
 
+	def save(self):
+		self.canvasController.save()
+
+	def restore(self):
+		self.canvasController.restore()
+
 	def onPreDrawCharacter(self, character):
 		self.canvasController.onPreDrawCharacter(character)
 

@@ -39,11 +39,13 @@ class Stroke(Shape):
 
 		stroke=self
 		drawingSystem.onPreDrawStroke(stroke)
+		drawingSystem.save()
 		drawingSystem.setPane(stroke.getInfoPane(), stroke.getStatePane())
 
 		drawingSystem.startDrawing(startPoint)
 		drawingSystem.draw(stroke.getStrokePath())
 		drawingSystem.endDrawing()
+		drawingSystem.restore()
 		drawingSystem.onPostDrawStroke(stroke)
 
 	def computeBoundary(self):
