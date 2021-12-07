@@ -45,14 +45,26 @@ class CanvasController:
 	def restore(self):
 		self.matrix = self.matrixStack.pop()
 
+	def translate(self, x, y):
+		matrix = numpy.array([
+				[0, 0, x],
+				[0, 0, y],
+				[0, 0, 0],
+			])
+		self.matrix = self.matrix+matrix
+
+	def scale(self, sx, sy):
+		matrix = numpy.array([
+				[sx, 0, 0],
+				[0, sy, 0],
+				[0, 0, 1],
+			])
+		self.matrix = matrix.dot(self.matrix)
+
 	def setPane(self, infoPane, statePane):
-		sx=statePane.getWidth()/infoPane.getWidth()
-		sy=statePane.getHeight()/infoPane.getHeight()
-		self.matrix = numpy.array([
-					[sx, 0, -infoPane.getLeft()*sx+statePane.getLeft()],
-					[0, sy, -infoPane.getTop()*sy+statePane.getTop()],
-					[0, 0, 1],
-				])
+		self.translate(-infoPane.getLeft(), -infoPane.getTop())
+		self.scale(statePane.getWidth()/infoPane.getWidth(), statePane.getHeight()/infoPane.getHeight())
+		self.translate(statePane.getLeft(), statePane.getTop())
 
 	def convertPointByPane(self, p):
 		pp = (p[0], p[1], 1)
