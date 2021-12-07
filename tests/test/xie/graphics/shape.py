@@ -27,16 +27,16 @@ class PaneTestCase(unittest.TestCase):
 
 	def test_transformRelativePointByTargetPane(self):
 		transformedPoint_1=self.pane_1.transformRelativePointByTargetPane(self.point_1, self.pane_4)
-		self.assertEqual(transformedPoint_1, (2, 89))
+		self.assertEqual(transformedPoint_1, (3, 89))
 
 		transformedPoint_2=self.pane_1.transformRelativePointByTargetPane(self.point_2, self.pane_4)
-		self.assertEqual(transformedPoint_2, (4, 51))
+		self.assertEqual(transformedPoint_2, (4, 52))
 
 	def test_transformRelativePaneByTargetPane(self):
 		transformedPane_1=self.pane_1.transformRelativePaneByTargetPane(self.pane_2, self.pane_4)
 		self.assertEqual(transformedPane_1, Pane(1, 84, 7, 265))
 
 		transformedPane_2=self.pane_1.transformRelativePaneByTargetPane(self.pane_3, self.pane_4)
-		self.assertEqual(transformedPane_2, Pane(0, -54, 2, 1))
+		self.assertEqual(transformedPane_2, Pane(0, -55, 2, 1))
 
 

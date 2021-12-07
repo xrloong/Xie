@@ -105,8 +105,8 @@ class Pane:
 	def transformRelativePointByTargetPane(self, point, targetPane):
 		(x, y)=point
 
-		newX=int((x-self.getLeft())*targetPane.getWidth()/self.getWidth())+targetPane.getLeft()
-		newY=int((y-self.getTop())*targetPane.getHeight()/self.getHeight())+targetPane.getTop()
+		newX=round((x-self.getLeft())*targetPane.getWidth()/self.getWidth())+targetPane.getLeft()
+		newY=round((y-self.getTop())*targetPane.getHeight()/self.getHeight())+targetPane.getTop()
 
 		return (newX, newY)
 

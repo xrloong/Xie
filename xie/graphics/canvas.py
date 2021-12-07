@@ -70,7 +70,7 @@ class CanvasController:
 		pp = (p[0], p[1], 1)
 		result = self.matrix.dot(pp)
 		resultList = result.tolist()
-		return (int(resultList[0]), int(resultList[1]))
+		return (round(resultList[0]), round(resultList[1]))
 
 class TkCanvasController(CanvasController):
 	def __init__(self, parent, size):
@@ -203,15 +203,15 @@ class HexTextCanvasController(CanvasController):
 		return self.encodeStrokeExpression(self.pointExpressionList)
 
 	def encodeStartPoint(self, p):
-		ip=(int(p[0]), int(p[1]))
+		ip=(round(p[0]), round(p[1]))
 		return self.textCodec.encodeStartPoint(ip)
 
 	def encodeEndPoint(self, p):
-		ip=(int(p[0]), int(p[1]))
+		ip=(round(p[0]), round(p[1]))
 		return self.textCodec.encodeEndPoint(ip)
 
 	def encodeControlPoint(self, p):
-		ip=(int(p[0]), int(p[1]))
+		ip=(round(p[0]), round(p[1]))
 		return self.textCodec.encodeControlPoint(ip)
 
 	def encodeStrokeExpression(self, pointExpressionList):
