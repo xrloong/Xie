@@ -8,20 +8,23 @@ class ShapeFactory:
 	def __init__(self):
 		self.strokeInfoFactory=StrokeInfoFactory()
 
+	def _generateStroke(self, startPoint, strokeInfo, pane = None):
+		return Stroke(startPoint, strokeInfo, pane)
+
 	def generateParameterBasedStroke(self, name, parameterList, startPoint):
 		strokeInfo = self.strokeInfoFactory.generateStrokeInfo(name, parameterList)
-		return Stroke(startPoint, strokeInfo)
+		return self._generateStroke(startPoint, strokeInfo)
 
 	def generateSegmentBasedStroke(self, name, segments, startPoint):
 		strokePath = StrokePath(segments)
 		strokeInfo = StrokeInfo(name, strokePath)
-		return Stroke(startPoint, strokeInfo)
+		return self._generateStroke(startPoint, strokeInfo)
 
 	def _generateStrokeByStrokeAndNewPane(self, stroke, sgTargetPane: Pane, newSgTargetPane: Pane):
 		newSTargetPane=sgTargetPane.transformRelativePaneByTargetPane(stroke.getStatePane(), newSgTargetPane)
 		newStartPoint=sgTargetPane.transformRelativePointByTargetPane(stroke.getStartPoint(), newSgTargetPane)
 
-		return Stroke(newStartPoint, stroke.strokeInfo, newSTargetPane)
+		return self._generateStroke(newStartPoint, stroke.strokeInfo, newSTargetPane)
 
 	def _generateComponent(self, strokes, pane = None):
 		return Component(strokes, pane)
