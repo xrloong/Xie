@@ -17,6 +17,12 @@ class ShapeFactory:
 		strokeInfo = StrokeInfo(name, strokePath)
 		return Stroke(startPoint, strokeInfo)
 
+	def _generateStrokeByStrokeAndNewPane(self, stroke, sgTargetPane: Pane, newSgTargetPane: Pane):
+		newSTargetPane=sgTargetPane.transformRelativePaneByTargetPane(stroke.getStatePane(), newSgTargetPane)
+		newStartPoint=sgTargetPane.transformRelativePointByTargetPane(stroke.getStartPoint(), newSgTargetPane)
+
+		return Stroke(newStartPoint, stroke.strokeInfo, newSTargetPane)
+
 	def _generateComponent(self, strokes, pane = None):
 		return Component(strokes, pane)
 
@@ -25,7 +31,7 @@ class ShapeFactory:
 
 	def generateComponentByComponentPane(self, component, pane):
 		componentStatePane=component.getStatePane()
-		strokes=[s.generateCopyWithNewPane(componentStatePane, pane) for s in component.getStrokeList()]
+		strokes=[self._generateStrokeByStrokeAndNewPane(s, componentStatePane, pane) for s in component.getStrokeList()]
 
 		return self._generateComponent(strokes)
 
