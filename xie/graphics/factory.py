@@ -17,14 +17,17 @@ class ShapeFactory:
 		strokeInfo = StrokeInfo(name, strokePath)
 		return Stroke(startPoint, strokeInfo)
 
+	def _generateComponent(self, strokes, pane = None):
+		return Component(strokes, pane)
+
 	def generateComponentByStrokes(self, strokes):
-		return Component(strokes)
+		return self._generateComponent(strokes)
 
 	def generateComponentByComponentPane(self, component, pane):
 		componentStatePane=component.getStatePane()
 		strokes=[s.generateCopyWithNewPane(componentStatePane, pane) for s in component.getStrokeList()]
 
-		return Component(strokes)
+		return self._generateComponent(strokes)
 
 	def generateComponentByComponentPanePairs(self, componentPanePairs):
 		def computeBBox(panes):
@@ -42,7 +45,7 @@ class ShapeFactory:
 		panes = [stroke.getStatePane() for stroke in strokes]
 		pane = computeBBox(panes)
 
-		return Component(strokes, pane)
+		return self._generateComponent(strokes, pane)
 
 class StrokeInfoFactory:
 	def __init__(self):
