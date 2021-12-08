@@ -50,11 +50,3 @@ class Component(Shape):
 		for stroke in strokeList:
 			stroke.draw(drawingSystem)
 
-	def generateCopyWithNewPane(self, newSgTargetPane):
-		sgStatePane=self.getStatePane()
-		strokeList=[s.generateCopyWithNewPane(sgStatePane, newSgTargetPane) for s in self.getStrokeList()]
-		componentInfo=ComponentInfo(strokeList)
-
-		component=Component(componentInfo)
-		return component
-
