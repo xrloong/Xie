@@ -17,7 +17,7 @@ class ShapeFactory:
 		strokeInfo = StrokeInfo(name, strokePath)
 		return Stroke(startPoint, strokeInfo)
 
-	def generateComponentByStrokeList(self, strokes):
+	def generateComponentByStrokes(self, strokes):
 		return Component(strokes)
 
 	def generateComponentByComponentPane(self, component, pane):
@@ -26,16 +26,16 @@ class ShapeFactory:
 
 		return Component(strokes)
 
-	def generateComponentByComponentPanePairList(self, componentPanePairList):
-		def computeBBox(paneList):
-			left=min(map(lambda pane: pane.getLeft(), paneList))
-			top=min(map(lambda pane: pane.getTop(), paneList))
-			right=max(map(lambda pane: pane.getRight(), paneList))
-			bottom=max(map(lambda pane: pane.getBottom(), paneList))
+	def generateComponentByComponentPanePairs(self, componentPanePairs):
+		def computeBBox(panes):
+			left=min(map(lambda pane: pane.getLeft(), panes))
+			top=min(map(lambda pane: pane.getTop(), panes))
+			right=max(map(lambda pane: pane.getRight(), panes))
+			bottom=max(map(lambda pane: pane.getBottom(), panes))
 			return Pane(left, top, right, bottom)
 
 		strokes = []
-		for component, pane in componentPanePairList:
+		for component, pane in componentPanePairs:
 			component=self.generateComponentByComponentPane(component, pane)
 			strokes.extend(component.getStrokeList())
 
