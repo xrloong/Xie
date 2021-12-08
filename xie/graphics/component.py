@@ -25,12 +25,12 @@ class ComponentInfo:
 		return self.infoPane
 
 class Component(Shape):
-	def __init__(self, componentInfo: ComponentInfo, statePane: Pane=None):
-		self.componentInfo=componentInfo
+	def __init__(self, strokes, statePane: Pane=None):
+		self.componentInfo = ComponentInfo(strokes)
 
 		if not statePane:
-			statePane=componentInfo.getInfoPane()
-		self.statePane=statePane
+			statePane = self.componentInfo.getInfoPane()
+		self.statePane = statePane
 
 	def getStatePane(self):
 		return self.statePane

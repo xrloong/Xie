@@ -1,5 +1,5 @@
 from .stroke import Stroke
-from .component import ComponentInfo, Component
+from .component import Component
 from .stroke_info import *
 
 from .shape import Pane
@@ -17,17 +17,14 @@ class ShapeFactory:
 		strokeInfo = StrokeInfo(name, strokePath)
 		return Stroke(startPoint, strokeInfo)
 
-	def generateComponentByStrokeList(self, strokeList):
-		componentInfo=ComponentInfo(strokeList)
-		return Component(componentInfo)
+	def generateComponentByStrokeList(self, strokes):
+		return Component(strokes)
 
 	def generateComponentByComponentPane(self, component, pane):
 		componentStatePane=component.getStatePane()
 		strokes=[s.generateCopyWithNewPane(componentStatePane, pane) for s in component.getStrokeList()]
-		componentInfo=ComponentInfo(strokes)
-		component=Component(componentInfo)
 
-		return component
+		return Component(strokes)
 
 	def generateComponentByComponentPanePairList(self, componentPanePairList):
 		def computeBBox(paneList):
@@ -37,18 +34,15 @@ class ShapeFactory:
 			bottom=max(map(lambda pane: pane.getBottom(), paneList))
 			return Pane(left, top, right, bottom)
 
-		resultStrokeList=[]
+		strokes = []
 		for component, pane in componentPanePairList:
 			component=self.generateComponentByComponentPane(component, pane)
-			resultStrokeList.extend(component.getStrokeList())
+			strokes.extend(component.getStrokeList())
 
-		paneList=[stroke.getStatePane() for stroke in resultStrokeList]
-		pane=computeBBox(paneList)
+		panes = [stroke.getStatePane() for stroke in strokes]
+		pane = computeBBox(panes)
 
-		componentInfo=ComponentInfo(resultStrokeList)
-		component=Component(componentInfo, pane)
-
-		return component
+		return Component(strokes, pane)
 
 class StrokeInfoFactory:
 	def __init__(self):
