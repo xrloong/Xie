@@ -9,6 +9,11 @@ class ShapeFactory:
 		self.strokeInfoFactory=StrokeInfoFactory()
 
 	def _generateStroke(self, startPoint, strokeInfo, pane = None):
+		if not pane:
+			strokePath = strokeInfo.getStrokePath()
+			boundary = strokePath.computeBoundaryWithStartPoint(startPoint)
+			pane = Pane(*boundary)
+
 		return Stroke(startPoint, strokeInfo, pane)
 
 	def generateParameterBasedStroke(self, name, parameterList, startPoint):

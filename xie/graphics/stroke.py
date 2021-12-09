@@ -3,7 +3,7 @@ from .stroke_info import StrokeInfo
 from . import DrawingSystem
 
 class Stroke(Shape):
-	def __init__(self, startPoint, strokeInfo: StrokeInfo, statePane=None):
+	def __init__(self, startPoint, strokeInfo: StrokeInfo, statePane):
 		self.startPoint=startPoint
 		self.strokeInfo=strokeInfo
 
@@ -11,12 +11,7 @@ class Stroke(Shape):
 		boundary = strokePath.computeBoundary()
 		self.infoPane = Pane(*boundary)
 
-		if statePane:
-			self.statePane=statePane
-		else:
-			strokePath=strokeInfo.getStrokePath()
-			boundary=strokePath.computeBoundaryWithStartPoint(startPoint)
-			self.statePane=Pane(*boundary)
+		self.statePane = statePane
 
 	def getStartPoint(self):
 		return self.startPoint
