@@ -2,15 +2,18 @@ from .shape import Shape, Pane
 from .stroke_info import StrokeInfo
 from . import DrawingSystem
 
-class Stroke(Shape):
-	def __init__(self, startPoint, strokeInfo: StrokeInfo, statePane):
-		self.startPoint=startPoint
-		self.strokeInfo=strokeInfo
-
+class StrokePosition:
+	def __init__(self, startPoint, statePane: Pane = None):
+		self.startPoint = startPoint
 		self.statePane = statePane
 
+class Stroke(Shape):
+	def __init__(self, strokeInfo: StrokeInfo, strokePosition: StrokePosition):
+		self.strokeInfo = strokeInfo
+		self.strokePosition = strokePosition
+
 	def getStartPoint(self):
-		return self.startPoint
+		return self.strokePosition.startPoint
 
 	def getStrokeInfo(self):
 		return self.strokeInfo
@@ -25,7 +28,7 @@ class Stroke(Shape):
 		return self.getStrokeInfo().getPane()
 
 	def getStatePane(self):
-		return self.statePane
+		return self.strokePosition.statePane
 
 	def draw(self, drawingSystem: DrawingSystem):
 		startPoint = self.getStartPoint()

@@ -1,4 +1,4 @@
-from .stroke import Stroke
+from .stroke import Stroke, StrokePosition
 from .component import Component
 from .stroke_info import *
 
@@ -14,7 +14,8 @@ class ShapeFactory:
 			boundary = strokePath.computeBoundaryWithStartPoint(startPoint)
 			pane = Pane(*boundary)
 
-		return Stroke(startPoint, strokeInfo, pane)
+		strokePosition = StrokePosition(startPoint, pane)
+		return Stroke(strokeInfo, strokePosition)
 
 	def generateParameterBasedStroke(self, name, parameterList, startPoint):
 		strokeInfo = self.strokeInfoFactory.generateStrokeInfo(name, parameterList)
