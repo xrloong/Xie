@@ -61,11 +61,6 @@ class CanvasController:
 			])
 		self.matrix = matrix.dot(self.matrix)
 
-	def setPane(self, infoPane, statePane):
-		self.translate(-infoPane.getLeft(), -infoPane.getTop())
-		self.scale(statePane.getWidth()/infoPane.getWidth(), statePane.getHeight()/infoPane.getHeight())
-		self.translate(statePane.getLeft(), statePane.getTop())
-
 	def convertPointByPane(self, p):
 		pp = (p[0], p[1], 1)
 		result = self.matrix.dot(pp)

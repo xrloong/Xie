@@ -40,7 +40,12 @@ class Stroke(Shape):
 		stroke=self
 		drawingSystem.onPreDrawStroke(stroke)
 		drawingSystem.save()
-		drawingSystem.setPane(stroke.getInfoPane(), stroke.getStatePane())
+
+		infoPane = stroke.getInfoPane()
+		statePane = stroke.getStatePane()
+		drawingSystem.translate(-infoPane.getLeft(), -infoPane.getTop())
+		drawingSystem.scale(statePane.getWidth()/infoPane.getWidth(), statePane.getHeight()/infoPane.getHeight())
+		drawingSystem.translate(statePane.getLeft(), statePane.getTop())
 
 		drawingSystem.startDrawing(startPoint)
 		drawingSystem.draw(stroke.getStrokePath())

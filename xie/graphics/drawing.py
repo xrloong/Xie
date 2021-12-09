@@ -34,9 +34,6 @@ class DrawingSystem():
 
 		return (tx + (x-Bx)*tW/BW, ty + (y-By)*tH/BH)
 
-	def setPane(self, infoPane, statePane):
-		self.canvasController.setPane(infoPane, statePane)
-
 	def save(self):
 		self.canvasController.save()
 
