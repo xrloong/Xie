@@ -10,13 +10,16 @@ class TextCodec:
 	def __init__(self):
 		pass
 
-	def encodeStartPoint(self, p):
+	def encodeStartPoint(self, point):
+		p=(round(point[0]), round(point[1]))
 		return TextCodec.START_POINT_PATTERN.format(p)
 
-	def encodeEndPoint(self, p):
+	def encodeEndPoint(self, point):
+		p=(round(point[0]), round(point[1]))
 		return TextCodec.END_POINT_PATTERN.format(p)
 
-	def encodeControlPoint(self, p):
+	def encodeControlPoint(self, point):
+		p=(round(point[0]), round(point[1]))
 		return TextCodec.CONTROL_POINT_PATTERN.format(p)
 
 	def encodeStrokeExpression(self, pointExpressionList):

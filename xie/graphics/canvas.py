@@ -169,16 +169,13 @@ class HexTextCanvasController(CanvasController):
 		return self.encodeStrokeExpression(self.pointExpressionList)
 
 	def encodeStartPoint(self, p):
-		ip=(round(p[0]), round(p[1]))
-		return self.textCodec.encodeStartPoint(ip)
+		return self.textCodec.encodeStartPoint(p)
 
 	def encodeEndPoint(self, p):
-		ip=(round(p[0]), round(p[1]))
-		return self.textCodec.encodeEndPoint(ip)
+		return self.textCodec.encodeEndPoint(p)
 
 	def encodeControlPoint(self, p):
-		ip=(round(p[0]), round(p[1]))
-		return self.textCodec.encodeControlPoint(ip)
+		return self.textCodec.encodeControlPoint(p)
 
 	def encodeStrokeExpression(self, pointExpressionList):
 		return self.textCodec.encodeStrokeExpression(pointExpressionList)
