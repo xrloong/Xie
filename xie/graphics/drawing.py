@@ -9,13 +9,6 @@ class DrawingSystem():
 	def getHeight(self):
 		return self.canvasController.getHeight()
 
-	def _moveTo(self, point):
-		assert point is not None
-		self.lastPoint = point
-
-		canvasController=self.canvasController
-		canvasController.moveTo(point)
-
 	def _clearLastPoint(self):
 		self.lastPoint = None
 
@@ -58,11 +51,17 @@ class DrawingSystem():
 	def onPostDrawStroke(self, stroke):
 		self.canvasController.onPostDrawStroke(stroke)
 
-	def startDrawing(self, startPoint):
-		self._moveTo(self._convertPointByBoundary(startPoint))
+	def startDrawing(self):
+		self._clearLastPoint()
 
 	def endDrawing(self):
 		self._clearLastPoint()
+
+	def moveTo(self, point):
+		canvasController=self.canvasController
+
+		canvasController.moveTo(point)
+		self.lastPoint = point
 
 	def lineTo(self, point):
 		canvasController=self.canvasController

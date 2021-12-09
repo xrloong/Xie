@@ -112,11 +112,14 @@ class Rectangle(Shape):
 		return "(%s, %s, %s, %s)"%(self.x, self.y, self.w, self.h,)
 
 	def draw(self, drawSystem):
-		drawSystem.startDrawing((0, 0))
+		drawSystem.startDrawing()
+
+		drawSystem.moveTo((0, 0))
 		drawSystem.lineTo((self.w, 0))
 		drawSystem.lineTo((0, self.h))
 		drawSystem.lineTo((-self.w, 0))
 		drawSystem.lineTo((0, -self.h))
+
 		drawSystem.endDrawing()
 
 def offsetBoundary(boundary, offset):

@@ -44,9 +44,13 @@ class Stroke(Shape):
 		drawingSystem.scale(statePane.getWidth()/infoPane.getWidth(), statePane.getHeight()/infoPane.getHeight())
 		drawingSystem.translate(statePane.getLeft(), statePane.getTop())
 
-		drawingSystem.startDrawing(startPoint)
+		drawingSystem.startDrawing()
+
+		drawingSystem.moveTo(startPoint)
 		drawingSystem.draw(stroke.getStrokePath())
+
 		drawingSystem.endDrawing()
+
 		drawingSystem.restore()
 		drawingSystem.onPostDrawStroke(stroke)
 
