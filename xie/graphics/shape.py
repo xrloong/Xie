@@ -31,19 +31,6 @@ class Pane:
 	def clone(self):
 		return Pane(self.left, self.top, self.right, self.bottom)
 
-	def translateBy(self, offset):
-		self.offsetLeftAndRight(offset[0])
-		self.offsetTopAndBottom(offset[1])
-
-	def scale(self, pivot, ratio):
-		pivotX = pivot[0]
-		pivotY = pivot[1]
-		self.left = (self.left - pivotX) * ratio + pivotX;
-		self.right = (self.right - pivotX) * ratio + pivotX;
-
-		self.top = (self.top - pivotY) * ratio + pivotY;
-		self.bottom = (self.bottom - pivotY) * ratio + pivotY;
-
 	def offsetLeftAndRight(self, offset):
 		self.left += offset
 		self.right += offset
@@ -59,24 +46,6 @@ class Pane:
 	@property
 	def height(self):
 		return self.bottom-self.top+1
-
-	def containsPoint(self, point):
-		x, y = point
-		return (self.left<=x<=self.right) and (self.top<=y<=self.bottom)
-
-	def containsPane(self, pane):
-		return self.containsPoint(pane.getLeftTop()) and self.containsPoint(pane.getRightBottom())
-
-	def limitedToPane(self, pane):
-		left=max(self.left, pane.left)
-		top=max(self.top, pane.top)
-		right=min(self.right, pane.right)
-		bottom=min(self.bottom, pane.bottom)
-
-		self.left=left
-		self.top=top
-		self.right=right
-		self.bottom=bottom
 
 	def getLeft(self):
 		return self.left
