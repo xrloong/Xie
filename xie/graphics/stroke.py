@@ -7,14 +7,16 @@ class Stroke(Shape):
 		self.startPoint=startPoint
 		self.strokeInfo=strokeInfo
 
-		strokePath=strokeInfo.getStrokePath()
-		boundary=strokePath.computeBoundaryWithStartPoint(startPoint)
-
+		strokePath = strokeInfo.getStrokePath()
+		boundary = strokePath.computeBoundary()
 		self.infoPane = Pane(*boundary)
+
 		if statePane:
 			self.statePane=statePane
 		else:
-			self.statePane=self.infoPane
+			strokePath=strokeInfo.getStrokePath()
+			boundary=strokePath.computeBoundaryWithStartPoint(startPoint)
+			self.statePane=Pane(*boundary)
 
 	def getStartPoint(self):
 		return self.startPoint
@@ -43,6 +45,7 @@ class Stroke(Shape):
 
 		infoPane = stroke.getInfoPane()
 		statePane = stroke.getStatePane()
+		drawingSystem.translate(-startPoint[0], -startPoint[1])
 		drawingSystem.translate(-infoPane.getLeft(), -infoPane.getTop())
 		drawingSystem.scale(statePane.getWidth()/infoPane.getWidth(), statePane.getHeight()/infoPane.getHeight())
 		drawingSystem.translate(statePane.getLeft(), statePane.getTop())
