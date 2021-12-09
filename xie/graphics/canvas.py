@@ -67,7 +67,11 @@ class CanvasController:
 		resultList = result.tolist()
 		return (round(resultList[0]), round(resultList[1]))
 
-class TkCanvasController(CanvasController):
+class DisplayCanvasController(CanvasController):
+	def __init__(self, size):
+		super().__init__(size)
+
+class TkCanvasController(DisplayCanvasController):
 	def __init__(self, parent, size):
 		super().__init__(size)
 
@@ -96,7 +100,7 @@ class TkCanvasController(CanvasController):
 	def setLastPoint(self, p):
 		self.lastp=p
 
-class WxCanvasController(CanvasController):
+class WxCanvasController(DisplayCanvasController):
 	def __init__(self, parent, size):
 		super().__init__(size)
 
@@ -136,7 +140,7 @@ class WxCanvasController(CanvasController):
 		self.lastp=p
 
 
-class TrueTypeGlyphCanvasController(CanvasController):
+class TrueTypeGlyphCanvasController(DisplayCanvasController):
 	def __init__(self, size):
 		super().__init__(size)
 
@@ -164,7 +168,7 @@ class TrueTypeGlyphCanvasController(CanvasController):
 	def convertCoordinate(self, p):
 		return (p[0], self.height-p[1])
 
-class SvgCanvasController(CanvasController):
+class SvgCanvasController(DisplayCanvasController):
 	def __init__(self, size):
 		super().__init__(size)
 		self.expression=""
