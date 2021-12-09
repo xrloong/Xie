@@ -65,7 +65,7 @@ class CanvasController:
 		pp = (p[0], p[1], 1)
 		result = self.matrix.dot(pp)
 		resultList = result.tolist()
-		return (round(resultList[0]), round(resultList[1]))
+		return (resultList[0], resultList[1])
 
 class DisplayCanvasController(CanvasController):
 	def __init__(self, size):
