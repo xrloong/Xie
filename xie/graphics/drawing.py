@@ -43,6 +43,12 @@ class DrawingSystem():
 	def restore(self):
 		self.canvasController.restore()
 
+	def translate(self, x, y):
+		self.canvasController.translate(x, y)
+
+	def scale(self, sx, sy):
+		self.canvasController.scale(sx, sy)
+
 	def onPreDrawCharacter(self, character):
 		self.canvasController.onPreDrawCharacter(character)
 
