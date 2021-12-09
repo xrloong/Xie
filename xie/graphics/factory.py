@@ -34,6 +34,8 @@ class ShapeFactory:
 
 	def _generateComponent(self, strokes, pane = None):
 		componentInfo = ComponentInfo(strokes)
+		if not pane:
+			pane = componentInfo.getInfoPane()
 		return Component(componentInfo, pane)
 
 	def generateComponentByStrokes(self, strokes):

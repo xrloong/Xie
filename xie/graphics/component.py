@@ -25,11 +25,9 @@ class ComponentInfo:
 		return self.infoPane
 
 class Component(Shape):
-	def __init__(self, componentInfo: ComponentInfo, statePane: Pane=None):
+	def __init__(self, componentInfo: ComponentInfo, statePane: Pane):
 		self.componentInfo = componentInfo
 
-		if not statePane:
-			statePane = componentInfo.getInfoPane()
 		self.statePane = statePane
 
 	def getStatePane(self):
