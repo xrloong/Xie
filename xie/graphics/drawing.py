@@ -1,7 +1,12 @@
+import numpy
+
 class DrawingSystem():
 	def __init__(self, canvasController):
 		self.canvasController=canvasController
 		self.lastPoint = None
+
+		self.matrix = numpy.eye(3)
+		self.matrixStack = []
 
 	def getWidth(self):
 		return self.canvasController.getWidth()
@@ -27,17 +32,36 @@ class DrawingSystem():
 
 		return (tx + (x-Bx)*tW/BW, ty + (y-By)*tH/BH)
 
+
+	# Matrix related operation
 	def save(self):
-		self.canvasController.save()
+		self.matrixStack.append(self.matrix)
 
 	def restore(self):
-		self.canvasController.restore()
+		self.matrix = self.matrixStack.pop()
 
 	def translate(self, x, y):
-		self.canvasController.translate(x, y)
+		matrix = numpy.array([
+				[0, 0, x],
+				[0, 0, y],
+				[0, 0, 0],
+			])
+		self.matrix = self.matrix+matrix
 
 	def scale(self, sx, sy):
-		self.canvasController.scale(sx, sy)
+		matrix = numpy.array([
+				[sx, 0, 0],
+				[0, sy, 0],
+				[0, 0, 1],
+			])
+		self.matrix = matrix.dot(self.matrix)
+
+	def convertPointByPane(self, p):
+		pp = (p[0], p[1], 1)
+		result = self.matrix.dot(pp)
+		resultList = result.tolist()
+
+		return (resultList[0], resultList[1])
 
 	def onPreDrawCharacter(self, character):
 		self.canvasController.onPreDrawCharacter(character)
@@ -61,20 +85,20 @@ class DrawingSystem():
 		canvasController=self.canvasController
 
 		p=self._convertPoint(self._convertPointByBoundary(point))
-		canvasController.moveTo(p)
+		canvasController.moveTo(self.convertPointByPane(p))
 		self.lastPoint = p
 
 	def lineTo(self, point):
 		canvasController=self.canvasController
 		p=self._convertPoint(self._convertPointByBoundary(point))
-		canvasController.lineTo(p)
+		canvasController.lineTo(self.convertPointByPane(p))
 		self.lastPoint=p
 
 	def qCurveTo(self, p1, p2):
 		canvasController=self.canvasController
 		p1=self._convertPoint(self._convertPointByBoundary(p1))
 		p2=self._convertPoint(self._convertPointByBoundary(p2))
-		canvasController.qCurveTo(p1, p2)
+		canvasController.qCurveTo(self.convertPointByPane(p1), self.convertPointByPane(p2))
 		self.lastPoint=p2
 
 	def clear(self):

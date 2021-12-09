@@ -1,13 +1,8 @@
-import numpy
-
 class CanvasController:
 	def __init__(self, size=(1000, 1000)):
 		self.size = size
 		self.width = size[0]
 		self.height = size[1]
-
-		self.matrix = numpy.eye(3)
-		self.matrixStack = []
 
 	def getWidth(self):
 		return self.width
@@ -38,34 +33,6 @@ class CanvasController:
 
 	def onPostDrawStroke(self, stroke):
 		pass
-
-	def save(self):
-		self.matrixStack.append(self.matrix)
-
-	def restore(self):
-		self.matrix = self.matrixStack.pop()
-
-	def translate(self, x, y):
-		matrix = numpy.array([
-				[0, 0, x],
-				[0, 0, y],
-				[0, 0, 0],
-			])
-		self.matrix = self.matrix+matrix
-
-	def scale(self, sx, sy):
-		matrix = numpy.array([
-				[sx, 0, 0],
-				[0, sy, 0],
-				[0, 0, 1],
-			])
-		self.matrix = matrix.dot(self.matrix)
-
-	def convertPointByPane(self, p):
-		pp = (p[0], p[1], 1)
-		result = self.matrix.dot(pp)
-		resultList = result.tolist()
-		return (resultList[0], resultList[1])
 
 class DisplayCanvasController(CanvasController):
 	def __init__(self, size):
@@ -223,14 +190,14 @@ class HexTextCanvasController(CanvasController):
 		self.clearStrokeExpression()
 
 	def moveTo(self, p):
-		self.pointExpressionList=[self.encodeStartPoint(self.convertPointByPane(p))]
+		self.pointExpressionList=[self.encodeStartPoint(p)]
 
 	def lineTo(self, p):
-		self.pointExpressionList.append(self.encodeEndPoint(self.convertPointByPane(p)))
+		self.pointExpressionList.append(self.encodeEndPoint(p))
 
 	def qCurveTo(self, cp, p):
-		self.pointExpressionList.append(self.encodeControlPoint(self.convertPointByPane(cp)))
-		self.pointExpressionList.append(self.encodeEndPoint(self.convertPointByPane(p)))
+		self.pointExpressionList.append(self.encodeControlPoint(cp))
+		self.pointExpressionList.append(self.encodeEndPoint(p))
 
 
 class BaseTextCanvasController(HexTextCanvasController):
