@@ -1,5 +1,5 @@
 from .stroke import Stroke, StrokePosition
-from .component import Component
+from .component import Component, ComponentInfo
 from .stroke_info import *
 
 from .shape import Pane
@@ -33,7 +33,8 @@ class ShapeFactory:
 		return self._generateStroke(newStartPoint, stroke.strokeInfo, newSTargetPane)
 
 	def _generateComponent(self, strokes, pane = None):
-		return Component(strokes, pane)
+		componentInfo = ComponentInfo(strokes)
+		return Component(componentInfo, pane)
 
 	def generateComponentByStrokes(self, strokes):
 		return self._generateComponent(strokes)
