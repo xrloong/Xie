@@ -10,11 +10,11 @@ class DrawingSystem():
 		return self.canvasController.getHeight()
 
 	def _clearLastPoint(self):
-		self.lastPoint = None
+		self.lastPoint = (0, 0)
 
 	def _convertPoint(self, point):
-		startPoint=self.lastPoint
-		return (startPoint[0]+point[0], startPoint[1]+point[1])
+		lastPoint=self.lastPoint
+		return (lastPoint[0]+point[0], lastPoint[1]+point[1])
 
 	def _convertPointByBoundary(self, point):
 		# source boundary
@@ -60,8 +60,9 @@ class DrawingSystem():
 	def moveTo(self, point):
 		canvasController=self.canvasController
 
-		canvasController.moveTo(point)
-		self.lastPoint = point
+		p=self._convertPoint(self._convertPointByBoundary(point))
+		canvasController.moveTo(p)
+		self.lastPoint = p
 
 	def lineTo(self, point):
 		canvasController=self.canvasController
