@@ -1,9 +1,13 @@
+from .shape import Pane
 from .segment import StrokePath
 
 class StrokeInfo:
 	def __init__(self, name, strokePath):
 		self.name=name
 		self.strokePath=strokePath
+
+		boundary = strokePath.computeBoundary()
+		self.pane = Pane(*boundary)
 
 	def __ne__(self, other):
 		return not self.__eq__(other)
@@ -16,6 +20,9 @@ class StrokeInfo:
 
 	def getStrokePath(self):
 		return self.strokePath
+
+	def getPane(self):
+		return self.pane
 
 class StrokeInfoGenerator:
 	def __init__(self, segmentFactory):
