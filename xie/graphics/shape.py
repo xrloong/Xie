@@ -49,6 +49,14 @@ class Pane:
 	def height(self):
 		return self.bottom-self.top+1
 
+	@property
+	def centerX(self):
+		return self.left + self.width / 2
+
+	@property
+	def centerY(self):
+		return self.top + self.height / 2
+
 	def getLeft(self):
 		return self.left
 
@@ -67,6 +75,9 @@ class Pane:
 	def getHeight(self):
 		return self.height
 
+	def getCenter(self):
+		return ((self.left+self.right)/2, (self.top+self.bottom)/2)
+
 	def getLeftTop(self):
 		return (self.left, self.top)
 
@@ -76,10 +87,12 @@ class Pane:
 	def transformRelativePointByTargetPane(self, point, targetPane):
 		(x, y)=point
 
-		sX=targetPane.getWidth()/self.getWidth()
-		sY=targetPane.getHeight()/self.getHeight()
-		newX=(x-self.getLeft())*sX+targetPane.getLeft()
-		newY=(y-self.getTop())*sY+targetPane.getTop()
+		newX = x-self.centerX
+		newY = y-self.centerY
+		newX *= targetPane.width / self.width
+		newY *= targetPane.height / self.height
+		newX += targetPane.centerX
+		newY += targetPane.centerY
 
 		return (newX, newY)
 
