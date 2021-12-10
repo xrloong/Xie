@@ -43,11 +43,11 @@ class Pane:
 
 	@property
 	def width(self):
-		return self.right-self.left+1
+		return self.right-self.left
 
 	@property
 	def height(self):
-		return self.bottom-self.top+1
+		return self.bottom-self.top
 
 	@property
 	def centerX(self):
@@ -89,8 +89,10 @@ class Pane:
 
 		newX = x-self.centerX
 		newY = y-self.centerY
-		newX *= targetPane.width / self.width
-		newY *= targetPane.height / self.height
+		if self.width != 0:
+			newX *= targetPane.width / self.width
+		if self.height != 0:
+			newY *= targetPane.height / self.height
 		newX += targetPane.centerX
 		newY += targetPane.centerY
 

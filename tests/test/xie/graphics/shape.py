@@ -28,15 +28,15 @@ class PaneTestCase(unittest.TestCase):
 
 	def test_transformRelativePointByTargetPane(self):
 		transformedPoint_1=self.pane_1.transformRelativePointByTargetPane(self.point_1, self.pane_4)
-		self.assertTrue(all(numpy.isclose(transformedPoint_1, (2.5625, 89.0))))
+		self.assertTrue(all(numpy.isclose(transformedPoint_1, (2.4285714285714284, 92.83333333333333))))
 
 		transformedPoint_2=self.pane_1.transformRelativePointByTargetPane(self.point_2, self.pane_4)
-		self.assertTrue(all(numpy.isclose(transformedPoint_2, (4.4375, 51.94736842105263))))
+		self.assertTrue(all(numpy.isclose(transformedPoint_2, (3.8571428571428568, 54.166666666666664))))
 
 	def test_transformRelativePaneByTargetPane(self):
 		transformedPane_1=self.pane_1.transformRelativePaneByTargetPane(self.pane_2, self.pane_4)
-		self.assertEqual(transformedPane_1, Pane(1.0, 84.36842105263159, 7.25, 265.0))
+		self.assertEqual(transformedPane_1, Pane(1.2380952380952381, 88.0, 6.0, 276.5))
 
 		transformedPane_2=self.pane_1.transformRelativePaneByTargetPane(self.pane_3, self.pane_4)
-		self.assertEqual(transformedPane_2, Pane(-0.0625, -54.578947368421055, 1.5625, 1.0))
+		self.assertEqual(transformedPane_2, Pane(0.4285714285714286, -57.0, 1.6666666666666667, 1.0))
 

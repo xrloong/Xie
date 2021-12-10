@@ -41,8 +41,10 @@ class Stroke(Shape):
 		statePane = stroke.getStatePane()
 		drawingSystem.translate(-startPoint[0], -startPoint[1])
 		drawingSystem.translate(-infoPane.centerX, -infoPane.centerY)
-		drawingSystem.scale(statePane.width/infoPane.width, 1)
-		drawingSystem.scale(1, statePane.height/infoPane.height)
+		if infoPane.width != 0:
+			drawingSystem.scale(statePane.width/infoPane.width, 1)
+		if infoPane.height != 0:
+			drawingSystem.scale(1, statePane.height/infoPane.height)
 		drawingSystem.translate(statePane.centerX, statePane.centerY)
 
 		drawingSystem.startDrawing()
