@@ -1,5 +1,6 @@
 import unittest
 import copy
+import numpy
 
 from xie.graphics.shape import Pane
 
@@ -27,10 +28,10 @@ class PaneTestCase(unittest.TestCase):
 
 	def test_transformRelativePointByTargetPane(self):
 		transformedPoint_1=self.pane_1.transformRelativePointByTargetPane(self.point_1, self.pane_4)
-		self.assertEqual(transformedPoint_1, (3, 89))
+		self.assertTrue(all(numpy.isclose(transformedPoint_1, (3, 89))))
 
 		transformedPoint_2=self.pane_1.transformRelativePointByTargetPane(self.point_2, self.pane_4)
-		self.assertEqual(transformedPoint_2, (4, 52))
+		self.assertTrue(all(numpy.isclose(transformedPoint_2, (4, 52))))
 
 	def test_transformRelativePaneByTargetPane(self):
 		transformedPane_1=self.pane_1.transformRelativePaneByTargetPane(self.pane_2, self.pane_4)
