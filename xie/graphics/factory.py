@@ -12,9 +12,13 @@ class ShapeFactory:
 		if not pane:
 			strokePath = strokeInfo.getStrokePath()
 			boundary = strokePath.computeBoundaryWithStartPoint(startPoint)
-			pane = Pane(*boundary)
+			statePane = Pane(*boundary)
+		else:
+			infoPane = strokeInfo.pane
+			statePane = pane
+			startPoint = infoPane.transformRelativePointByTargetPane((0, 0), statePane)
 
-		strokePosition = StrokePosition(startPoint, pane)
+		strokePosition = StrokePosition(startPoint, statePane)
 		return Stroke(strokeInfo, strokePosition)
 
 	def generateParameterBasedStroke(self, name, parameterList, startPoint):
