@@ -63,9 +63,7 @@ class Stroke(Shape):
 		drawingSystem.onPostDrawStroke(stroke)
 
 	def computeBoundary(self):
-		startPoint=self.getStartPoint()
-		strokePath=self.getStrokePath()
-		return strokePath.computeBoundaryWithStartPoint(startPoint)
+		return self.getStatePane().boundary
 
 	def transform(self, fromComponentPane, toComponentPane):
 		strokePosition = self.strokePosition.transform(fromComponentPane, toComponentPane)
