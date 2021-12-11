@@ -17,8 +17,8 @@ class ComponentInfo:
 					r = mergeBoundary(r, b)
 				return r
 
-			strokeList=self.getStrokeList()
-			boundaryList=[stroke.computeBoundary() for stroke in strokeList]
+			strokes = self.getStrokeList()
+			boundaryList=[stroke.getStatePane().boundary for stroke in strokes]
 			bBox=mergeBoundaryList(boundaryList)
 			self.infoPane=Pane(*bBox)
 
