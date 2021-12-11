@@ -7,6 +7,11 @@ class StrokePosition:
 		self.startPoint = startPoint
 		self.statePane = statePane
 
+	def transform(self, fromPane, toPane):
+		newStatePane = fromPane.transformRelativePaneByTargetPane(self.statePane, toPane)
+		newStartPoint = fromPane.transformRelativePointByTargetPane(self.startPoint, toPane)
+		return StrokePosition(newStartPoint, newStatePane)
+
 class Stroke(Shape):
 	def __init__(self, strokeInfo: StrokeInfo, strokePosition: StrokePosition):
 		self.strokeInfo = strokeInfo
@@ -61,4 +66,8 @@ class Stroke(Shape):
 		startPoint=self.getStartPoint()
 		strokePath=self.getStrokePath()
 		return strokePath.computeBoundaryWithStartPoint(startPoint)
+
+	def transform(self, fromComponentPane, toComponentPane):
+		strokePosition = self.strokePosition.transform(fromComponentPane, toComponentPane)
+		return Stroke(self.strokeInfo, strokePosition)
 

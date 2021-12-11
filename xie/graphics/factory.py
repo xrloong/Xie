@@ -30,12 +30,6 @@ class ShapeFactory:
 		strokeInfo = StrokeInfo(name, strokePath)
 		return self._generateStroke(startPoint, strokeInfo)
 
-	def _generateStrokeByStrokeAndNewPane(self, stroke, sgTargetPane: Pane, newSgTargetPane: Pane):
-		newSTargetPane=sgTargetPane.transformRelativePaneByTargetPane(stroke.getStatePane(), newSgTargetPane)
-		newStartPoint=sgTargetPane.transformRelativePointByTargetPane(stroke.getStartPoint(), newSgTargetPane)
-
-		return self._generateStroke(newStartPoint, stroke.strokeInfo, newSTargetPane)
-
 	def _generateComponent(self, strokes, pane = None):
 		componentInfo = ComponentInfo(strokes)
 		if not pane:
@@ -46,8 +40,9 @@ class ShapeFactory:
 		return self._generateComponent(strokes)
 
 	def generateComponentByComponentPane(self, component, pane):
-		componentStatePane=component.getStatePane()
-		strokes=[self._generateStrokeByStrokeAndNewPane(s, componentStatePane, pane) for s in component.getStrokeList()]
+		componentStrokes = component.getStrokeList()
+		componentStatePane = component.getStatePane()
+		strokes = [s.transform(componentStatePane, pane) for s in componentStrokes]
 
 		return self._generateComponent(strokes)
 
