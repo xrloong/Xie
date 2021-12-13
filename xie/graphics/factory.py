@@ -31,8 +31,11 @@ class ShapeFactory:
 
 	def generateSegmentBasedStroke(self, name, segments, startPoint):
 		strokePath = StrokePath(segments)
+		boundary = strokePath.computeBoundaryWithStartPoint(startPoint)
+		pane = Pane(*boundary)
+
 		strokeInfo = StrokeInfo(name, strokePath)
-		return self._generateStroke(startPoint, strokeInfo)
+		return self._generateStroke(startPoint, strokeInfo, pane)
 
 	def _generateComponent(self, strokes, pane = None):
 		componentInfo = ComponentInfo(strokes)
