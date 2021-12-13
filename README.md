@@ -1,8 +1,8 @@
 # 寫（Xie）
 
-專案的目標在於建立一個可以描繪出字形的 Python 函式庫。目前是著重在於漢字字形，未來則希望能拓展到所有文字。
+專案的目標在於建立一個可以描繪出字形的 Python 3 函式庫。目前是著重在於漢字字形，未來則希望能拓展到所有文字。
 
-The goal is to create a Python library to draw glyphs. It current focuses on HanZi glyphs and hope to support all scripts in the future.
+The goal is to create a Python 3 library to draw glyphs. It current focuses on HanZi glyphs and hope to support all scripts in the future.
 
 環境（Environment）
 ====
