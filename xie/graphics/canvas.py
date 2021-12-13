@@ -155,7 +155,7 @@ class SvgCanvasController(DisplayCanvasController):
 	def getExpression(self):
 		return self.expression
 
-class HexTextCanvasController(CanvasController):
+class EncodedTextCanvasController(CanvasController):
 	def __init__(self, size=(256, 256)):
 		super().__init__(size)
 		self.clear()
@@ -197,7 +197,7 @@ class HexTextCanvasController(CanvasController):
 		self.pointExpressionList.append(self.encodeEndPoint(p))
 
 
-class BaseTextCanvasController(HexTextCanvasController):
+class BaseTextCanvasController(EncodedTextCanvasController):
 	def __init__(self):
 		super().__init__()
 
