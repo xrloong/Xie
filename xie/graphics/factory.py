@@ -8,6 +8,10 @@ class ShapeFactory:
 	def __init__(self):
 		self.strokeInfoFactory=StrokeInfoFactory()
 
+	def generateStrokePath(self, segments):
+		strokePath = StrokePath(segments)
+		return strokePath
+
 	def _generateStroke(self, startPoint, strokeInfo, pane = None):
 		if not pane:
 			strokePath = strokeInfo.getStrokePath()
