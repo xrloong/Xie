@@ -12,21 +12,27 @@ class ShapeFactory:
 		strokePath = StrokePath(segments)
 		return strokePath
 
-	def _generateStroke(self, startPoint, strokeInfo, pane = None):
-		if not pane:
-			strokePath = strokeInfo.getStrokePath()
-			boundary = strokePath.computeBoundaryWithStartPoint(startPoint)
-			statePane = Pane(*boundary)
-		else:
-			infoPane = strokeInfo.pane
-			statePane = pane
-			startPoint = infoPane.transformRelativePointByTargetPane((0, 0), statePane)
+	def _generateStroke(self, startPoint, strokeInfo, pane):
+		infoPane = strokeInfo.pane
+		statePane = pane
+		startPoint = infoPane.transformRelativePointByTargetPane((0, 0), statePane)
 
 		strokePosition = StrokePosition(startPoint, statePane)
 		return Stroke(strokeInfo, strokePosition)
 
-	def generateParameterBasedStroke(self, name, parameterList, startPoint, strokeBoundPane):
+	def generateParameterBasedStroke(self, name, parameterList, startPoint = None, strokeBoundPane = None):
+		assert startPoint != None or strokeBoundPane != None
+
 		strokeInfo = self.strokeInfoFactory.generateStrokeInfo(name, parameterList)
+
+		if startPoint:
+			strokePath = strokeInfo.getStrokePath()
+			boundary = strokePath.computeBoundaryWithStartPoint(startPoint)
+			strokeBoundPane = Pane(*boundary)
+		else:
+			infoPane = strokeInfo.pane
+			startPoint = infoPane.transformRelativePointByTargetPane((0, 0), strokeBoundPane)
+
 		return self._generateStroke(startPoint, strokeInfo, strokeBoundPane)
 
 	def generateSegmentBasedStroke(self, name, segments, startPoint):
