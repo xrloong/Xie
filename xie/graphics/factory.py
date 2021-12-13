@@ -25,9 +25,9 @@ class ShapeFactory:
 		strokePosition = StrokePosition(startPoint, statePane)
 		return Stroke(strokeInfo, strokePosition)
 
-	def generateParameterBasedStroke(self, name, parameterList, startPoint):
+	def generateParameterBasedStroke(self, name, parameterList, startPoint, strokeBoundPane):
 		strokeInfo = self.strokeInfoFactory.generateStrokeInfo(name, parameterList)
-		return self._generateStroke(startPoint, strokeInfo)
+		return self._generateStroke(startPoint, strokeInfo, strokeBoundPane)
 
 	def generateSegmentBasedStroke(self, name, segments, startPoint):
 		strokePath = StrokePath(segments)
