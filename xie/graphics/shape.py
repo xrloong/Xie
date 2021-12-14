@@ -57,31 +57,16 @@ class Pane:
 	def centerY(self):
 		return self.top + self.height / 2
 
-	def getLeft(self):
-		return self.left
+	@property
+	def center(self):
+		return (self.centerX, self.centerY)
 
-	def getTop(self):
-		return self.top
-
-	def getRight(self):
-		return self.right
-
-	def getBottom(self):
-		return self.bottom
-
-	def getWidth(self):
-		return self.width
-
-	def getHeight(self):
-		return self.height
-
-	def getCenter(self):
-		return ((self.left+self.right)/2, (self.top+self.bottom)/2)
-
-	def getLeftTop(self):
+	@property
+	def leftTop(self):
 		return (self.left, self.top)
 
-	def getRightBottom(self):
+	@property
+	def rightBottom(self):
 		return (self.right, self.bottom)
 
 	def transformRelativePointByTargetPane(self, point, targetPane):
@@ -99,8 +84,8 @@ class Pane:
 		return (newX, newY)
 
 	def transformRelativePaneByTargetPane(self, relativePane, targetPane):
-		(left, top)=self.transformRelativePointByTargetPane(relativePane.getLeftTop(), targetPane)
-		(right, bottom)=self.transformRelativePointByTargetPane(relativePane.getRightBottom(), targetPane)
+		(left, top)=self.transformRelativePointByTargetPane(relativePane.leftTop, targetPane)
+		(right, bottom)=self.transformRelativePointByTargetPane(relativePane.rightBottom, targetPane)
 
 		return Pane(left, top, right, bottom)
 
@@ -171,28 +156,28 @@ def _splitLengthToList(length, weightList):
 
 def genVerticalPanes(weights):
 	pane=Pane.BBOX
-	points=_splitLengthToList(pane.getHeight(), weights)
+	points=_splitLengthToList(pane.height, weights)
 	paneList=[]
-	offset=pane.getTop()
+	offset=pane.top
 	for [pointStart, pointEnd] in zip(points[:-1], points[1:]):
 		height=pointEnd-pointStart
 		targetHeight=int(height*0.90)
 		offset=int(height-targetHeight)//2
-		tmpPane=Pane(pane.getLeft(), pointStart+offset, pane.getRight(), pointEnd-offset)
+		tmpPane=Pane(pane.left, pointStart+offset, pane.right, pointEnd-offset)
 		tmpPane.offsetTopAndBottom(offset)
 		paneList.append(tmpPane)
 	return paneList
 
 def genHorizontalPanes(weights):
 	pane=Pane.BBOX
-	points=_splitLengthToList(pane.getWidth(), weights)
+	points=_splitLengthToList(pane.width, weights)
 	paneList=[]
-	offset=pane.getLeft()
+	offset=pane.left
 	for [pointStart, pointEnd] in zip(points[:-1], points[1:]):
 		width=pointEnd-pointStart
 		targetWidth=int(width*0.90)
 		offset=int(width-targetWidth)//2
-		tmpPane=Pane(pointStart+offset, pane.getTop(), pointEnd-offset, pane.getBottom())
+		tmpPane=Pane(pointStart+offset, pane.top, pointEnd-offset, pane.bottom)
 		tmpPane.offsetLeftAndRight(offset)
 		paneList.append(tmpPane)
 	return paneList
