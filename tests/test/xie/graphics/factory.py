@@ -13,10 +13,9 @@ from xie.graphics.factory import StrokeFactory
 from xie.graphics.canvas import EncodedTextCanvasController
 from xie.graphics.drawing import DrawingSystem
 
-class FactoryTestCase(unittest.TestCase):
+class SegmentFactoryTestCase(unittest.TestCase):
 	def setUp(self):
 		self.segmentFactory = SegmentFactory()
-		self.shapeFactory = ShapeFactory()
 		self.generateTestDataSegments()
 
 	def tearDown(self):

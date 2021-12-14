@@ -6,29 +6,7 @@ from .shape import Pane
 
 class ShapeFactory:
 	def __init__(self):
-		self.strokeFactory=StrokeFactory()
-
-	def generateStrokeByParameters(self, name, parameters, startPoint = None, strokeBoundPane = None):
-		assert startPoint != None or strokeBoundPane != None
-
-		strokePath = self.strokeFactory.generateStrokePathByParameters(name, parameters)
-
-		if startPoint:
-			boundary = strokePath.computeBoundaryWithStartPoint(startPoint)
-			strokeBoundPane = Pane(*boundary)
-		else:
-			infoPane = strokePath.pane
-			startPoint = infoPane.transformRelativePointByTargetPane((0, 0), strokeBoundPane)
-
-		return self.strokeFactory.generateStroke(name, strokePath, strokeBoundPane)
-
-	def generateStrokeBySegments(self, name, segments, startPoint):
-		strokePath = self.strokeFactory.generateStrokePathBySegments(segments)
-
-		boundary = strokePath.computeBoundaryWithStartPoint(startPoint)
-		pane = Pane(*boundary)
-
-		return self.strokeFactory.generateStroke(name, strokePath, pane)
+		pass
 
 	def _generateComponent(self, strokes, pane = None):
 		componentInfo = ComponentInfo(strokes)
@@ -123,10 +101,32 @@ class StrokeFactory:
 		return strokePath
 
 	# Stroke
-	def generateStroke(self, name, strokePath, strokeBoundPane):
+	def _generateStroke(self, name, strokePath, strokeBoundPane):
 		infoPane = strokePath.pane
 		startPoint = infoPane.transformRelativePointByTargetPane((0, 0), strokeBoundPane)
 
 		strokePosition = StrokePosition(startPoint, strokeBoundPane)
 		return Stroke(name, strokePath, strokePosition)
+
+	def generateStrokeByParameters(self, name, parameters, startPoint = None, strokeBoundPane = None):
+		assert startPoint != None or strokeBoundPane != None
+
+		strokePath = self.generateStrokePathByParameters(name, parameters)
+
+		if startPoint:
+			boundary = strokePath.computeBoundaryWithStartPoint(startPoint)
+			strokeBoundPane = Pane(*boundary)
+		else:
+			infoPane = strokePath.pane
+			startPoint = infoPane.transformRelativePointByTargetPane((0, 0), strokeBoundPane)
+
+		return self._generateStroke(name, strokePath, strokeBoundPane)
+
+	def generateStrokeBySegments(self, name, segments, startPoint):
+		strokePath = self.generateStrokePathBySegments(segments)
+
+		boundary = strokePath.computeBoundaryWithStartPoint(startPoint)
+		pane = Pane(*boundary)
+
+		return self._generateStroke(name, strokePath, pane)
 
