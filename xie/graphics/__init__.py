@@ -12,6 +12,8 @@ from .canvas import SvgCanvasController, WxCanvasController, TrueTypeGlyphCanvas
 
 from .utils import TextCodec
 
+from .shape import genVerticalPanes, genHorizontalPanes
+
 if __name__=='__main__':
 	pass
 

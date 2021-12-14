@@ -156,3 +156,43 @@ def mergePanes(panes):
 		mergedBox = mergeBoundary(mergedBox, box)
 	return Pane(*mergedBox)
 
+def _splitLengthToList(length, weightList):
+	totalWeight=sum(weightList)
+	unitLength=length*1./totalWeight
+
+	pointList=[]
+	newComponentList=[]
+	base=0
+	for weight in weightList:
+		pointList.append(int(base))
+		base=base+unitLength*weight
+	pointList.append(int(base))
+	return pointList
+
+def genVerticalPanes(weights):
+	pane=Pane.BBOX
+	points=_splitLengthToList(pane.getHeight(), weights)
+	paneList=[]
+	offset=pane.getTop()
+	for [pointStart, pointEnd] in zip(points[:-1], points[1:]):
+		height=pointEnd-pointStart
+		targetHeight=int(height*0.90)
+		offset=int(height-targetHeight)//2
+		tmpPane=Pane(pane.getLeft(), pointStart+offset, pane.getRight(), pointEnd-offset)
+		tmpPane.offsetTopAndBottom(offset)
+		paneList.append(tmpPane)
+	return paneList
+
+def genHorizontalPanes(weights):
+	pane=Pane.BBOX
+	points=_splitLengthToList(pane.getWidth(), weights)
+	paneList=[]
+	offset=pane.getLeft()
+	for [pointStart, pointEnd] in zip(points[:-1], points[1:]):
+		width=pointEnd-pointStart
+		targetWidth=int(width*0.90)
+		offset=int(width-targetWidth)//2
+		tmpPane=Pane(pointStart+offset, pane.getTop(), pointEnd-offset, pane.getBottom())
+		tmpPane.offsetLeftAndRight(offset)
+		paneList.append(tmpPane)
+	return paneList
