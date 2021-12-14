@@ -3,8 +3,8 @@ import copy
 
 from xie.graphics.segment import BeelineSegment
 from xie.graphics.segment import QCurveSegment
-from xie.graphics.segment import StrokePath
 from xie.graphics.segment import SegmentFactory
+from xie.graphics.stroke_path import StrokePath
 from xie.graphics.stroke_info import StrokeInfo
 from xie.graphics.factory import ShapeFactory
 from xie.graphics.factory import StrokeInfoFactory

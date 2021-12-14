@@ -3,8 +3,9 @@ import copy
 
 from xie.graphics.segment import BeelineSegment
 from xie.graphics.segment import QCurveSegment
-from xie.graphics.segment import StrokePath
 from xie.graphics.segment import SegmentFactory
+
+from xie.graphics.stroke_path import StrokePath
 
 class SegmentTestCase(unittest.TestCase):
 	def setUp(self):

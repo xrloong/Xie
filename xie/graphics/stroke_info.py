@@ -1,5 +1,5 @@
 from .shape import Pane
-from .segment import StrokePath
+from .stroke_path import StrokePath
 
 class StrokeInfo:
 	def __init__(self, name, strokePath):
