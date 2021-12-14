@@ -7,7 +7,7 @@ from .character import Character
 
 from .segment import SegmentFactory
 from .factory import ShapeFactory
-from .factory import StrokeFactory
+from .factory import StrokeSpec, StrokeFactory
 
 from .canvas import BaseTextCanvasController
 from .canvas import SvgCanvasController, WxCanvasController, TrueTypeGlyphCanvasController

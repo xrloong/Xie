@@ -7,8 +7,9 @@ from xie.graphics.segment import SegmentFactory
 from xie.graphics.stroke_path import StrokePath
 from xie.graphics.stroke import Stroke
 from xie.graphics.stroke import StrokePosition
-from xie.graphics.factory import ShapeFactory
+from xie.graphics.factory import StrokeSpec
 from xie.graphics.factory import StrokeFactory
+from xie.graphics.factory import ShapeFactory
 
 from xie.graphics.canvas import EncodedTextCanvasController
 from xie.graphics.drawing import DrawingSystem
@@ -454,10 +455,12 @@ class StrokeFactoryTestCase(unittest.TestCase):
 		pass
 
 	def generateStrokePathBySegments(self, segments):
-		return self.strokeFactory.generateStrokePathBySegments(segments)
+		strokeSpec = StrokeSpec("測試", segments = segments)
+		return self.strokeFactory.generateStrokePathBySpec(strokeSpec)
 
 	def generateStrokePath(self, name, params):
-		return self.strokeFactory.generateStrokePathByParameters(name, params)
+		strokeSpec = StrokeSpec(name, params)
+		return self.strokeFactory.generateStrokePathBySpec(strokeSpec)
 
 	def _generateStroke(self, strokePath):
 		return Stroke("測試", strokePath, StrokePosition((0, 0), strokePath.pane))
@@ -666,12 +669,14 @@ class StrokeFactoryTestCase(unittest.TestCase):
 			BeelineSegment((90, 0)),
 			BeelineSegment((0, 30))
 		]
-		strokePath = self.strokeFactory.generateStrokePathBySegments(segments)
+		strokeSpec = StrokeSpec("測試", segments = segments)
+		strokePath = self.strokeFactory.generateStrokePathBySpec(strokeSpec)
 
 		self.assertEqual("0.0.0,1.90.0,1.90.30", self._getDrawResultForStrokePath(strokePath))
 
 	def test_generateStrokePathByParameters(self):
-		strokePath = self.strokeFactory.generateStrokePathByParameters("橫", (30,))
+		strokeSpec = StrokeSpec("橫",  parameters = (30,))
+		strokePath = self.strokeFactory.generateStrokePathBySpec(strokeSpec)
 
 		self.assertEqual("0.0.0,1.30.0", self._getDrawResultForStrokePath(strokePath))
 
@@ -680,12 +685,14 @@ class StrokeFactoryTestCase(unittest.TestCase):
 			BeelineSegment((90, 0)),
 			BeelineSegment((0, 30))
 		]
-		stroke = self.strokeFactory.generateStrokeBySegments("測試", segments, (0, 0))
+		strokeSpec = StrokeSpec("測試", segments = segments)
+		stroke = self.strokeFactory.generateStrokeBySpec(strokeSpec, (0, 0))
 
 		self.assertEqual("0.0.0,1.90.0,1.90.30", self._getDrawResultForStroke(stroke))
 
 	def test_generateStrokeByParameters(self):
-		stroke = self.strokeFactory.generateStrokeByParameters("橫",  (30,), (0, 0))
+		strokeSpec = StrokeSpec("橫",  parameters = (30,))
+		stroke = self.strokeFactory.generateStrokeBySpec(strokeSpec, (0, 0))
 
 		self.assertEqual("0.0.0,1.30.0", self._getDrawResultForStroke(stroke))
 
