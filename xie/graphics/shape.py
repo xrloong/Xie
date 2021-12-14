@@ -148,3 +148,11 @@ def mergeBoundary(boundaryA, boundaryB):
 	return (min(boundaryA[0], boundaryB[0]), min(boundaryA[1], boundaryB[1]),
 		max(boundaryA[2], boundaryB[2]), max(boundaryA[3], boundaryB[3]),)
 
+def mergePanes(panes):
+	boxes = map(lambda pane: pane.boundary, panes)
+
+	mergedBox = next(boxes)
+	for box in boxes:
+		mergedBox = mergeBoundary(mergedBox, box)
+	return Pane(*mergedBox)
+

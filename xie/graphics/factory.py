@@ -59,12 +59,7 @@ class ShapeFactory:
 		return self._generateComponent(strokes)
 
 	def generateComponentByComponentPanePairs(self, componentPanePairs):
-		def computeBBox(panes):
-			left=min(map(lambda pane: pane.getLeft(), panes))
-			top=min(map(lambda pane: pane.getTop(), panes))
-			right=max(map(lambda pane: pane.getRight(), panes))
-			bottom=max(map(lambda pane: pane.getBottom(), panes))
-			return Pane(left, top, right, bottom)
+		from .shape import mergePanes
 
 		strokes = []
 		for component, pane in componentPanePairs:
@@ -72,7 +67,7 @@ class ShapeFactory:
 			strokes.extend(component.getStrokeList())
 
 		panes = [stroke.getStatePane() for stroke in strokes]
-		pane = computeBBox(panes)
+		pane = mergePanes(panes)
 
 		return self._generateComponent(strokes, pane)
 
