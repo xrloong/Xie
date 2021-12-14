@@ -1,6 +1,27 @@
 from .shape import Shape, Pane
-from .stroke_info import StrokeInfo
+from .stroke_path import StrokePath
+
 from . import DrawingSystem
+
+class StrokeInfo:
+	def __init__(self, name, strokePath: StrokePath):
+		self.name = name
+		self.strokePath = strokePath
+
+	def __ne__(self, other):
+		return not self.__eq__(other)
+
+	def __eq__(self, other):
+		return isinstance(other, StrokeInfo) and (self.getName()==other.getName() and self.getStrokePath()==other.getStrokePath())
+
+	def getName(self):
+		return self.name
+
+	def getStrokePath(self):
+		return self.strokePath
+
+	def getPane(self):
+		return self.strokePath.pane
 
 class StrokePosition:
 	def __init__(self, startPoint, statePane: Pane = None):

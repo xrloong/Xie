@@ -57,8 +57,8 @@ class SegmentTestCase(unittest.TestCase):
 
 		self.assertEqual(self.stroke_path_5, self.stroke_path_5)
 		self.assertEqual(self.stroke_path_5, copy.deepcopy(self.stroke_path_5))
-		self.assertNotEqual(self.stroke_path_5, StrokePath(self.stroke_path_6))
-		self.assertNotEqual(self.stroke_path_5, StrokePath(self.stroke_path_7))
+		self.assertNotEqual(self.stroke_path_5, StrokePath([self.beeline_1, self.qcurve_2]))
+		self.assertNotEqual(self.stroke_path_5, StrokePath([self.beeline_1, self.qcurve_2]))
 
 		self.assertEqual(StrokePath([]), StrokePath([]))
 
