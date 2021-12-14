@@ -1,4 +1,4 @@
-from .stroke import Stroke, StrokePosition, StrokeInfo
+from .stroke import Stroke, StrokePosition
 from .component import Component, ComponentInfo
 from .stroke_path import *
 
@@ -122,20 +122,11 @@ class StrokeFactory:
 		strokePath = StrokePath(segments)
 		return strokePath
 
-	# StrokeInfo
-	def generateStrokeInfo(self, name, strokePath):
-		return StrokeInfo(name, strokePath)
-
-	def generateStrokeInfoByParameters(self, name, parameters):
-		strokePath = self.generateStrokePathByParameters(name, parameters)
-		return StrokeInfo(name, strokePath)
-
 	# Stroke
 	def generateStroke(self, name, strokePath, strokeBoundPane):
 		infoPane = strokePath.pane
 		startPoint = infoPane.transformRelativePointByTargetPane((0, 0), strokeBoundPane)
 
-		strokeInfo = self.generateStrokeInfo(name, strokePath)
 		strokePosition = StrokePosition(startPoint, strokeBoundPane)
-		return Stroke(strokeInfo, strokePosition)
+		return Stroke(name, strokePath, strokePosition)
 

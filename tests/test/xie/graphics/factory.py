@@ -6,7 +6,6 @@ from xie.graphics.segment import QCurveSegment
 from xie.graphics.segment import SegmentFactory
 from xie.graphics.stroke_path import StrokePath
 from xie.graphics.stroke import Stroke
-from xie.graphics.stroke import StrokeInfo
 from xie.graphics.stroke import StrokePosition
 from xie.graphics.factory import ShapeFactory
 from xie.graphics.factory import StrokeFactory
@@ -462,8 +461,7 @@ class StrokeFactoryTestCase(unittest.TestCase):
 		return self.strokeFactory.generateStrokePathByParameters(name, params)
 
 	def _generateStroke(self, strokePath):
-		strokeInfo = StrokeInfo("測試", strokePath)
-		return Stroke(strokeInfo, StrokePosition((0, 0), strokePath.pane))
+		return Stroke("測試", strokePath, StrokePosition((0, 0), strokePath.pane))
 
 	def _getDrawResultForStrokePath(self, strokePath):
 		stroke = self._generateStroke(strokePath)
@@ -661,16 +659,6 @@ class StrokeFactoryTestCase(unittest.TestCase):
 		self.strokePath_橫捺_2 = self.generateStrokePath("橫捺", (64, 98, 91))
 		self.strokePath_橫捺_3 = self.generateStrokePath("橫捺", (12, 26, 12))
 		self.strokePath_橫捺_4 = self.generateStrokePath("橫捺", (4, 49, 124))
-
-	def testStrokeInfo(self):
-		strokePath = StrokeInfo("空", StrokePath([]))
-		self.assertEqual(strokePath.getName(), "空")
-		self.assertEqual(strokePath.getStrokePath(), StrokePath([]))
-
-		segments=[BeelineSegment((37, 41)), QCurveSegment((0, -99), (57, -99))]
-		strokePath = StrokeInfo("測試", StrokePath(segments))
-		self.assertEqual(strokePath.getName(), "測試")
-		self.assertEqual(strokePath.getStrokePath(), StrokePath(segments))
 
 	def test_generateStrokePathBySegments(self):
 		segments = [

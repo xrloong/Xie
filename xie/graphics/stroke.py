@@ -3,26 +3,6 @@ from .stroke_path import StrokePath
 
 from . import DrawingSystem
 
-class StrokeInfo:
-	def __init__(self, name, strokePath: StrokePath):
-		self.name = name
-		self.strokePath = strokePath
-
-	def __ne__(self, other):
-		return not self.__eq__(other)
-
-	def __eq__(self, other):
-		return isinstance(other, StrokeInfo) and (self.getName()==other.getName() and self.getStrokePath()==other.getStrokePath())
-
-	def getName(self):
-		return self.name
-
-	def getStrokePath(self):
-		return self.strokePath
-
-	def getPane(self):
-		return self.strokePath.pane
-
 class StrokePosition:
 	def __init__(self, startPoint, statePane: Pane = None):
 		self.startPoint = startPoint
@@ -34,24 +14,25 @@ class StrokePosition:
 		return StrokePosition(newStartPoint, newStatePane)
 
 class Stroke(Shape):
-	def __init__(self, strokeInfo: StrokeInfo, strokePosition: StrokePosition):
-		self.strokeInfo = strokeInfo
+	def __init__(self, typeName, path: StrokePath, strokePosition: StrokePosition):
+		self.typeName = typeName
+		self.path = path
 		self.strokePosition = strokePosition
 
 	def getStartPoint(self):
 		return self.strokePosition.startPoint
 
-	def getStrokeInfo(self):
-		return self.strokeInfo
+	def getTypeName(self):
+		return self.typeName
 
 	def getName(self):
-		return self.getStrokeInfo().getName()
+		return self.getTypeName()
 
 	def getStrokePath(self):
-		return self.getStrokeInfo().getStrokePath()
+		return self.path
 
 	def getInfoPane(self):
-		return self.getStrokeInfo().getPane()
+		return self.path.getPane()
 
 	def getStatePane(self):
 		return self.strokePosition.statePane
@@ -85,5 +66,5 @@ class Stroke(Shape):
 
 	def transform(self, fromComponentPane, toComponentPane):
 		strokePosition = self.strokePosition.transform(fromComponentPane, toComponentPane)
-		return Stroke(self.strokeInfo, strokePosition)
+		return Stroke(self.typeName, self.path, strokePosition)
 
