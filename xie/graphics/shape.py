@@ -18,7 +18,7 @@ class Pane:
 		self.bottom=bottom
 
 	def __str__(self):
-		return "%s"%([self.left, self.top, self.right, self.bottom])
+		return "%s"%(self.left, self.top, self.right, self.bottom)
 
 	def __eq__(self, other):
 		return isinstance(other, Pane) and all(numpy.isclose(self.boundary, other.boundary))
@@ -28,18 +28,6 @@ class Pane:
 
 	def clone(self):
 		return Pane(self.left, self.top, self.right, self.bottom)
-
-	def offsetLeftAndRight(self, offset):
-		self.left += offset
-		self.right += offset
-
-	def offsetTopAndBottom(self, offset):
-		self.top += offset
-		self.bottom += offset
-
-	@property
-	def boundary(self):
-		return (self.left, self.top, self.right, self.bottom)
 
 	@property
 	def width(self):
@@ -69,6 +57,18 @@ class Pane:
 	def rightBottom(self):
 		return (self.right, self.bottom)
 
+	@property
+	def boundary(self):
+		return (self.left, self.top, self.right, self.bottom)
+
+	def _offsetLeftAndRight(self, offset):
+		self.left += offset
+		self.right += offset
+
+	def _offsetTopAndBottom(self, offset):
+		self.top += offset
+		self.bottom += offset
+
 	def transformRelativePointByTargetPane(self, point, targetPane):
 		(x, y)=point
 
@@ -91,7 +91,7 @@ class Pane:
 
 
 # 字面框（Bounding Box）
-Pane.BBOX=Pane(
+Pane._BBOX=Pane(
 	Pane.BBOX_X_MIN,
 	Pane.BBOX_Y_MIN,
 	Pane.BBOX_X_MAX,
@@ -155,7 +155,7 @@ def _splitLengthToList(length, weightList):
 	return pointList
 
 def genVerticalPanes(weights):
-	pane=Pane.BBOX
+	pane=Pane._BBOX
 	points=_splitLengthToList(pane.height, weights)
 	paneList=[]
 	offset=pane.top
@@ -164,12 +164,12 @@ def genVerticalPanes(weights):
 		targetHeight=int(height*0.90)
 		offset=int(height-targetHeight)//2
 		tmpPane=Pane(pane.left, pointStart+offset, pane.right, pointEnd-offset)
-		tmpPane.offsetTopAndBottom(offset)
+		tmpPane._offsetTopAndBottom(offset)
 		paneList.append(tmpPane)
 	return paneList
 
 def genHorizontalPanes(weights):
-	pane=Pane.BBOX
+	pane=Pane._BBOX
 	points=_splitLengthToList(pane.width, weights)
 	paneList=[]
 	offset=pane.left
@@ -178,6 +178,6 @@ def genHorizontalPanes(weights):
 		targetWidth=int(width*0.90)
 		offset=int(width-targetWidth)//2
 		tmpPane=Pane(pointStart+offset, pane.top, pointEnd-offset, pane.bottom)
-		tmpPane.offsetLeftAndRight(offset)
+		tmpPane._offsetLeftAndRight(offset)
 		paneList.append(tmpPane)
 	return paneList
