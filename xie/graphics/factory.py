@@ -22,7 +22,7 @@ class ShapeFactory:
 
 		return self.strokeFactory.generateStroke(name, strokePath, strokeBoundPane)
 
-	def generateStrokeBySegements(self, name, segments, startPoint):
+	def generateStrokeBySegments(self, name, segments, startPoint):
 		strokePath = self.strokeFactory.generateStrokePathBySegments(segments)
 
 		boundary = strokePath.computeBoundaryWithStartPoint(startPoint)
