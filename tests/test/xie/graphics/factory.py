@@ -455,6 +455,9 @@ class StrokeFactoryTestCase(unittest.TestCase):
 	def tearDown(self):
 		pass
 
+	def generateStrokePathBySegments(self, segments):
+		return self.strokeFactory.generateStrokePathBySegments(segments)
+
 	def generateStrokePath(self, name, params):
 		return self.strokeFactory.generateStrokePathByParameters(name, params)
 
@@ -668,6 +671,20 @@ class StrokeFactoryTestCase(unittest.TestCase):
 		strokePath = StrokeInfo("測試", StrokePath(segments))
 		self.assertEqual(strokePath.getName(), "測試")
 		self.assertEqual(strokePath.getStrokePath(), StrokePath(segments))
+
+	def test_generateStrokePathBySegments(self):
+		segments = [
+			BeelineSegment((90, 0)),
+			BeelineSegment((0, 30))
+		]
+		strokePath = self.strokeFactory.generateStrokePathBySegments(segments)
+
+		self.assertEqual("0.0.0,1.90.0,1.90.30", self._getDrawResultForStrokePath(strokePath))
+
+	def test_generateStrokePathByParameters(self):
+		strokePath = self.strokeFactory.generateStrokePathByParameters("橫", (30,))
+
+		self.assertEqual("0.0.0,1.30.0", self._getDrawResultForStrokePath(strokePath))
 
 	def testStrokePath_點(self):
 		self.assertEqual("0.0.0,1.5.95", self._getDrawResultForStrokePath(self.strokePath_點_1))
