@@ -464,7 +464,9 @@ class StrokeFactoryTestCase(unittest.TestCase):
 
 	def _getDrawResultForStrokePath(self, strokePath):
 		stroke = self._generateStroke(strokePath)
+		return self._getDrawResultForStroke(stroke)
 
+	def _getDrawResultForStroke(self, stroke):
 		self.ds.draw(stroke)
 		return self.controller.getStrokeExpression()
 
@@ -672,6 +674,20 @@ class StrokeFactoryTestCase(unittest.TestCase):
 		strokePath = self.strokeFactory.generateStrokePathByParameters("橫", (30,))
 
 		self.assertEqual("0.0.0,1.30.0", self._getDrawResultForStrokePath(strokePath))
+
+	def test_generateStrokeBySegments(self):
+		segments = [
+			BeelineSegment((90, 0)),
+			BeelineSegment((0, 30))
+		]
+		stroke = self.strokeFactory.generateStrokeBySegments("測試", segments, (0, 0))
+
+		self.assertEqual("0.0.0,1.90.0,1.90.30", self._getDrawResultForStroke(stroke))
+
+	def test_generateStrokeByParameters(self):
+		stroke = self.strokeFactory.generateStrokeByParameters("橫",  (30,), (0, 0))
+
+		self.assertEqual("0.0.0,1.30.0", self._getDrawResultForStroke(stroke))
 
 	def testStrokePath_點(self):
 		self.assertEqual("0.0.0,1.5.95", self._getDrawResultForStrokePath(self.strokePath_點_1))
