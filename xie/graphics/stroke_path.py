@@ -212,35 +212,6 @@ class StrokePathGenerator_橫折折撇(StrokePathGenerator):
 		segments.extend(self.getSegmentFactory().generateSegments_撇(w4, h4))
 		return segments
 
-class StrokePathGenerator_橫撇彎鉤(StrokePathGenerator):
-	def parseExpression(self, parameterExpressionList):
-		l=parameterExpressionList
-		assert len(l)==7
-		assert int(l[0])>0
-		assert int(l[1])>0
-		assert int(l[2])>0
-		assert int(l[3])>0
-		assert int(l[4])>0
-		assert int(l[5])>0
-		assert int(l[6])>0
-		return [int(l[0]), int(l[1]), int(l[2]), int(l[3]), int(l[4]), int(l[5]), int(l[6]), ]
-
-	def computeStrokeSegments(self, paramList):
-		w1=paramList[0]
-		w2=paramList[1]
-		h2=paramList[2]
-		w3=paramList[3]
-		h3=paramList[4]
-		w4=paramList[5]
-		h4=paramList[6]
-
-		segments=[]
-		segments.extend(self.getSegmentFactory().generateSegments_橫(w1))
-		segments.extend(self.getSegmentFactory().generateSegments_撇(w2, h2))
-		segments.extend(self.getSegmentFactory().generateSegments_彎鉤之彎(w3, h3))
-		segments.extend(self.getSegmentFactory().generateSegments_鉤(w4, h4))
-		return segments
-
 class StrokePathGenerator_橫折鉤(StrokePathGenerator):
 	def parseExpression(self, parameterExpressionList):
 		l=parameterExpressionList
@@ -846,5 +817,52 @@ class StrokePathGenerator_橫捺(StrokePathGenerator):
 		segments=[]
 		segments.extend(self.getSegmentFactory().generateSegments_橫(w1))
 		segments.extend(self.getSegmentFactory().generateSegments_捺(w2, h2))
+		return segments
+
+
+class StrokePathGenerator_橫撇彎鉤(StrokePathGenerator):
+	def parseExpression(self, parameterExpressionList):
+		l=parameterExpressionList
+		assert len(l)==7
+		assert int(l[0])>0
+		assert int(l[1])>0
+		assert int(l[2])>0
+		assert int(l[3])>0
+		assert int(l[4])>0
+		assert int(l[5])>0
+		assert int(l[6])>0
+		return [int(l[0]), int(l[1]), int(l[2]), int(l[3]), int(l[4]), int(l[5]), int(l[6]), ]
+
+	def computeStrokeSegments(self, paramList):
+		w1=paramList[0]
+		w2=paramList[1]
+		h2=paramList[2]
+		w3=paramList[3]
+		h3=paramList[4]
+		w4=paramList[5]
+		h4=paramList[6]
+
+		segments=[]
+		segments.extend(self.getSegmentFactory().generateSegments_橫(w1))
+		segments.extend(self.getSegmentFactory().generateSegments_撇(w2, h2))
+		segments.extend(self.getSegmentFactory().generateSegments_彎鉤之彎(w3, h3))
+		segments.extend(self.getSegmentFactory().generateSegments_鉤(w4, h4))
+		return segments
+
+class StrokePathGenerator_豎彎折(StrokePathGenerator):
+	def parseExpression(self, parameterExpressionList):
+		l=parameterExpressionList
+		assert len(l)==2
+		assert int(l[0])>0
+		assert int(l[1])>0
+		return [int(l[0]), int(l[1]), ]
+
+	def computeStrokeSegments(self, paramList):
+		h1=paramList[0]
+		w1=paramList[1]
+
+		segments=[]
+		segments.extend(self.getSegmentFactory().generateSegments_豎(h1))
+		segments.extend(self.getSegmentFactory().generateSegments_左(w1))
 		return segments
 

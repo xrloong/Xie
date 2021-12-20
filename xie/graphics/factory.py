@@ -61,7 +61,6 @@ class StrokeFactory:
 			"橫折折": StrokePathGenerator_橫折折(segmentFactory),
 			"橫折提": StrokePathGenerator_橫折提(segmentFactory),
 			"橫折折撇": StrokePathGenerator_橫折折撇(segmentFactory),
-			"橫撇彎鉤": StrokePathGenerator_橫撇彎鉤(segmentFactory),
 			"橫折鉤": StrokePathGenerator_橫折鉤(segmentFactory),
 			"橫折彎": StrokePathGenerator_橫折彎(segmentFactory),
 			"橫撇": StrokePathGenerator_橫撇(segmentFactory),
@@ -95,6 +94,10 @@ class StrokeFactory:
 			"臥捺": StrokePathGenerator_臥捺(segmentFactory),
 			"提捺": StrokePathGenerator_提捺(segmentFactory),
 			"橫捺": StrokePathGenerator_橫捺(segmentFactory),
+
+
+			"橫撇彎鉤": StrokePathGenerator_橫撇彎鉤(segmentFactory),
+			"豎彎折": StrokePathGenerator_豎彎折(segmentFactory),
 		}
 
 	# StrokePath
