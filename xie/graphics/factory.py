@@ -3,10 +3,23 @@ from .component import Component, ComponentInfo
 from .stroke_path import *
 
 from .shape import Pane
+from .shape import genVerticalPanes, genHorizontalPanes
+
+from .layout import JointOperator
+from .layout import LayoutSpec
 
 class ShapeFactory:
 	def __init__(self):
 		pass
+
+	def generateLayouts(self, spec: LayoutSpec) -> [Pane]:
+		operator = spec.operator
+		if operator == JointOperator.Goose:
+			return genHorizontalPanes(spec.weights)
+		if operator == JointOperator.Silkworm:
+			return genVerticalPanes(spec.weights)
+
+		return []
 
 	def _generateComponent(self, strokes, pane = None):
 		componentInfo = ComponentInfo(strokes)
