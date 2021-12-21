@@ -19,6 +19,9 @@ class ShapeFactory:
 		if operator == JointOperator.Silkworm:
 			return genVerticalPanes(spec.weights)
 
+		if spec.containerPane and spec.subPanes:
+			return [spec.containerPane] + spec.subPanes
+
 		return []
 
 	def _generateComponent(self, strokes, pane = None):
