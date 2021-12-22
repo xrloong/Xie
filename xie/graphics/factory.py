@@ -54,19 +54,38 @@ class ShapeFactory:
 		return self._generateComponent(strokes, pane)
 
 class StrokeSpec:
-	def __init__(self, typeName, parameters = None, segments = None):
+	def __init__(self, typeName, parameters = None, segments = None,
+			splinePointsList = None):
 		self.typeName = typeName
 		self.parameters = parameters
 		self.segments = segments
 
+		if splinePointsList:
+			lastEndPoint = (0, 0)
+			relativeControlPointsList = []
+			for points in splinePointsList:
+				newPoints = [(point[0] - lastEndPoint[0], point[1] - lastEndPoint[1]) for point in points]
+				relativeControlPointsList.append(newPoints)
+				lastEndPoint = points[-1]
+
+			self.relativeControlPointsList = relativeControlPointsList
+			self.absoluteControlPointsList = splinePointsList
+		else:
+			self.relativeControlPointsList = None
+			self.absoluteControlPointsList = None
+
 	def isBySegments(self):
 		return (self.segments != None)
+
+	def isByControlPoints(self):
+		return (self.relativeControlPointsList != None)
 
 class StrokeFactory:
 	def __init__(self):
 		from .segment import SegmentFactory
 
 		segmentFactory = SegmentFactory()
+		self.segmentFactory = segmentFactory
 		self.strokePathMap = {
 			"點": StrokePathGenerator_點(segmentFactory),
 #			"長頓點": StrokePathGenerator_點(segmentFactory),
@@ -120,6 +139,31 @@ class StrokeFactory:
 	def generateStrokePathBySpec(self, spec: StrokeSpec):
 		if spec.isBySegments():
 			segments = spec.segments
+			strokePath = StrokePath(segments)
+		elif spec.isByControlPoints():
+			segmentFactory = self.segmentFactory
+
+			# Start at (0, 0)
+			# Format:
+			# [
+			#     [(x, y)],
+			#     [(x, y), (x,y)],
+			# ]
+			controlPointsList = spec.relativeControlPointsList
+
+			segments = []
+			controlPoint = None
+			for points in controlPointsList:
+				segmentCount = len(points)
+				if segmentCount == 2:
+					# 二次貝茲曲線
+					segment = segmentFactory.generateSegment_QCurve(points[0], points[1])
+				elif segmentCount == 1:
+					# 一次貝茲曲線、線性
+					segment = segmentFactory.generateSegment_Beeline(points[0])
+				else:
+					assert False
+				segments.append(segment)
 			strokePath = StrokePath(segments)
 		else:
 			strokeTypeName = spec.typeName
