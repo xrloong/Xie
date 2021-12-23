@@ -6,11 +6,6 @@ class Shape:
 		pass
 
 class Pane:
-	BBOX_X_MIN=0x08
-	BBOX_Y_MIN=0x08
-	BBOX_X_MAX=0xF7
-	BBOX_Y_MAX=0xF7
-
 	def __init__(self, left, top, right, bottom):
 		self.left=left
 		self.top=top
@@ -89,15 +84,6 @@ class Pane:
 
 		return Pane(left, top, right, bottom)
 
-
-# 字面框（Bounding Box）
-Pane._BBOX=Pane(
-	Pane.BBOX_X_MIN,
-	Pane.BBOX_Y_MIN,
-	Pane.BBOX_X_MAX,
-	Pane.BBOX_Y_MAX,
-	)
-
 class Rectangle(Shape):
 	def __init__(self, x=0, y=0, w=0, h=0):
 		super().__init__()
@@ -141,43 +127,3 @@ def mergePanes(panes):
 		mergedBox = mergeBoundary(mergedBox, box)
 	return Pane(*mergedBox)
 
-def _splitLengthToList(length, weightList):
-	totalWeight=sum(weightList)
-	unitLength=length*1./totalWeight
-
-	pointList=[]
-	newComponentList=[]
-	base=0
-	for weight in weightList:
-		pointList.append(int(base))
-		base=base+unitLength*weight
-	pointList.append(int(base))
-	return pointList
-
-def genVerticalPanes(weights):
-	pane=Pane._BBOX
-	points=_splitLengthToList(pane.height, weights)
-	paneList=[]
-	offset=pane.top
-	for [pointStart, pointEnd] in zip(points[:-1], points[1:]):
-		height=pointEnd-pointStart
-		targetHeight=int(height*0.90)
-		offset=int(height-targetHeight)//2
-		tmpPane=Pane(pane.left, pointStart+offset, pane.right, pointEnd-offset)
-		tmpPane._offsetTopAndBottom(offset)
-		paneList.append(tmpPane)
-	return paneList
-
-def genHorizontalPanes(weights):
-	pane=Pane._BBOX
-	points=_splitLengthToList(pane.width, weights)
-	paneList=[]
-	offset=pane.left
-	for [pointStart, pointEnd] in zip(points[:-1], points[1:]):
-		width=pointEnd-pointStart
-		targetWidth=int(width*0.90)
-		offset=int(width-targetWidth)//2
-		tmpPane=Pane(pointStart+offset, pane.top, pointEnd-offset, pane.bottom)
-		tmpPane._offsetLeftAndRight(offset)
-		paneList.append(tmpPane)
-	return paneList
