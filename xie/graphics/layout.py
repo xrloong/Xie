@@ -6,15 +6,9 @@ class JointOperator(Enum):
 	Loop = '回'
 
 	Qi = '起'
-	Zhe = '這'
 	Liao = '廖'
 	Zai = '載'
 	Dou = '斗'
-
-	Tong = '同'
-	Han = '函'
-	Qu = '區'
-	Left = '左'
 
 	Mu = '畞'
 	Zuo = '㘴'
