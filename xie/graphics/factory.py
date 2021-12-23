@@ -24,35 +24,6 @@ class ShapeFactory:
 
 		return []
 
-	def _generateComponent(self, strokes, pane = None):
-		componentInfo = ComponentInfo(strokes)
-		if not pane:
-			pane = componentInfo.getInfoPane()
-		return Component(componentInfo, pane)
-
-	def generateComponentByStrokes(self, strokes):
-		return self._generateComponent(strokes)
-
-	def generateComponentByComponentPane(self, component, pane):
-		componentStrokes = component.getStrokeList()
-		componentStatePane = component.getStatePane()
-		strokes = [s.transform(componentStatePane, pane) for s in componentStrokes]
-
-		return self._generateComponent(strokes)
-
-	def generateComponentByComponentPanePairs(self, componentPanePairs):
-		from .shape import mergePanes
-
-		strokes = []
-		for component, pane in componentPanePairs:
-			component=self.generateComponentByComponentPane(component, pane)
-			strokes.extend(component.getStrokeList())
-
-		panes = [stroke.getStatePane() for stroke in strokes]
-		pane = mergePanes(panes)
-
-		return self._generateComponent(strokes, pane)
-
 class StrokeSpec:
 	def __init__(self, typeName, parameters = None, segments = None,
 			splinePointsList = None):
@@ -202,4 +173,37 @@ class StrokeFactory:
 				startPoint = infoPane.transformRelativePointByTargetPane((0, 0), strokeBoundPane)
 
 			return self._generateStroke(strokeTypeName, strokePath, strokeBoundPane)
+
+class ComponentFactory:
+	def __init__(self):
+		pass
+
+	def _generateComponent(self, strokes, pane = None):
+		componentInfo = ComponentInfo(strokes)
+		if not pane:
+			pane = componentInfo.getInfoPane()
+		return Component(componentInfo, pane)
+
+	def generateComponentByStrokes(self, strokes):
+		return self._generateComponent(strokes)
+
+	def generateComponentByComponentPane(self, component, pane):
+		componentStrokes = component.getStrokeList()
+		componentStatePane = component.getStatePane()
+		strokes = [s.transform(componentStatePane, pane) for s in componentStrokes]
+
+		return self._generateComponent(strokes)
+
+	def generateComponentByComponentPanePairs(self, componentPanePairs):
+		from .shape import mergePanes
+
+		strokes = []
+		for component, pane in componentPanePairs:
+			component=self.generateComponentByComponentPane(component, pane)
+			strokes.extend(component.getStrokeList())
+
+		panes = [stroke.getStatePane() for stroke in strokes]
+		pane = mergePanes(panes)
+
+		return self._generateComponent(strokes, pane)
 

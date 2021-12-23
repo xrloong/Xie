@@ -12,6 +12,7 @@ from .factory import StrokeSpec
 from .segment import SegmentFactory
 from .factory import ShapeFactory
 from .factory import StrokeFactory
+from .factory import ComponentFactory
 
 from .canvas import BaseTextCanvasController
 from .canvas import SvgCanvasController, WxCanvasController, TrueTypeGlyphCanvasController
