@@ -5,12 +5,9 @@ from .stroke import Stroke
 from .component import Component
 from .character import Character
 
-from .layout import JointOperator
-from .layout import LayoutSpec
 from .factory import StrokeSpec
 
 from .segment import SegmentFactory
-from .factory import ShapeFactory
 from .factory import StrokeFactory
 from .factory import ComponentFactory
 
